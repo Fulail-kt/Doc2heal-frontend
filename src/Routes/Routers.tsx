@@ -7,6 +7,7 @@ import Login from '../Pages/Login'
 import Profile from '../Pages/Profile'
 import DoctorsDetails from '../Pages/DoctorsDetails'
 import Doctors from '../Pages/Doctors'
+import Otp from '../Pages/otp'
 
 // Doctor pages
 
@@ -19,6 +20,7 @@ const Routers:FC=()=> {
       <Route path='/doctors'element={<Doctors/>}/>
       <Route path='/doctors/:id' element={<DoctorsDetails/>}/>
       <Route path='/profile' element={<Profile/>}/>
+      <Route path='/otp' element={<Otp/>}/>
   </Routes>
   )
 }

@@ -3,6 +3,8 @@ import React,{useState} from 'react';
 import { useForm, SubmitHandler, SubmitErrorHandler} from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import api from '../../services/api';
+import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify"
 
 
 type FormData = {
@@ -19,21 +21,35 @@ const Signup: React.FC = () => {
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
 
+  const navigate=useNavigate()
+
   const onSubmit: SubmitHandler<FormData> = async (data:FormData) => {
     setLoading(true)
     try {
+      
+      const { username, email, password, phone } = data;
 
-      const res= await api.post(`/register`,{data})
 
-      console.log(res);
+     let response= await api.post(`/register`,{username,email,password,phone})
+
+        console.log(response.data,"this is forntedn");
+        if(response.data?.success){
+          navigate('/otp',{ state: { otp: true, email:response?.data?.email,id:response?.data?.id } })
+        }else{
+        console.log(response.data,"this is forntedn");
+          toast.error(response.data.message)
+        }
+
       
+
       
-    } catch (error:any) {
-      console.log(error.message);
-      
+    } catch (error: any) {
+      // Handle any other errors that might occur during the request
+      console.error('Error:', error.message);
+    } finally {
+      setLoading(false);
     }
   };
-
   const onError: SubmitErrorHandler<FormData> = (errors) => {
     console.error(errors);
   };

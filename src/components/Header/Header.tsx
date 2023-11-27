@@ -55,7 +55,7 @@ const Header:React.FC=()=> {
     return () => {
       window.removeEventListener('scroll', handlerStickyHeader);
     };
-  }, []);
+  },[]);
 
   const toggleMenu=()=>menuRef.current?.classList.toggle('show_menu')
 
