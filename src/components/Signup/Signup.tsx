@@ -3,8 +3,9 @@ import React,{useState} from 'react';
 import { useForm, SubmitHandler, SubmitErrorHandler} from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import api from '../../services/api';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify"
+import Spinner from '../Spinner/Spinner';
 
 
 type FormData = {
@@ -21,6 +22,7 @@ const Signup: React.FC = () => {
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
 
+  
   const navigate=useNavigate()
 
   const onSubmit: SubmitHandler<FormData> = async (data:FormData) => {
@@ -33,7 +35,10 @@ const Signup: React.FC = () => {
      let response= await api.post(`/register`,{username,email,password,phone})
 
         console.log(response.data,"this is forntedn");
-        if(response.data?.success){
+        // if(!response.data.isVerified){
+
+        // }
+        if(response.data?.success || !response.data.isVerified){
           navigate('/otp',{ state: { otp: true, email:response?.data?.email,id:response?.data?.id } })
         }else{
         console.log(response.data,"this is forntedn");
@@ -58,7 +63,7 @@ const Signup: React.FC = () => {
   return (
     <>
   {loading? (
-    <h1>Loading...</h1>
+    <Spinner/>
   ) : (
     <div className="login_bg  overflow-y-auto  py-2 flex flex-col  sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
@@ -239,6 +244,9 @@ const Signup: React.FC = () => {
                 </div>
               </div>
             </div>
+            <div className='flex'>
+                <p>Already have Account?</p> <Link to='/login'><span className='text-blue-500'>LogIn</span></Link>
+              </div>
           </form>
           <DevTool control={control} />
         </div>

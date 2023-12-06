@@ -1,15 +1,18 @@
 // EmailVerification.tsx
-import React, { useState } from 'react';
-import { HiOutlineMail } from 'react-icons/hi';
-import api from '../services/api';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+// import { HiOutlineMail } from 'react-icons/hi';
+import api from '../../services/api';
+import { useLocation, useNavigate } from 'react-router-dom';
+import toast,{Toaster} from 'react-hot-toast';
 
 const Otp: React.FC = () => {
   const [verificationCode, setVerificationCode] = useState(['', '', '', '']); // State to store verification code
 
 
   const location = useLocation();
-  const { otp ,email,id} = location.state || {};
+  const { otp ,email} = location.state || {};
+
+  const navigate=useNavigate()
 
 
 
@@ -22,15 +25,47 @@ const Otp: React.FC = () => {
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     const code = verificationCode.join('');
-    // Add logic to handle the verification code
-    console.log(email,id,"======================");
+ 
+    try {
+        console.log('Verification Code:',code);
+       let response = await api.post('/verify-otp',{code,email})
+         console.log(response?.data);
+
+         if (response.data?.success) {
+            // If success is true, navigate to the home
+            console.log('Verification successful!');
+     
+            navigate('/login');
+          } else {
+            console.log('Verification failed!');
+            // Handle verification failed
+            console.log(response.data?.message);
+            toast.error(response.data?.message)
+            navigate('/otp')
+
+          }
+        
+    } catch (error) {
+
+        console.error('Error during verification:', error);
+        
+    }
     
-    console.log('Verification Code:',code);
-   let response = await api.post('/verify-otp',{code,email})
-     console.log(response.data);
+    
   };
 
+  useEffect(()=>{
+
+    if(!otp){
+        navigate("/")
+    }
+
+  },[])
+
   return (
+    <>
+    <Toaster/>
+   
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12">
       <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
         <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
@@ -83,6 +118,7 @@ const Otp: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

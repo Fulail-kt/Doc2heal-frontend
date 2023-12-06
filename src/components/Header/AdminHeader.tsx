@@ -1,8 +1,10 @@
+
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import userImg from '../../assets/images/avatar.png';
 import Logo from '../../assets/images/Logo.png';
 import { BiMenu } from 'react-icons/bi';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface NavLinkItem {
   path: string;
@@ -11,20 +13,24 @@ interface NavLinkItem {
 
 const navLinks: NavLinkItem[] = [
   {
-    path: '/',
-    display: 'Home',
+    path: '/admin',
+    display: 'Dashboard',
   },
   {
-    path: '/doctors',
-    display: 'Find a Doctors',
+    path: '/admin/doctors',
+    display: 'Doctors',
   },
   {
-    path: '/services',
-    display: 'Services',
+    path: '/admin/patients',
+    display: 'Patients',
   },
   {
-    path: '/contact',
-    display: 'Contact',
+    path: '/admin/applications',
+    display: 'Applications',
+  },
+  {
+    path: '/admin/payments',
+    display: 'Payments',
   },
 ];
 
@@ -59,7 +65,7 @@ const Header: React.FC = () => {
 
 
   return (
-    <header className="header flex items-center" ref={headerRef}>
+    <header className="headers h-24 flex items-center" ref={headerRef}>
 <div className="container">
   <div className="flex items-center justify-between">
     {/* ===================LOGO================= */}
@@ -89,6 +95,8 @@ const Header: React.FC = () => {
             <img src={userImg} className='w-full rounded-full' alt="" />
           </figure>
         </Link>
+
+        
       </div>
 
      {!Token?(<Link to='/login'>
