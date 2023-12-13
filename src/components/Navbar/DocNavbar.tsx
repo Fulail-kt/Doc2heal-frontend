@@ -1,48 +1,8 @@
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faUserDoctor,faMessage,faCalendarCheck,faUser } from '@fortawesome/free-solid-svg-icons';
-// import { FC } from 'react';
-
-
-
-
-// const Navbar: FC = () => {
-//   return (
-//     <nav className="sm:w-40 text-white">
-//       <div className='relative'>
-//         <ul className="md:flex flex-col text-center items-center top-14 left-0 sm:w-[50%] md:w-[95%]  rounded-md p-4">
-//           <li className="p-2 rounded-md w-full mb-2 md:mb-7 bg-[#3b82f6] hover:text-[#ffff] hover:bg-[#8fa3c4]">
-//             <span className="hidden md:inline">Doctors</span>
-//             <span className="md:hidden p-1">
-//               <FontAwesomeIcon icon={faUserDoctor} style={{ color: "#ffffff" }} />
-//             </span>
-//           </li>
-//           <li className="p-2 rounded-md w-full mb-2 md:mb-7 bg-[#8fa3c4] hover:text-[#fff] hover:bg-[#3b82f6]">
-//             <span className="hidden md:inline">Appointments</span>
-            
-//             <span className="md:hidden p-1"><FontAwesomeIcon icon={faCalendarCheck} /></span>
-//           </li>
-//           <li className="p-2 rounded-md w-full mb-2 md:mb-7 bg-[#8fa3c4] hover:text-[#fff] hover:bg-[#3b82f6]">
-//             <span className="hidden md:inline">Messages</span>
-            
-//             <span className="md:hidden p-1">
-//             <FontAwesomeIcon icon={faMessage} style={{color: "#f7f7f7",}} />
-//             </span>
-//           </li>
-//           <li className="p-2 rounded-md w-full bg-[#8fa3c4] hover:text-[#fff] hover:bg-[#3b82f6]">
-//             <span className="hidden md:inline">Profile</span>
-//             <span className="md:hidden p-1"><FontAwesomeIcon icon={faUser} style={{color: "#ffffff",}} /></span>
-//           </li>
-//         </ul>
-//       </div>
-//     </nav>
-//   );
-// }
-
-// export default Navbar;
+// Import necessary libraries and icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserDoctor, faMessage, faCalendarCheck, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUserDoctor, faMessage, faCalendarCheck, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { FC } from 'react';
-import { NavLink} from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import "./navbar.css"
 
 interface NavLinkItem {
@@ -51,53 +11,64 @@ interface NavLinkItem {
 }
 
 const navLinks: NavLinkItem[] = [
-    {
-        path: '/dashboard',
-        display: 'Dashboard',
-    },
-
   {
-    path: '/patients',
-    display: 'Patients',
+    path: '/dashboard',
+    display: 'Dashboard',
   },
   {
-    path: '/bookings',
+    path: '/doctor/bookings',
     display: 'Bookings',
   },
   {
-    path: '/messages',
+    path: '/doctor/timeslots',
+    display: 'Timeslots',
+  },
+  {
+    path: '/doctor/messages',
     display: 'Messages',
   },
   {
-    path: '/profile',
+    path: '/doctor/profile',
     display: 'Profile',
   },
   {
-    path: '/payments',
+    path: '/doctor/payments',
     display: 'Payment',
+  },
+  {
+    path: '',
+    display: 'Logout',
   },
 ];
 
 const DocNavbar: FC = () => {
+ 
+  const navigate = useNavigate();
 
-
+  // Function to handle logout
+  const handleLogout = () => {
+    console.log("Logout button clicked");
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+  
 
   return (
-    <nav className="sm:w-40 text-gray-300">
-      <div className='relative'>
+    <nav className="sm:w-52 flex justify-center text-gray-300 bg-[#202231]">
+      <div className='relative '>
         <ul className="md:flex flex-col text-center items-center top-14 left-0 sm:w-[50%] md:w-[95%]  rounded-md p-4">
           {navLinks.map((link) => (
-            <li key={link.path} className="p-2 rounded-md w-full mb-2 md:mb-7 hover:text-[#ffff] bg-[#538deb]">
+            <li key={link.path} className="p-2 px-4 rounded-md w-full mb-2 md:mb-7 hover:text-white hover:overline bg-[#171b30]">
               <NavLink to={link.path} className="flex items-center justify-center">
                 <span className="hidden md:inline">{link.display}</span>
                 <span className="md:hidden p-1 px-2">
-                {link.display === 'Dashboard' && <FontAwesomeIcon icon={faUserDoctor} style={{ color: "#ffffff" }} />}
+                  {link.display === 'Dashboard' && <FontAwesomeIcon icon={faUserDoctor} style={{ color: "#ffffff" }} />}
                   {link.display === 'Patients' && <FontAwesomeIcon icon={faUserDoctor} style={{ color: "#ffffff" }} />}
                   {link.display === 'Bookings' && <FontAwesomeIcon icon={faCalendarCheck} />}
                   {link.display === 'Messages' && <FontAwesomeIcon icon={faMessage} style={{ color: "#f7f7f7" }} />}
                   {link.display === 'Profile' && <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />}
                   {link.display === 'Payments' && <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />}
-                
+                  {link.display === 'Logout' && <FontAwesomeIcon icon={faSignOutAlt} onClick={handleLogout} style={{ color: "#ffffff", cursor: "pointer" }} />}
                 </span>
               </NavLink>
             </li>
@@ -109,5 +80,3 @@ const DocNavbar: FC = () => {
 }
 
 export default DocNavbar;
-
-

@@ -4,6 +4,7 @@ import useApi from '../../hooks/useApi';
 import Spinner from '../../components/Spinner/Spinner';
 import api from '../../services/api';
 import Swal from 'sweetalert2';
+import Adminheader from '../../components/Header/AdminHeader';
 const PatientsList:FC = () => {
 
     interface Patient {
@@ -42,9 +43,9 @@ const PatientsList:FC = () => {
 
             }})
            
-        } catch (error:any) {
+        } catch (error) {
     
-            console.log(error.message);   
+            console.log((error as Error).message);   
         }
           };
     
@@ -54,7 +55,7 @@ const PatientsList:FC = () => {
     
       useEffect(() => {
         fetchData();
-      }, [refresh]); 
+      }, [fetchData, refresh]); 
     
       if (loading) {
         return <Spinner/>;
@@ -71,10 +72,13 @@ const PatientsList:FC = () => {
       console.log(data.user,"from admin")
     
   return (
+    <>
+    <Adminheader/>
     <div>
      <h1>usersList</h1> 
      <Table onBlock={handleBlock} user={patients}/>
     </div>
+    </>
   )
 }
 

@@ -3,74 +3,76 @@ import { jwtDecode } from 'jwt-decode';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DoctorForm from '../../components/Doctor/DoctorForm';
-// import Spinner from '../../components/Spinner/Spinner';
-// import DoctorNavbar from '../../components/Header/DoctorHeader';
 import Header from '../../components/Header/Header';
 import Spinner from '../../components/Spinner/Spinner';
+import User from '../../@types';
+import Api from '../../services/api';
 
 const Application: React.FC = () => {
-  const [loading,setLoading]=useState(true)
-  const {  isApproved } = useSelector((state: any) => state.useDetails);
-  
+  const [loading, setLoading] = useState(true);
+  const { isApproved } = useSelector((state:{useDetails: {isApproved: boolean;}}) => state.useDetails);
+  const [user, setUser] = useState<User | undefined>();
+  const [id, setId] = useState<string | undefined>(); // changed the type of id
 
   type Token = {
-    _id: string;
+    id: string;
     role: string;
   };
 
-
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-  
     const checkAuthentication = async () => {
+      const token = localStorage.getItem('token');
+
       if (!token) {
         return navigate('/login');
-      } else {
-        try {
-          const decode: Token | null = jwtDecode<Token>(token);
-  
-          if (decode.role === 'doctor') {
-            return navigate('/dashboard');
-          }else{
+      }
 
-            navigate('/application');
-          }
-          setLoading(false);
-          
-          
-        } catch (error) {
-          console.error('Error decoding token:', error);
-          navigate('/login');
+      try {
+        const decode: Token = jwtDecode<Token>(token);
+
+        setId(decode.id);
+        console.log(decode.id, "af");
+
+        if (decode.role === 'doctor') {
+          return navigate('/dashboard');
         }
+
+        await fetchData();
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        navigate('/login');
+      } finally {
+        setLoading(false);
       }
     };
-  
-   
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  
-    checkAuthentication();
-  }, []);
 
-  if(loading){
-    return(<Spinner/>)
+    checkAuthentication();
+  }, [navigate,id]);
+
+  const fetchData = async () => {
+    try {
+      const response = await Api.get('/getuser', { params: { id } });
+      setUser(response.data.user);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  };
+
+  if (loading) {
+    return <Spinner />;
   }
- 
 
   return (
-    <div className=''>
+    <div className='w-100'>
       {!isApproved ? (
-        <div className='w-100'>
-        <Header/>
-        <DoctorForm />
-        </div>
+        <>
+          <Header />
+          <DoctorForm user={user} />
+        </>
       ) : (
-        <div>
-          <Navigate to='/dashboard'/>
-        </div>
+        <Navigate to='/dashboard' />
       )}
     </div>
   );

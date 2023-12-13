@@ -1,37 +1,45 @@
-import { useEffect, useState } from 'react';
+// ProtectedRoute.tsx
+import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { Outlet, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
+import Spinner from '../components/Spinner/Spinner';
 
-export const ProtectedRoute = () => {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  allowedRole: string;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRole }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<string | undefined>(undefined);
 
   const token = localStorage.getItem('token');
-  useEffect(() => {
 
-    const fetchData = async () => {
-      try {
-        if (token) {
-          const decode =jwtDecode<{ _id: string; role: string }>(token);
-          setRole(decode.role);
-          if (decode.role !== 'admin') {
-            navigate('/');
-          }
-        } else {
+  useEffect(() => {
+    try {
+      if (token) {
+        const decode = jwtDecode<{ _id: string; role: string }>(token);
+
+        setRole(decode.role);
+
+        if (decode.role !== allowedRole) {
           navigate('/');
         }
-      } catch (error) {
-        console.error('Error decoding token:', error);
-        // Handle error if necessary
-      } finally {
-        setLoading(false);
+      } else {
+        navigate('/');
       }
-    };
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      // Handle error if necessary
+    } finally {
+      setLoading(false);
+    }
+  }, [token, navigate, allowedRole]);
 
-    fetchData();
-  }, [token, navigate]);
 
-  // Render the Outlet only if the conditions are met or show a loading indicator
-  return loading ? <div>Loading...</div> : role === 'admin' ? <Outlet /> : null;
+
+  return loading ? <Spinner/> : role === allowedRole ? <>{children}</> : null;
 };
+
+export default ProtectedRoute;

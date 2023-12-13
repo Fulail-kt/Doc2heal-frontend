@@ -4,6 +4,9 @@ import useApi from '../../hooks/useApi';
 import Spinner from '../../components/Spinner/Spinner';
 import Navbar from '../../components/Navbar/Navbar';
 import Header from '../../components/Header/Header';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../redux/authSlice';
 
 
 const Doctors: FC = () => {
@@ -16,6 +19,16 @@ const Doctors: FC = () => {
     patients: number;
   }
 
+
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+  
+    const handleLogout = () => {
+      dispatch(logout());
+      localStorage.clear();
+      navigate('/', { replace: true });
+    };
 
   // const { fetchData, loading, data, error } = useApi<Doctor[]>('/getAllDoctors', 'get');
   const { fetchData, loading, data, error } = useApi<{ user: Doctor[] }>('/getAllUsers','get',"doctor");
@@ -44,7 +57,7 @@ const Doctors: FC = () => {
     <Header/>
    <div>
          <section className='bg-[#fff9ea] flex pt-2 pb-2'>
-      <div className='sm:w-1/4 md:w-[5%]'><Navbar/></div>
+      <div className='sm:w-1/4 md:w-[5%]'><Navbar handleLogout={handleLogout}/></div>
           <div className='container w-100  text-center'>
             <h2 className='heading'>Find a Doctor</h2>
             <div className='max-w-[570px] mt-[30px] mx-auto bg-[#0066ff2c] rounded-md flex items-center justify-between'>

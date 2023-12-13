@@ -6,7 +6,6 @@ const initialState={
     email:null,
     role:null,
     isApproved:false,
-    isAdmin:false,
     isAuthenticated:false
 
 }

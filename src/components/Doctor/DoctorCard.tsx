@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import defaultImg from '../../assets/images/placeholder-doctor-male.jpg'
+// import defaultImg from '../../assets/images/placeholder-doctor-male.jpg'
 
 
 // import {BsArrowRight} from 'react-icons/bs'
@@ -17,12 +17,12 @@ interface Doctor {
   }
   
   const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
-    const {username}=doctor
+    const {username,_id}=doctor
   return (
     <div>
-        <Link to='/doctor/id'>
+     <Link to={`/doctors/${_id}`}>
       <div>
-      <img src={ defaultImg} className="w-100 rounded-md" alt="" />
+      <img src={ doctor.image} className="w-100 rounded-md" alt="" />
       </div>
       <h2 className="text-[18px] leading-[30px] lg:text-[26px] lg:leading-9 text-slate-800 font-[700] mt-3 lg:mt-5">{username}</h2>
       <div className="mt-2 lg:mt-4 flex items-center justify-between">

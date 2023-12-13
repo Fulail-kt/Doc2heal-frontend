@@ -4,9 +4,10 @@ import useApi from '../../hooks/useApi';
 import Spinner from '../../components/Spinner/Spinner';
 import api from '../../services/api';
 import Swal from 'sweetalert2'
+import Adminheader from '../../components/Header/AdminHeader';
 
 
-const DoctorsList: FC = ({ }) => {
+const DoctorsList: FC = () => {
 
   interface Doctor {
     _id: string;
@@ -44,14 +45,14 @@ const DoctorsList: FC = ({ }) => {
 
 
 
-    } catch (error: any) {
+    } catch (error) {
 
-      console.log(error.message);
+      console.log((error as Error).message);
     }
   };
 
+ 
   const handleApprove = async (userId: string) => {
-
     try {
       Swal.fire({
         title: 'Confirmation?',
@@ -66,17 +67,16 @@ const DoctorsList: FC = ({ }) => {
         },
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const response = await api.put(`/admin/ApproveUser/${userId}`)
+          const response = await api.put(`/admin/ApproveUser/${userId}`);
           setRefresh((prev) => !prev);
           console.log(response.data);
         }
       });
-
-    } catch (error: any) {
-      console.log(error.message)
+    } catch (error) {
+      // Handle error
+      console.error(error);
     }
-  }
-
+  };
 
 
   // const { fetchData, loading, data, error } = useApi<Doctor[]>('/getAllDoctors', 'get');
@@ -104,7 +104,7 @@ const DoctorsList: FC = ({ }) => {
 
 return (
     <>
-
+    <Adminheader/>
       <div>
         <Table user={doctors} onApprove={handleApprove} onBlock={handleBlock} />
       </div>

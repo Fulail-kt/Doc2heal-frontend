@@ -4,7 +4,7 @@ import api from '../services/api';
 
 interface ApiResponse<T> {
   data: T;
-  error: AxiosError<any> | null;
+  error: AxiosError<Error> | null;
   loading: boolean;
   message: string;
 }
@@ -17,7 +17,7 @@ const useApi = <T>(url: string, method: Method,user?:string) => {
     message: '',
   });
 
-  const fetchData = async (body?: any) => {
+  const fetchData = async (body?) => {
     setResponse({ data: response.data, message: '', error: null, loading: true });
 
     console.log(user,"us");
@@ -38,7 +38,7 @@ const useApi = <T>(url: string, method: Method,user?:string) => {
       
 
       setResponse({ data:result.data, message: 'Success!', loading: false, error: null  });
-    } catch (error: any) {
+    } catch (error) {
       setResponse({ data: response.data, message: 'Error occurred.', error, loading: false });
       throw error; // rethrow the error for the component to catch
     }

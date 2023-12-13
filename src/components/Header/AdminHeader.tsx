@@ -4,7 +4,7 @@ import { NavLink, Link } from 'react-router-dom';
 import userImg from '../../assets/images/avatar.png';
 import Logo from '../../assets/images/Logo.png';
 import { BiMenu } from 'react-icons/bi';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface NavLinkItem {
   path: string;
@@ -34,7 +34,7 @@ const navLinks: NavLinkItem[] = [
   },
 ];
 
-const Header: React.FC = () => {
+const Adminheader: React.FC = () => {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [Token, setToken] = useState('');
@@ -113,4 +113,4 @@ const Header: React.FC = () => {
   )
 }
 
-export default Header
+export default Adminheader

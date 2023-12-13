@@ -11,39 +11,37 @@ import Header from "../../components/Header/Header"
 
 const Home: FC = () => {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const [loading, setLoading] = useState(false);
-    // const location = useLocation()
-    // const message = location.state?.msg;
-    //     console.log(msg,"------------");
-
+  
     useEffect(() => {
-
-        if (!token) {
-            navigate('/')
-        } else {
+      setLoading(true); // Set loading to true when starting the operation
+  
+      if (!token) {
         
-            
-            const decode=jwtDecode<{_id:string;role:string}>(token)
-            console.log(decode)
-            if(decode.role=="admin"){
-            
-            console.log("admin");
-            
-                navigate('/admin')
-                // window.location.reload()
-            }
-            if(decode.role=="doctor"){
-                navigate('/dashboard')
-            }
+        navigate('/');
+        setLoading(false)
+      } else {
+        try {
+          const decode = jwtDecode<{ _id: string; role: string }>(token);
+          console.log(decode);
+  
+          if (decode.role === 'admin') {
+            console.log('admin');
+            navigate('/admin');
+          }
+          if (decode.role === 'doctor') {
+            navigate('/dashboard');
+          }
+        } catch (error) {
+          console.error('Error decoding token:', error);
+          // Handle error if necessary
+        } finally {
+          setLoading(false); // Set loading to false when the operation is finished
         }
-
-        
-
-    }, [token])
-    
-
+      }
+    }, [token, navigate]);
 
 
     return (

@@ -1,42 +1,38 @@
-// import React from 'react'
-// import DoctorCard from './DoctorCard'
+import React from 'react';
+// import Modal from '../modal/modal';
+// import BookingForm from './time';
+import User from '../../@types';
+
+const DoctorsList: React.FC<{ doctor: User }> = ({ doctor }) => {
 
 
 
-// const DoctorsList:React.FC = () => {
+  console.log(doctor,"from doc");
 
-//     interface Doctor {
-//         _id:number,
-//         username: string;
-//         specialization?: string;
-//         image?: string;
-//         hospital?: string;
-//         patients?:number
-//       }
+  if(!doctor){
+    return <p>empty</p>
+  }
+  
 
-//     // let doctors:Doctor[]=[{
-//     //     name:'abhinad',
-//     //     specialization:'A specialist',
-//     //     image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4NCYGRXV7kTpJGlgxN81lU-oEi47JegB1Sw&usqp=CAU',
-//     //     hospital:'abc hospital',
-//     //     patients:10
-        
-//     // },
-//     // {
-//     //     name:'Ashwin',
-//     //     specialization:'B specialist',
-//     //     image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnQpXYvz56A_3W9ucLWHqlIQIHe3vgxHIS5A&usqp=CAU',
-//     //     hospital:'xyz hospital',
-//     //     patients:13
-        
-//     // }]
-//   return (
-//     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 lg:gap-[30px] mt-[30px] lg:mt-[55px]'>
-//     {/* {doctors.map((doctor, index) => (
-//       <DoctorCard key={index} doctor={doctor} />
-//     ))} */}
-//   </div>
-//   )
-// }
 
-// export default DoctorsList
+  return (
+    <section className=''>
+      <div className='flex justify-center'>
+        <div className='bg-blue-300 flex flex-col items-center justify-center px-2 rounded-md shadow-xl shadow-stone-400 border-2 w-52 h-60'>
+            <img src={doctor?.image} className='h-100 ' alt="" />
+        </div>
+      </div>
+      <div className='flex justify-center'>
+        <div className='rounded-md text-center flex flex-col justify-center items-center w-52 mt-3'>
+          <h1 className='py-1 text-lg font-medium '>Dr.{doctor?.username}</h1>
+          <p className='bg-cyan-300 w-32 py-1 rounded-sm text-sm text-white'>{doctor?.specialization}</p>
+          <p className='py-1 font-mono'>at <span className=''>{doctor?.hospital}</span></p>
+          
+
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default DoctorsList;

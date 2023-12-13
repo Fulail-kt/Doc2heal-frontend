@@ -1,16 +1,16 @@
-import { FC, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import socket from '../../services/socket'
+import { FC } from 'react'
+// import { useNavigate } from 'react-router-dom'
+// import socket from '../../services/socket'
 
-const Appointments: FC = () => {
+const Appointments: FC = () =>  {
 
   
 
-    const [id, Setid] = useState('')
+    // const [id, Setid] = useState('')
 
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
-    const handleClick = () => {
+    // const handleClick = () => {
       
         // navigate(`/room/${id}`)
 
@@ -24,7 +24,7 @@ const Appointments: FC = () => {
         //     console.log(error.message);
 
         // }
-    }
+    // }
 
 
     return (

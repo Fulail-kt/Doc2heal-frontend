@@ -65,7 +65,7 @@ const Login: React.FC = () => {
       if(decode?.role==="admin"){
         navigate('/admin');
       }else if (decode?.role === 'doctor') {
-        navigate('/dashboard',{replace:true});
+        navigate('/doctor',{replace:true});
       } else {
         navigate('/',{replace:true});
       }

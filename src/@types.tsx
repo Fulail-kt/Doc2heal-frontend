@@ -1,9 +1,14 @@
+
+
 export default interface User {
+    _id: string;
     username: string;
     email: string;
     password: string;
     image?: string;
+    documents?:[string]
     phone: number;
+    gender:string;
     address?: {
       name: string;
       house: string;
@@ -15,21 +20,14 @@ export default interface User {
     }[];
     specialization?: string;
     fee?: number;
-    timeSchedules?: string[];
+    formStatus:string;
     hospital?: string;
     experience?: number;
-    booking?: {
-
-    }[];
-    feedback?: {
-
-    }[];
-    report?: {
-
-    }[];
     role?: 'patient' | 'doctor'|'admin';
     wallet?: {
 
+      balance:number
+      transaction:string
     };
     isBlocked?: boolean;
     isApproved?:boolean,
@@ -39,3 +37,20 @@ export default interface User {
 
   
 
+
+
+  export default interface Booking {
+    _id:string;
+    doctorId: string;
+    status: string;
+    date: string;
+    time:string;
+    fee?: number;
+    end: string;
+    feedback?:[]; 
+    note: string;
+    userAge: number;
+    userId:string;
+    userName: string;
+  }
+  

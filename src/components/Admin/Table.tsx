@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 
 interface TableProps {
-    user: any[];
+    user: User[];
     onBlock: (userId: string) => void;
     onApprove?:(userId:string)=>void;
   }
@@ -20,6 +20,8 @@ const Table: React.FC<TableProps> = ({user,onBlock,onApprove}) => {
   const [localUser, setLocalUser] = useState(user);
 
 // Update localUser when user prop changes
+console.log(localUser);
+
 const location=useLocation()
 
 useEffect(() => {
@@ -62,12 +64,11 @@ useEffect(() => {
 
               {path === '/admin/doctors' && (<td className="py-2 px-4  border-b"><button className={`mt-0 p-2 btn ${user.isApproved ? 'bg-green-500' : 'bg-red-500'}`} onClick={() => onApprove && onApprove(user._id)}>
                 {user.isApproved ? 'Approved' : 'Not Approved'}</button></td>)}
+                
 
               {/* {path=='/admin/doctors?'&& <td className="py-2 px-4  border-b"><button className= {`mt-0 p-2 btn bg-${user.isApproved ? 'bg-red-500' : 'bg-green-500'}`} onClick={() => onApprove(user._id)}>{user.isApproved ? "Approved" : "UnApprove"}</button></td>} */}
               <td className="py-2 px-4  border-b"><button className= {`mt-0 p-2 btn ${user.isBlocked ? 'bg-red-500' : 'bg-green-500'}`} onClick={() => onBlock(user._id)}>{user.isBlocked ? "Blocked" : "UnBlocked"}</button></td>
-              {/* <td className={`py-2 px-4 border-b`}>
-              <button>Delete</button>
-              </td> */}
+              
             </tr>
           ))}
         </tbody>
