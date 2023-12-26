@@ -3,168 +3,107 @@ import DocNavbar from '../../components/Navbar/DocNavbar'
 import Api from '../../services/api'
 import toast, { Toaster } from 'react-hot-toast'
 import Booking from '../../@types'
+import moment from 'moment'
+import { useNavigate } from 'react-router-dom'
+import Booked from '../../components/Doctor/Booked'
 
 
 const Bookings = () => {
 
-    const [uBooking, setUbooking] = useState<Array<Booking>>()
-    const [cBooking, setCbooking] = useState<Array<Booking>>()
-    const [fBooking, setFbooking] = useState<Booking>()
+    const [Books, setBookings] = useState<Array<Booking>>()
 
-    const [completed, setCompleted] = useState(false)
-    const [upcomming, setUpcomming] = useState(true)
-    const [cancelled, setCancelled] = useState(false)
 
 
 
     const Upcomming = async () => {
-
         try {
-
             // for upcomming
-            const upcomming = await Api.get('/doctor/getbookings', { params: { condition: 'booked' } })
+            const upcomming = await Api.get('/doctor/getAllbookings');
+            console.log(upcomming, 'res');
 
-            console.log(upcomming.data);
 
             if (upcomming.data.success) {
-                setUbooking(upcomming.data.booking)
+                const currentDateTime = moment();
+                const updatedUBooking = upcomming.data.booking.map((ubook: { time: Date, end: Date }) => ({
+                    ...ubook,
+                    time: moment(ubook.time).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
+                    end: moment(ubook.end).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
+                }));
+
+
+                setBookings(updatedUBooking)
+
+
+
+
+
             } else {
-                toast.error(upcomming.data.message)
-            }
-
-
-            // for completed booking
-            const Completed = await Api.get('/doctor/getbookings', { params: { condition: 'completed' } })
-
-            if (Completed.data.success) {
-                setCbooking(Completed.data.booking);
-            } else {
-                toast.error(Completed.data.message);
-            }
-
-
-            // for cancelled booking
-            const cancelledBookings = await Api.get('/doctor/getbookings', { params: { condition: 'cancelled' } });
-
-            if (cancelledBookings.data.success) {
-                setFbooking(cancelledBookings.data.booking);
-            } else {
-                toast.error(cancelledBookings.data.message);
+                toast.error(upcomming.data.message);
             }
 
 
         } catch (error) {
-            console.log((error as Error))
+            console.error('Error fetching upcoming bookings:', error);
+            toast.error('An error occurred while fetching upcoming bookings');
         }
-    }
 
-
-    // const Completed=()=>{
-
-    // }
-
-    // const Cancelled=()=>{
-
-    // }
-    const handleUpcommingClick=()=>{
-        setUpcomming(true)
-        setCompleted(false);
-        setCancelled(false);
-    }
-
-    const handleCompletedClick = () => {
-        setCompleted(true);
-        setCancelled(false);
-        setUpcomming(false)
     };
+    const [refresh, setRefresh] = useState<boolean>(false);
+
+
+   const handleCancelBooking=async(bookingId:string)=>{
+    try {
+        console.log(bookingId,"this is form bookings");
+        const status='cancelled'
+        const response = await Api.post('/doctor/cancelBooking', { bookingId,status });
+
+        if(response.data.success){
+
+            toast.success(response.data.message)
+            setRefresh((prev) => !prev);
+        }else{
+            toast.error(response.data.message)
+        }
+        
+        
+    } catch (error) {
+        toast.success((error as Error).message)
+
+    }
+   }
+
+
+
 
     useEffect(() => {
 
         Upcomming();
 
-    }, [])
+    }, [refresh])
 
 
-    console.log(uBooking);
+
+
+
+
 
 
     return (
         <>
             <Toaster />
-            <div className='bg-slate-900 w-full h-14'>
-
-            </div>
-            <div className='w-full flex'>
-                <DocNavbar />
-                <div className='w-full bg-gray-400'>
-
-                    <div className='w-full flex h-12 items-center justify-around '>
-                    <span onClick={handleUpcommingClick} className={upcomming ? "text-blue-600  p-2 px-4 shadow-lg shadow-gray-900 rounded-md" : ""}>Upcoming</span>
-                        <span onClick={handleCompletedClick} className={completed ? "text-blue-600  p-2 px-4 shadow-lg shadow-gray-900 rounded-md" : ""}>Completed</span>
-                        <span>Cancelled</span>
+            
+            <div className='flex flex-col min-h-screen bg-gray-400'>
+                <div className='bg-[#202231] w-full h-16'></div>
+                <div className='flex flex-1'>
+                    <div className=' bg-[#202231]'>
+                        <DocNavbar />
                     </div>
-
-
-                    <div className='mt-4'>
-
-                      { upcomming&&
-                      <>
-                       <div className='w-full flex flex-col justify-center items-center'>
-                            {uBooking?.map((ubook) => (
-                                <>
-                                    <div></div>
-                                    <div className=' w-[70%] rounded-lg p-2 px-5 bg-white justify-around border m-3 items-center text-black flex' key={ubook?._id}>
-                                        <p>{new Date(ubook.date).toLocaleDateString()}</p>
-                                        <p>
-                                            {new Date(ubook.time).toLocaleTimeString([], {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                            })}{' '}
-                                            to{' '}
-                                            {new Date(ubook.end).toLocaleTimeString([], {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                            })}
-                                        </p>
-                                        <button className='btn bg-green-600 p-2 mt-0'>Start Session</button>
-                                    </div>
-                                </>
-                            ))}
-                        </div>
-                        </>}
-
-                        {completed && (
-                            <>
-                                <h1>completed</h1>
-                                <div className='w-full flex flex-col justify-center items-center'>
-                                    {cBooking?.map((cbook) => (
-                                        <>
-                                            <div></div>
-                                            <div className=' w-[70%] rounded-lg p-2 px-5 bg-white justify-around border m-3 items-center text-black flex' key={cbook?._id}>
-                                                <p>{new Date(cbook.date).toLocaleDateString()}</p>
-                                                <p>
-                                                    {new Date(cbook.time).toLocaleTimeString([], {
-                                                        hour: '2-digit',
-                                                        minute: '2-digit',
-                                                    })}{' '}
-                                                    to{' '}
-                                                    {new Date(cbook.end).toLocaleTimeString([], {
-                                                        hour: '2-digit',
-                                                        minute: '2-digit',
-                                                    })}
-                                                </p>
-                                                <button className='btn bg-green-600 p-2 mt-0'>Start Session</button>
-                                            </div>
-                                        </>
-                                    ))}
-                                </div>
-                            </>
-                        )}
+                    <div className='w-full bg-gray-400'>
+                        <Booked Bookings={Books} handleCancelBooking={handleCancelBooking} />
                     </div>
-
-
                 </div>
             </div>
+
         </>
     )
 }

@@ -32,7 +32,7 @@ const Home: FC = () => {
             navigate('/admin');
           }
           if (decode.role === 'doctor') {
-            navigate('/dashboard');
+            navigate('/doctor');
           }
         } catch (error) {
           console.error('Error decoding token:', error);
@@ -108,7 +108,7 @@ const Home: FC = () => {
                         <div className="flex justify-center mt-9 gap-x-10 w-full">
 
                             <div className="w-1/3 bg-slate-600 rounded-md h-52 flex justify-center items-end">
-                                <Link to='/doctors'><button className="bg-blue-500 rounded-full p-1 px-2 font-semibold mb-2 text-white">Become a Patient</button></Link>
+                                <Link to='/doctors'><button className="bg-blue-500 rounded-full p-1 px-2 font-semibold mb-2 text-white">Join as Patient</button></Link>
                             </div>
 
                             <div className="w-1/3  bg-slate-600 rounded-md h-52 flex justify-center items-end">

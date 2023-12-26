@@ -5,18 +5,12 @@ import Spinner from '../../components/Spinner/Spinner';
 import api from '../../services/api';
 import Swal from 'sweetalert2'
 import Adminheader from '../../components/Header/AdminHeader';
+import User from '../../@types';
 
 
 const DoctorsList: FC = () => {
 
-  interface Doctor {
-    _id: string;
-    username: string;
-    specialization: string;
-    image: string;
-    hospital: string;
-    patients: number;
-  }
+ 
 
   const [refresh, setRefresh] = useState<boolean>(false);
 
@@ -36,8 +30,7 @@ const DoctorsList: FC = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
 
-          const response = await api.put(`/admin/blockUser/${userId}`)
-          const doctors: Doctor[] = response.data || [];
+           await api.put(`/admin/blockUser/${userId}`)
           setRefresh((prev) => !prev);
           console.log(doctors, "---0-0-0-0-0-0-0-0-0");
         }
@@ -80,7 +73,7 @@ const DoctorsList: FC = () => {
 
 
   // const { fetchData, loading, data, error } = useApi<Doctor[]>('/getAllDoctors', 'get');
-  const { fetchData, loading, data, error } = useApi<{ user: Doctor[] }>('/getAllusers', 'get', 'doctor');
+  const { fetchData, loading, data, error } = useApi<{ user: User[] }>('/getAllusers', 'get',);
 
   useEffect(() => {
     fetchData();
@@ -94,9 +87,11 @@ const DoctorsList: FC = () => {
     return <p>Error: {error.message}</p>;
   }
 
-  const doctors: Doctor[] = data.user || [];
+  const user: User[] = data.user || [];
 
-  console.log(data.user, "from admin")
+  const doctors=user.filter((user)=>{
+    return user.role==="doctor"
+  })
 
 
 

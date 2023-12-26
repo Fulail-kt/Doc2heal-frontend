@@ -1,85 +1,75 @@
-import {FC,useEffect,useState} from 'react'
-import Table from '../../components/Admin/Table'
+import { FC, useEffect, useState } from 'react';
+import Table from '../../components/Admin/Table';
 import useApi from '../../hooks/useApi';
 import Spinner from '../../components/Spinner/Spinner';
 import api from '../../services/api';
 import Swal from 'sweetalert2';
-import Adminheader from '../../components/Header/AdminHeader';
-const PatientsList:FC = () => {
+import AdminHeader from '../../components/Header/AdminHeader';
+import User from '../../@types';
 
-    interface Patient {
-        _id: string;
-        username: string;
-        specialization: string;
-        image: string;
-        hospital: string;
-        patients: number;
+
+
+const PatientsList: FC = () => {
+  const [refresh, setRefresh] = useState<boolean>(false);
+
+  const handleBlock = async (userId: string) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Confirmation?',
+        width: '350px',
+        text: 'Are you sure you want to block it?',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, block it!',
+        customClass: {
+          title: 'text-xl',
+        },
+      });
+
+      if (result.isConfirmed) {
+        await api.put(`/admin/blockUser/${userId}`);
+        setRefresh((prev) => !prev);
       }
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+  };
 
-      const [refresh, setRefresh] = useState<boolean>(false);
+  const { fetchData, loading, data, error } = useApi<{ user: User[] }>('/getAllusers', 'get',);
 
-      const handleBlock = async (userId: string) => {
-        try {
+  useEffect(() => {
+    fetchData();
+  }, [refresh]);
 
+  if (loading) {
+    return <Spinner />;
+  }
 
-          Swal.fire({
-            title: 'Confirmation?',
-            width: '350px',
-            text: 'Are you sure want!',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, block it!',
-            customClass: {
-              title: 'text-xl',
-            },
-          }).then(async (result) => {
-            if (result.isConfirmed) {
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
 
-              const response = await api.put(`/admin/blockUser/${userId}`)
-              const patients: Patient[] = response.data || [];
-              setRefresh((prev) => !prev);
-              console.log(patients,"---0-0-0-0-0-0-0-0-0");
+  const user: User[] = data.user || [];
 
-            }})
-           
-        } catch (error) {
-    
-            console.log((error as Error).message);   
-        }
-          };
-    
-    
-      // const { fetchData, loading, data, error } = useApi<Doctor[]>('/getAllDoctors', 'get');
-      const { fetchData, loading, data, error } = useApi<{ user: Patient[] }>('/getAllusers', 'get','patient');
-    
-      useEffect(() => {
-        fetchData();
-      }, [fetchData, refresh]); 
-    
-      if (loading) {
-        return <Spinner/>;
-      }
-    
-      if (error) {
-        return <p>Error: {error.message}</p>;
-      }
+  const patients=user.filter((user)=>{
+   return user.role==="patient"
+  })
 
 
-    
-      const patients: Patient[] = data.user || [];
-    
-      console.log(data.user,"from admin")
-    
+  
+
+  // const 
+
   return (
     <>
-    <Adminheader/>
-    <div>
-     <h1>usersList</h1> 
-     <Table onBlock={handleBlock} user={patients}/>
-    </div>
+      <AdminHeader />
+      <div>
+        <h1>Users List</h1>
+        <Table onBlock={handleBlock} user={patients} />
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default PatientsList
+export default PatientsList;

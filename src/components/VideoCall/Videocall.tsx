@@ -15,15 +15,25 @@ const VideoCall:FC = () => {
         console.log(email, "joined room");
         setRemoteSocketId(id)
     }, []);
+
+
+    const constrains = {
+        video: {
+          width: { min: 640, ideal: 1920, max: 1920 },
+          height: { min: 480, ideal: 1080, max: 1080 },
+        },
+        audio: true,
+      };
     
     const handleCallUser= useCallback(async()=>{
-        const stream= await navigator.mediaDevices.getUserMedia({audio:true,video:true})
+        const stream= await navigator.mediaDevices.getUserMedia(constrains)
         const offer=await peer.getOffer()
         socket.emit("user:call",{to:remoteSocketId,offer})
         setMyStream(stream)
     },[remoteSocketId,socket])
 
-    const handleIncommingCall=useCallback(async({from,offer}:{from:string;offer:any})=>{
+    const handleIncommingCall=useCallback(async({from,offer}:{ offer: RTCSessionDescriptionInit; from: string;
+      })=>{
         setRemoteSocketId(from)
         const stream= await navigator.mediaDevices.getUserMedia({audio:true,video:true})
         setMyStream(stream)
@@ -33,6 +43,11 @@ const VideoCall:FC = () => {
     },[socket])
 
     const sendStreams=useCallback(()=>{
+
+        if(typeof myStream==="string"){
+            console.error('invalid mystream type')
+            return;
+        }
         for(const track of myStream.getTracks()){
             peer.peer.addTrack(track,myStream)
         }
@@ -63,18 +78,18 @@ const VideoCall:FC = () => {
     const handleNegoNeedIncomming=useCallback(async({from,offer}:{from:any;offer:any})=>{
         const ans= await peer.getAnswer(offer)
         socket.emit("peer:nego:done",{to:from,ans})
-    },[])
+    },[socket])
 
     const handleNegoNeedFinal=useCallback(async({ans}:{ans:any})=>{
         await peer.setLocalsDescription(ans)
     },[])
 
     useEffect(()=>{
-        peer.peer.addEventListener('track',async ev=>{
+        peer.peer.addEventListener('track',async (ev : {streams:any})=>{
             const remoteStream=ev.streams
             setRemoteStream(remoteStream[0])
         });
-    })
+    },[])
 
     useEffect(()=>{
         socket.on('user:joined',handleUserJoined);
@@ -83,7 +98,7 @@ const VideoCall:FC = () => {
         socket.on('peer:nego:needed',handleNegoNeedIncomming);
         socket.on('peer:nego:final',handleNegoNeedFinal);
         return()=>{
-            socket.off('user:joined',handleUserJoined)
+        socket.off('user:joined',handleUserJoined)
         socket.off('incomming:call',handleIncommingCall);
         socket.off('call:accepted',handleCallAccepted);
         socket.off('peer:nego:needed',handleNegoNeedIncomming);
@@ -91,29 +106,35 @@ const VideoCall:FC = () => {
 
 
         }
-    },[socket,handleUserJoined,handleIncommingCall,handleCallAccepted,handleNegoNeedIncomming,handleNegoNeedFinal])
+    },[socket,handleUserJoined, handleIncommingCall, handleCallAccepted, handleNegoNeedIncomming, handleNegoNeedFinal,myStream])
   return (
     
 
-      <div className='w-full text-center'>
-        <h1>ROOOOM</h1>
-        <h4>{remoteSocketId? "connected":'no one in room'}</h4>
-        {remoteSocketId && <button className='btn' onClick={handleCallUser}>Call</button>}
-        {myStream &&
-            <>
-            <h1>My Stream</h1>
-         <ReactPlayer playing muted height="200px" width="300px" url={myStream} />
-        
-        </>}
+      <div className='w-full text-center flex justify-center items-center bg-black h-screen'>
+        <div>
+            <h4 className='text-white'>{remoteSocketId? "connected":'no one in room'}</h4>
+        {remoteSocketId && <button className='btn px-2 py-2' onClick={handleCallUser}>Call</button>}
+        {remoteStream && <button className='btn p-1 py-2' onClick={sendStreams}>Send Stream</button>}
+        </div>
+        <div className='absolute border bottom-8 right-32'>
+            {myStream &&
+                <>
+                <h1 className='text-white'>My Stream</h1>
+             <ReactPlayer playing muted height="200px" width="300px" url={myStream} />
+            
+            </>}
+        </div>
 
-        {remoteStream &&
-            <>
-        {remoteStream && <button className='btn' onClick={sendStreams}>Send Stream</button>}
-
-            <h1>Remote stream</h1>
-         <ReactPlayer playing muted height="200px" width="300px" url={remoteStream} />
-        
-        </>}
+        <div className='w-full '>
+            {remoteStream &&
+                <>
+            
+                <h1>Remote stream</h1>
+             <ReactPlayer playing muted height="90%" width="90%"  url={remoteStream} />
+            
+            </>}
+            <div className='absolute bottom-10 w-[80%] justify-center flex '> <div className='w-[25%] flex justify-around cursor-pointer items-center bg-white bg-opacity-20 shadow-md  rounded-full h-16'><span className='bg-red-500 rounded-full h-10 w-10'>dddd</span> <span className='bg-red-500 rounded-full h-10 w-10'>dddd</span>  <span className='bg-red-500 rounded-full h-10 w-10'>dddd</span></div> </div>
+        </div>
         
       </div>
   )

@@ -10,14 +10,7 @@ const initialState={
 
 }
 
-// type userDetails={
-//     id:string,
-//     username:string,
-//     email:string,
-//     role:string,
-//     isApproved:boolean;
-//     isAdmin:boolean
-// }
+
 
 
 const authSlice=createSlice({

@@ -1,5 +1,5 @@
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 
 interface CheckoutFormProps {
   savebooking: () => void;
@@ -10,6 +10,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ savebooking }) => {
   const elements = useElements();
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
+
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,10 +25,12 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ savebooking }) => {
         redirect: "if_required",
       });
 
-      if (error) {
+      if (error ) {
         setMessage(error.message);
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
         savebooking();
+        setRefresh((prev) => !prev);
+
       }
     } catch (error) {
         const message=((error as Error).message );
@@ -36,6 +40,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ savebooking }) => {
       setIsLoading(false);
     }
   };
+
+  useEffect(()=>{
+
+  },[refresh])
 
   return (
     <form onSubmit={handleSubmit}>

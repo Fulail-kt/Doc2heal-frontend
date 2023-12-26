@@ -22,12 +22,12 @@ export default interface User {
     fee?: number;
     formStatus:string;
     hospital?: string;
-    experience?: number;
+    experience?: string;
     role?: 'patient' | 'doctor'|'admin';
     wallet?: {
 
       balance:number
-      transaction:string
+      transactions:[]
     };
     isBlocked?: boolean;
     isApproved?:boolean,
@@ -52,5 +52,25 @@ export default interface User {
     userAge: number;
     userId:string;
     userName: string;
+  }
+  
+
+  export default interface ApplyFormValues {
+    phone: number;
+    email: string;
+    address?: {
+      name: string;
+      house: string;
+      post: string;
+      pin: number;
+      contact: number;
+      state: string;
+      District: string;
+    }[];
+    
+    specialization?: string;
+    hospital?: string;
+    experience?: string|undefined;
+    fee?: number;
   }
   

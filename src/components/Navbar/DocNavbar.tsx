@@ -1,8 +1,8 @@
 // Import necessary libraries and icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserDoctor, faMessage, faCalendarCheck, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faUserDoctor, faMessage, faCalendarCheck, faUser} from '@fortawesome/free-solid-svg-icons';
 import { FC } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import "./navbar.css"
 
 interface NavLinkItem {
@@ -12,7 +12,7 @@ interface NavLinkItem {
 
 const navLinks: NavLinkItem[] = [
   {
-    path: '/dashboard',
+    path: '/doctor',
     display: 'Dashboard',
   },
   {
@@ -35,22 +35,14 @@ const navLinks: NavLinkItem[] = [
     path: '/doctor/payments',
     display: 'Payment',
   },
-  {
-    path: '',
-    display: 'Logout',
-  },
+ 
 ];
 
 const DocNavbar: FC = () => {
  
-  const navigate = useNavigate();
+ 
 
-  // Function to handle logout
-  const handleLogout = () => {
-    console.log("Logout button clicked");
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+
   
 
   return (
@@ -68,7 +60,7 @@ const DocNavbar: FC = () => {
                   {link.display === 'Messages' && <FontAwesomeIcon icon={faMessage} style={{ color: "#f7f7f7" }} />}
                   {link.display === 'Profile' && <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />}
                   {link.display === 'Payments' && <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />}
-                  {link.display === 'Logout' && <FontAwesomeIcon icon={faSignOutAlt} onClick={handleLogout} style={{ color: "#ffffff", cursor: "pointer" }} />}
+                
                 </span>
               </NavLink>
             </li>

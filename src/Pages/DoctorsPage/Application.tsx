@@ -12,7 +12,7 @@ const Application: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { isApproved } = useSelector((state:{useDetails: {isApproved: boolean;}}) => state.useDetails);
   const [user, setUser] = useState<User | undefined>();
-  const [id, setId] = useState<string | undefined>(); // changed the type of id
+  const [id, setId] = useState<string | undefined>();
 
   type Token = {
     id: string;
@@ -52,24 +52,33 @@ const Application: React.FC = () => {
   }, [navigate,id]);
 
   const fetchData = async () => {
+    console.log("seconde");
+    
     try {
-      const response = await Api.get('/getuser', { params: { id } });
+      const response = await Api.get('/getuser', { params: { id } })
       setUser(response.data.user);
     } catch (error) {
       console.error('Error fetching user:', error);
     }
   };
 
+ 
+
+
   if (loading) {
     return <Spinner />;
   }
+
+  
 
   return (
     <div className='w-100'>
       {!isApproved ? (
         <>
           <Header />
-          <DoctorForm user={user} />
+          <div className='profile_bg  min-h-[600px] flex flex-1 justify-center items-center'>
+            <DoctorForm fetchUser={fetchData} user={user} />
+          </div>
         </>
       ) : (
         <Navigate to='/dashboard' />

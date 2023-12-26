@@ -7,17 +7,11 @@ import Header from '../../components/Header/Header';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/authSlice';
+import User from '../../@types';
 
 
 const Doctors: FC = () => {
-  interface Doctor {
-    _id: string;
-    username: string;
-    specialization: string;
-    image: string;
-    hospital: string;
-    patients: number;
-  }
+
 
 
 
@@ -31,7 +25,7 @@ const Doctors: FC = () => {
     };
 
   // const { fetchData, loading, data, error } = useApi<Doctor[]>('/getAllDoctors', 'get');
-  const { fetchData, loading, data, error } = useApi<{ user: Doctor[] }>('/getAllUsers','get',"doctor");
+  const { fetchData, loading, data, error } = useApi<{ user: User[] }>('/getAllUsers','get',);
 
   useEffect(() => {
     fetchData();
@@ -45,9 +39,12 @@ const Doctors: FC = () => {
     return <p>Error: {error.message}</p>;
   }
 
-  const doctors: Doctor[] = data.user || [];
+  const user: User[] = data.user || [];
 
   console.log(data.user)
+  const doctors=user.filter((doc)=>(
+    doc.role==="doctor"
+  ))
 
 
   
@@ -55,8 +52,8 @@ const Doctors: FC = () => {
   return (
     <>
     <Header/>
-   <div>
-         <section className='bg-[#fff9ea] flex pt-2 pb-2'>
+   <div className='profile_bg'>
+         <section className=' flex pt-2 pb-2'>
       <div className='sm:w-1/4 md:w-[5%]'><Navbar handleLogout={handleLogout}/></div>
           <div className='container w-100  text-center'>
             <h2 className='heading'>Find a Doctor</h2>

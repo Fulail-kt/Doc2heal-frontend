@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import userImg from '../../assets/images/avatar.png';
 import Logo from '../../assets/images/Logo.png';
 import { BiMenu } from 'react-icons/bi';
@@ -39,6 +39,8 @@ const Adminheader: React.FC = () => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [Token, setToken] = useState('');
 
+  const navigate=useNavigate()
+
   const handlerStickyHeader = () => {
     window.addEventListener('scroll', () => {
       if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
@@ -60,6 +62,13 @@ const Adminheader: React.FC = () => {
     };
   }, [Token]);
   
+
+  const Logout=()=>{
+
+    localStorage.removeItem('token'); 
+    navigate('/login')
+    
+  }
 
   const toggleMenu = () => menuRef.current?.classList.toggle('show_menu');
 
@@ -90,11 +99,15 @@ const Adminheader: React.FC = () => {
     <div className="flex items-center gap-4">
 
       <div className={!Token?'hidden':''}>
-        <Link to='/profile'>
-          <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
+       
+
+          <div>
+            <button className='btn p-1 m-0' onClick={Logout}>Logout</button>
+          </div>
+          {/* <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
             <img src={userImg} className='w-full rounded-full' alt="" />
-          </figure>
-        </Link>
+          </figure> */}
+      
 
         
       </div>
