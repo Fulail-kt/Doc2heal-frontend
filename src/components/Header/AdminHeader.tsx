@@ -39,14 +39,14 @@ const Adminheader: React.FC = () => {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [Token, setToken] = useState('');
 
-  const navigate=useNavigate()
+  const navigate = useNavigate()
 
   const handlerStickyHeader = () => {
     window.addEventListener('scroll', () => {
       if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-        headerRef.current?.classList.add('sticky_header');
+        headerRef.current?.classList.add('sticky_header', "bg-gray-100","bg-opacity-50");
       } else {
-        headerRef.current?.classList.remove('sticky_header');
+        headerRef.current?.classList.remove('sticky_header', "bg-gray-100","bg-opacity-50");
       }
     });
   };
@@ -61,13 +61,13 @@ const Adminheader: React.FC = () => {
       window.removeEventListener('scroll', handlerStickyHeader);
     };
   }, [Token]);
-  
 
-  const Logout=()=>{
 
-    localStorage.removeItem('token'); 
+  const Logout = () => {
+
+    localStorage.removeItem('token');
     navigate('/login')
-    
+
   }
 
   const toggleMenu = () => menuRef.current?.classList.toggle('show_menu');
@@ -75,53 +75,47 @@ const Adminheader: React.FC = () => {
 
   return (
     <header className="headers h-24 flex items-center" ref={headerRef}>
-<div className="container">
-  <div className="flex items-center justify-between">
-    {/* ===================LOGO================= */}
-    <div className='w-[160px]'>
-      <img src={Logo} alt="LOGO" />
-    </div>
-
-
-    {/* =================== MENU ============== */}
-
-    <div className="navigation" ref={menuRef} onClick={toggleMenu}>
-      <ul className="menu flex items-center gap-[2.7rem]">
-        {
-          navLinks.map((link,index)=><li key={index}>
-            <NavLink to={link.path} className={navClass=>navClass.isActive?"text-blue-500 text-[16px] leading-7 font-[600]":'text-slate-600 text-[16px] leading-7 font-[500] hover:text-blue-500'}>{link.display}</NavLink>
-          </li>)
-        }
-      </ul>
-    </div>
-
-    {/* ============== nav right================ */}
-    <div className="flex items-center gap-4">
-
-      <div className={!Token?'hidden':''}>
-       
-
-          <div>
-            <button className='btn p-1 m-0' onClick={Logout}>Logout</button>
+      <div className="container">
+        <div className="flex items-center justify-between">
+          {/* ===================LOGO================= */}
+          <div className='w-[160px]'>
+            <img src={Logo} alt="LOGO" />
           </div>
-          {/* <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
-            <img src={userImg} className='w-full rounded-full' alt="" />
-          </figure> */}
-      
 
-        
+
+          {/* =================== MENU ============== */}
+
+          <div className="navigation" ref={menuRef} onClick={toggleMenu}>
+            <ul className="menu flex items-center gap-[2.7rem]">
+              {
+                navLinks.map((link, index) => <li key={index}>
+                  <NavLink to={link.path} className={navClass => navClass.isActive ? "text-blue-500 text-[16px] leading-7 font-[600]" : 'text-slate-600 text-[16px] leading-7 font-[500] hover:text-blue-500'}>{link.display}</NavLink>
+                </li>)
+              }
+            </ul>
+          </div>
+
+          {/* ============== nav right================ */}
+          <div className="flex items-center gap-4">
+
+            <div className={!Token ? 'hidden' : ''}>
+
+              <div className='flex items-center'>
+                <button className='bg-blue-500 py-1 px-4 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]' onClick={Logout}>Logout</button>
+              </div>
+
+            </div>
+
+            {!Token ? (<Link to='/login'>
+              <button className='bg-blue-500 py-1 px-4 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]'>Login</button>
+            </Link>) : ("")}
+          </div>
+
+          <span className='md:hidden' onClick={toggleMenu}>
+            <BiMenu className='w-6 h-6 cursor-pointer' />
+          </span>
+        </div>
       </div>
-
-     {!Token?(<Link to='/login'>
-       <button className='bg-blue-500 py-2 px-6 text-white font-[600] h-[44px] flex items-center justify-center rounded-[50px]'>Login</button>
-     </Link>):("")}
-    </div>
-
-    <span className='md:hidden' onClick={toggleMenu}>
-      <BiMenu className='w-6 h-6 cursor-pointer'/>
-    </span>
-  </div>
-</div>
     </header>
   )
 }

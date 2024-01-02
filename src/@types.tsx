@@ -1,6 +1,8 @@
 
 
 export default interface User {
+    bankDetails: any;
+    bankDetails: User | undefined;
     _id: string;
     username: string;
     email: string;
@@ -45,7 +47,7 @@ export default interface User {
     status: string;
     date: string;
     time:string;
-    fee?: number;
+    fee?: number|undefined;
     end: string;
     feedback?:[]; 
     note: string;

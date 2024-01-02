@@ -19,9 +19,6 @@ const Table: React.FC<TableProps> = ({user,onBlock,onApprove}) => {
 
   const [localUser, setLocalUser] = useState(user);
 
-// Update localUser when user prop changes
-console.log(localUser);
-
 const location=useLocation()
 
 useEffect(() => {
@@ -41,16 +38,16 @@ useEffect(() => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <table className="min-w-full text-center bg-white border border-gray-300">
+    <div className="container mx-auto p-4 ">
+      <table className="min-w-full  text-center bg-gray-200 border border-gray-600 ">
         {/* Table Header */}
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b">Name</th>
-            <th className="py-2 px-4 border-b">Email</th>
-            <th className="py-2 px-4 border-b">Role</th>
-            {path=="/admin/doctors" && <th className="py-2 px-4 border-b">Approved Status</th>}
-            <th className="py-2 px-4 border-b">Blocked Status</th>
+            <th className="py-2 px-4 border-b border-gray-400">Name</th>
+            <th className="py-2 px-4 border-b border-gray-400">Email</th>
+            <th className="py-2 px-4 border-b border-gray-400">Role</th>
+            {path=="/admin/doctors" && <th className="py-2 px-4 border-b border-gray-400">Approved Status</th>}
+            <th className="py-2 px-4 border-b border-gray-400">Blocked Status</th>
             {/* <th className="py-2 px-4 border-b">Action</th> */}
           </tr>
         </thead>
@@ -58,16 +55,16 @@ useEffect(() => {
         <tbody>
           {currentItems.map((user) => (
             <tr key={user._id}>
-              <td className="py-2 px-4 border-b">{user.username}</td>
-              <td className="py-2 px-4 border-b">{user.email}</td>
-              <td className="py-2 px-4 border-b">{user.role}</td>
+              <td className="py-2 px-4 border-b border-gray-400">{user.username}</td>
+              <td className="py-2 px-4 border-b border-gray-400">{user.email}</td>
+              <td className="py-2 px-4 border-b border-gray-400">{user.role}</td>
 
-              {path === '/admin/doctors' && (<td className="py-2 px-4  border-b"><button className={`mt-0 p-2 btn ${user.isApproved ? 'bg-green-500' : 'bg-red-500'}`} onClick={() => onApprove && onApprove(user._id)}>
+              {path === '/admin/doctors' && (<td className="py-2 px-4  border-b border-gray-400"><button className={`mt-0 p-2 btn ${user.isApproved ? 'bg-green-500' : 'bg-red-500'}`} onClick={() => onApprove && onApprove(user._id)}>
                 {user.isApproved ? 'Approved' : 'Not Approved'}</button></td>)}
                 
 
               {/* {path=='/admin/doctors?'&& <td className="py-2 px-4  border-b"><button className= {`mt-0 p-2 btn bg-${user.isApproved ? 'bg-red-500' : 'bg-green-500'}`} onClick={() => onApprove(user._id)}>{user.isApproved ? "Approved" : "UnApprove"}</button></td>} */}
-              <td className="py-2 px-4  border-b"><button className= {`mt-0 p-2 btn ${user.isBlocked ? 'bg-red-500' : 'bg-green-500'}`} onClick={() => onBlock(user._id)}>{user.isBlocked ? "Blocked" : "Unblocked"}</button></td>
+              <td className="py-2 px-4  border-b border-gray-400"><button className= {`mt-0 p-2 btn ${user.isBlocked ? 'bg-red-500' : 'bg-green-500'}`} onClick={() => onBlock(user._id)}>{user.isBlocked ? "Blocked" : "Unblocked"}</button></td>
               
             </tr>
           ))}

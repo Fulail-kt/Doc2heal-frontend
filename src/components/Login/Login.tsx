@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 import { login } from '../../redux/authSlice';
 import Spinner from '../Spinner/Spinner';
+import User from '../../@types';
 
 type FormData = {
   email: string;
@@ -15,12 +16,12 @@ type FormData = {
 
 type Token={
   _id:string,
-  role:String
+  role:string
 }
 const Login: React.FC = () => {
   const {register,handleSubmit,formState: { errors },} = useForm<FormData>();
 
-  const { fetchData, loading, data, error } = useApi<{user: any; success: any; value: any; message: string; isVerified: boolean;email:string,token:string}>('/login', 'POST');
+  const { fetchData, loading, data,  } = useApi<{user: User; success: string; value: any; message: string; isVerified: boolean;email:string,token:string}>('/login', 'POST');
 
   const navigate = useNavigate();
 
@@ -32,9 +33,9 @@ const Login: React.FC = () => {
     try {
       await fetchData(value);
 
-    } catch (error:any) {
+    } catch (error) {
         
-      const errorMessage = error.response.data.message || "An error occurred please try after some times";
+      const errorMessage = (error as Error).response.data.message || "An error occurred please try after some times";
       toast.error(errorMessage);
      
     }

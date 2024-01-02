@@ -8,6 +8,8 @@ import DocProfile from '../Pages/DoctorsPage/DocProfile'
 
 import Messenger from '../Pages/CommonPage/Messages/Messenger'
 import Lobby from '../components/lobby'
+import DisApproved from '../Pages/DoctorsPage/DisApproved'
+import DocPayment from '../Pages/DoctorsPage/DocPayment'
 
 const DoctorRoutes = () => {
     return (
@@ -20,7 +22,8 @@ const DoctorRoutes = () => {
          <Route path='/timeslots' element={<ProtectedRoute allowedRole="doctor"><TimeSlots /></ProtectedRoute>} />
          <Route path='/profile' element={<ProtectedRoute allowedRole="doctor"><DocProfile /></ProtectedRoute>} />
          <Route path='/messages' element={<ProtectedRoute allowedRole="doctor"><Messenger /></ProtectedRoute>} />
-            </Routes>
+         <Route path='/payments' element={<ProtectedRoute allowedRole="doctor"><DocPayment /></ProtectedRoute>} />
+         <Route path="/disapproved" element={<DisApproved/>} /> </Routes>
         </>
     )
 }

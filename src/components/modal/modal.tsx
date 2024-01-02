@@ -11,7 +11,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div className={`${modalClass} w-full  h-full bg-black backdrop-blur-sm bg-opacity-30`}>
-      <div className='bg-white rounded-md w-96'>
+      <div className='bg-white rounded-md w-100'>
         <div className='bg-gray-500 p-2 rounded-md shadow-lg flex justify-end'>
           <button className='text-white pr-3' onClick={onClose}>
             x

@@ -17,7 +17,7 @@ const useApi = <T>(url: string, method: Method,user?:string) => {
     message: '',
   });
 
-  const fetchData = async (body?) => {
+  const fetchData = async (body?:any) => {
     setResponse({ data: response.data, message: '', error: null, loading: true });
 
     console.log(user,"us");
@@ -34,13 +34,10 @@ const useApi = <T>(url: string, method: Method,user?:string) => {
 
       const result: AxiosResponse<T> = await api(axiosConfig);
 
-      console.log(result,"rsul");
-      
-
       setResponse({ data:result.data, message: 'Success!', loading: false, error: null  });
     } catch (error) {
       setResponse({ data: response.data, message: 'Error occurred.', error, loading: false });
-      throw error; // rethrow the error for the component to catch
+      throw error; 
     }
   };
 

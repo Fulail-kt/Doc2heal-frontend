@@ -58,15 +58,15 @@ const Profile: FC = () => {
       setLoading(true);
       const user = await Api.get(`/getuser`, { params: { id } });
       console.log(user.data, "block");
-  
+
       setUser(user.data.user);
-    } catch (error) {
+    } catch (error:any) {
       if (error?.response?.data.isBlocked) {
         localStorage.removeItem('token');
         navigate('/', { replace: true });
       }
       console.error('Error fetching data:', error);
-     
+
     } finally {
       setLoading(false);
     }
@@ -82,15 +82,12 @@ const Profile: FC = () => {
     try {
       const file = e.target.files[0];
 
-      console.log(file, "888888888888888888");
 
       if (!file) return;
 
       setimgLoading(true);
       const formData = new FormData();
       formData.append('file', file);
-
-      console.log(formData, "formdata");
 
 
       const response = await Api.patch('/editProfile', formData, {
@@ -105,8 +102,8 @@ const Profile: FC = () => {
       setTimeout(() => {
         setimgLoading(false);
       }, 100);
-    } catch (error) {
-     
+    } catch (error:any) {
+
       if (error?.response?.data.isBlocked) {
         localStorage.removeItem('token');
         navigate('/', { replace: true });
@@ -175,18 +172,20 @@ const Profile: FC = () => {
             <div className='w-1/6  rounded-xl shadow-xl  h-40'>
               <p className='text-center font-semibold text-lg shadow-md py-3'>Wallet Amount: ₹ {user?.wallet?.balance}</p>
               <p className='text-center text-blue-400'>history</p>
-              {user?.wallet?.transactions.slice(-2).map((history) => (
+              {user?.wallet?.transactions.slice(-2).map((history:{_id:string;paymentType:string;amount:number}) => (
                 <p className='text-center font-mono' key={history?._id}>{history?.paymentType} {history?.amount}</p>
               ))}
 
               <h3 className='cursor-pointer text-center text-green-500' onClick={handleViewMore}>view more</h3>
               <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                <div className='w-[500px]'>
 
-                {user?.wallet?.transactions.slice().reverse().map((history) => (
-                  <p key={history?._id} className={`text-center font-mono ${history?.paymentType === 'credit' ? 'text-green-500' : 'text-red-500' }`}>
-                    {history?.paymentType} {history?.amount}
-                  </p>
-                ))}
+                  {user?.wallet?.transactions.slice().reverse().map((history:{_id:string;paymentType:string;amount:number}) => (
+                    <p key={history?._id} className={`text-center font-mono ${history?.paymentType === 'credit' ? 'text-green-500' : 'text-red-500'}`}>
+                      {history?.paymentType} {history?.amount}
+                    </p>
+                  ))}
+                </div>
 
               </Modal>
             </div>

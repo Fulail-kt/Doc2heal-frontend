@@ -125,8 +125,8 @@ export default function Messenger() {
           <div className='w-full flex justify-center mt-4 '>
             <div className={`messenger w-[90%] rounded-lg shadow-2xl shadow-slate-800 ${location.pathname == "/doctor/messages" ? '  ' : 'bg-[#71a1ee]'} `}>
               <div className="chatMenu border-r-2">
-                <div className="chatMenuWrapper">
-                  <input placeholder="Search for friends" className="chatMenuInput" />
+                <div className="chatMenuWrapper ">
+                  <div className='w-full flex flex-col items-center '><input placeholder="Search for friends" className="chatMenuInput outline-none rounded-full h-10 px-3" /></div>
                   {conversations.map((c) => (
                     <div key={c._id} onClick={() => setCurrentChat(c)}>
                       <Conversation conversation={c} currentUserId={id} />
@@ -151,7 +151,7 @@ export default function Messenger() {
                       </div>
                       <div className=" flex items-center justify-between mt-2">
                         <input
-                          className="w-full m-3 h-8 rounded-full px-4"
+                          className="w-full m-3  h-8 rounded-full px-4"
                           placeholder="Write something..."
                           onChange={(e) => setNewMessage(e.target.value)}
                           value={newMessage}
@@ -162,7 +162,7 @@ export default function Messenger() {
                       </div>
                     </>
                   ) : (
-                    <span className="text-center text-white text-lg font-medium flex items-center justify-center min-h-full">
+                    <span className="text-center text-white text-lg font-medium flex items-center justify-center sm:text-xs  md:text-sm min-h-full">
                       Open a conversation to start a chat.
                     </span>
                   )}

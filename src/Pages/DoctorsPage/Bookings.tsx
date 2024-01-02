@@ -4,7 +4,7 @@ import Api from '../../services/api'
 import toast, { Toaster } from 'react-hot-toast'
 import Booking from '../../@types'
 import moment from 'moment'
-import { useNavigate } from 'react-router-dom'
+
 import Booked from '../../components/Doctor/Booked'
 
 
@@ -21,22 +21,13 @@ const Bookings = () => {
             const upcomming = await Api.get('/doctor/getAllbookings');
             console.log(upcomming, 'res');
 
-
             if (upcomming.data.success) {
-                const currentDateTime = moment();
                 const updatedUBooking = upcomming.data.booking.map((ubook: { time: Date, end: Date }) => ({
                     ...ubook,
                     time: moment(ubook.time).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
                     end: moment(ubook.end).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
                 }));
-
-
                 setBookings(updatedUBooking)
-
-
-
-
-
             } else {
                 toast.error(upcomming.data.message);
             }
@@ -51,28 +42,44 @@ const Bookings = () => {
     const [refresh, setRefresh] = useState<boolean>(false);
 
 
-   const handleCancelBooking=async(bookingId:string)=>{
+    const handleCancelBooking = async (bookingId: string) => {
+        try {
+            console.log(bookingId, "this is form bookings");
+            const status = 'cancelled'
+            const response = await Api.post('/doctor/updateBookingStatus', { bookingId, status });
+
+            if (response.data.success) {
+
+                toast.success(response.data.message)
+                setRefresh((prev) => !prev);
+            } else {
+                toast.error(response.data.message)
+            }
+
+
+        } catch (error) {
+            toast.success((error as Error).message)
+
+        }
+    }
+
+   const handleCompleteBooking=async(bookingId:string)=>{
     try {
-        console.log(bookingId,"this is form bookings");
-        const status='cancelled'
-        const response = await Api.post('/doctor/cancelBooking', { bookingId,status });
+        console.log(bookingId, "this is form bookings");
+        const status = 'completed'
+        const response = await Api.post('/doctor/updateBookingStatus', { bookingId, status });
 
-        if(response.data.success){
-
+        if (response.data.success) {
             toast.success(response.data.message)
             setRefresh((prev) => !prev);
-        }else{
+        } else {
             toast.error(response.data.message)
         }
-        
-        
     } catch (error) {
         toast.success((error as Error).message)
 
     }
    }
-
-
 
 
     useEffect(() => {
@@ -91,7 +98,7 @@ const Bookings = () => {
     return (
         <>
             <Toaster />
-            
+
             <div className='flex flex-col min-h-screen bg-gray-400'>
                 <div className='bg-[#202231] w-full h-16'></div>
                 <div className='flex flex-1'>
@@ -99,7 +106,7 @@ const Bookings = () => {
                         <DocNavbar />
                     </div>
                     <div className='w-full bg-gray-400'>
-                        <Booked Bookings={Books} handleCancelBooking={handleCancelBooking} />
+                        <Booked Bookings={Books} handleCancelBooking={handleCancelBooking} handleCompleteBooking={handleCompleteBooking}/>
                     </div>
                 </div>
             </div>

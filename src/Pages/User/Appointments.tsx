@@ -4,27 +4,6 @@ import { FC } from 'react'
 
 const Appointments: FC = () =>  {
 
-  
-
-    // const [id, Setid] = useState('')
-
-    // const navigate = useNavigate()
-
-    // const handleClick = () => {
-      
-        // navigate(`/room/${id}`)
-
-        // try {
-
-        //     if (id) {
-        //         navigate(`/room/${id}`)
-        //     }
-
-        // } catch (error: any) {
-        //     console.log(error.message);
-
-        // }
-    // }
 
 
     return (

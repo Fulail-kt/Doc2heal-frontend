@@ -1,20 +1,74 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import Adminheader from '../../components/Header/AdminHeader'
+import ChartExample from '../../components/Chart/Chart'
+import Api from '../../services/api'
+import doctorImg from '../../assets/images/edit.png'
+import patientImg from '../../assets/images/patient.png'
+import PieChart from '../../components/Chart/PieChart'
+
 
 const AdminDashboard: FC = () => {
-  useEffect(() => {
+  const [earnings, setEarnings] = useState([])
+  const [bookings, setbookings] = useState({})
 
+  const convertToShortMonth = (monthString: string) => {
+    const [year, month] = monthString.split('-');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${monthNames[parseInt(month, 10) - 1]}, ${year}`;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await Api.get('/admin/totalEarnings')
+
+        console.log(res, "dh");
+
+        const data = res.data.result.map((entry: { month: string }) => ({
+          ...entry,
+          month: convertToShortMonth(entry.month)
+        }));
+        data.sort((a: { year: string }, b: { year: string }) => a.year.localeCompare(b.year));
+        setEarnings(data)
+        setbookings(res.data.booking)
+      } catch (error) {
+
+      }
+    }
+    fetchData()
   }, [])
   return (
     <>
-      <Adminheader />
-      <div className='w-full flex justify-center mt-12 '>
-
-        <div className='w-1/2 flex justify-center gap-x-10'>
-          <div className='w-1/2 bg-gray-400 h-48 rounded-md'></div>
-          <div className='w-1/2 bg-gray-400 h-48 rounded-md'></div>
+      <div className='bg-gray-200 min-h-screen p-2'>
+        <Adminheader />
+        <div className=' flex flex-col items-center justify-center  mt-4 '>
+          <div className='flex w-3/4 justify-center gap-x-10'>
+            <div className='w-1/2 bg-gray-500 h-96 p-2 rounded-md'><ChartExample data={earnings} /></div>
+            <div className='w-1/2 flex flex-col justify-around  rounded-md'>
+              <div className=' flex justify-around items-center cursor-default  bg-gray-500 h-40 rounded-md'>
+                <div className='w-1/2 border flex justify-center items-center text-center font-semibold h-20' ><span><img src={doctorImg} width={60} height={50} alt="" /></span><h1>Doctors 10</h1></div>
+                <div className='w-1/2 border flex items-center justify-center text-center font-semibold h-20'><span><img src={patientImg} width={60} height={50} className='' /></span><h1>Patients 40</h1></div>
+              </div>
+              <div className=' flex justify-around items-center  cursor-default bg-gray-500 h-40 rounded-md'>
+                <div className='w-1/2 border grid place-items-center text-center font-semibold h-20' >Non Blocked 50</div>
+                <div className='w-1/2 border grid place-items-center text-center font-semibold h-20'>Blocked 5</div>
+              </div>
+            </div>
+          </div>
+          <div className=' flex w-3/4 mt-8 justify-center gap-x-10'>
+            <div className='w-1/2 flex flex-col justify-around  rounded-md'>
+              <div className=' flex justify-around items-center cursor-default  bg-gray-500 h-32 rounded-md'>
+                <div className='w-1/2 border flex justify-center items-center text-center font-semibold h-14' ><span><img src={doctorImg} width={60} height={50} alt="" /></span><h1>Doctors 10</h1></div>
+                <div className='w-1/2 border flex items-center justify-center text-center font-semibold h-14'><span><img src={patientImg} width={60} height={50} className='' /></span><h1>Patients 40</h1></div>
+              </div>
+              <div className=' flex justify-around items-center  cursor-default bg-gray-500 h-32 rounded-md'>
+                <div className='w-1/2 border grid place-items-center text-center font-semibold h-14' >Non Blocked 50</div>
+                <div className='w-1/2 border grid place-items-center text-center font-semibold h-14'>Blocked 5</div>
+              </div>
+            </div>
+            <div className='w-2/4  bg-gray-500 max-h-80 p-1 rounded-md'><PieChart data={bookings} /></div>
+          </div>
         </div>
-
       </div>
     </>
   )

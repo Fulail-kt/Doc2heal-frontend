@@ -49,7 +49,7 @@ const Application: React.FC = () => {
     };
 
     checkAuthentication();
-  }, [navigate,id]);
+  }, [navigate, id,]);
 
   const fetchData = async () => {
     console.log("seconde");
@@ -63,8 +63,6 @@ const Application: React.FC = () => {
   };
 
  
-
-
   if (loading) {
     return <Spinner />;
   }

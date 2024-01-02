@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import bookingModal from '../../@types';
 import Modal from '../modal/modal';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +7,6 @@ import Api from '../../services/api';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
-// import ReactModal from 'react-modal';
 import moment from 'moment';
 import 'moment-timezone';
 import toast, { Toaster } from 'react-hot-toast';
@@ -57,7 +56,7 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
         }
         setSelectedBookingId(id);
 
-        
+
         setSelectedamount(amount);
         openModal();
     };
@@ -74,8 +73,8 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
                 age: data.Age,
                 note: data.note,
             };
-            
-            
+
+
             setBookingData(booking);
 
             const response = await Api.post('/payment', { amount });
@@ -98,24 +97,27 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
                 toast.success(response.data?.message);
 
             }
-            
+
             closeModal();
             setRefresh((prev) => !prev);
-            
+
         } catch (error) {
             console.log((error as Error).message);
 
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
 
-    },[refresh])
+    }, [refresh])
 
     return (
         <>
             <Toaster />
             <div className='w-full text-center'>
+                {bookings.length === 0 && (
+                    <p className='text-red-500 font-extralight text-lg p-4 tracking-widest'>No slots available at the selected date.</p>
+                )}
                 {clientSecret && (
                     <Modal isOpen={open} onClose={closeModal} >
                         <Elements stripe={stripePromise} options={options}>
@@ -124,7 +126,7 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
                     </Modal>
                 )}
                 <div className='flex justify-center w-full'>
-                    
+
                     <div className='flex w-[80%] justify-center  m-3'>
                         {bookings?.map((booking) => (
                             <div
@@ -135,7 +137,7 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
                             >
                                 <p>{moment(booking.date).tz('Asia/Kolkata').format('L')}</p>
                                 <p>
-                        
+
                                     {moment(booking.time).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')} to{' '}
                                     {moment(booking.end).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')}
                                 </p>

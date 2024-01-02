@@ -17,11 +17,14 @@ const DoctorsDetails: React.FC = () => {
   const [bookings, setBookings] = useState<bookingModal[] | undefined>();
   const [showBookings, setShowBookings] = useState(false);
 
+  const currentDate = moment().format('YYYY-MM-DD');
+  const [selected, setSelected] = useState(currentDate);
+
   const fetchData = async () => {
     try {
       const response = await Api.get(`/doctor/getdoctor`, { params: { id } });
       setDoctor(response.data?.doctor.doctor);
-      
+
     } catch (error) {
       console.error("Error fetching doctor data:", error);
     }
@@ -43,11 +46,19 @@ const DoctorsDetails: React.FC = () => {
   //   }
   // };
 
+
+  console.log(selected, "ds");
+
+
   const fetchBookings = async () => {
     try {
-      const slots = await Api.get("/getbookings", { params: { id } });
+      // const selected="2024-01-02"
+      const slots = await Api.get("/getbookings", { params: { id, selected } });
       const allBookings: bookingModal[] = slots.data.bookings;
-  
+
+      console.log(slots.data, "daa");
+
+
       const filteredBookings = allBookings.filter((item) => {
         const currentTime = moment();
         const isAfterEndTime = currentTime.isBefore(item?.end);
@@ -63,11 +74,15 @@ const DoctorsDetails: React.FC = () => {
     }
   };
 
-  
+
 
   useEffect(() => {
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    fetchBookings()
+  }, [selected])
 
   const handleSeeAvailableSlots = () => {
     fetchBookings();
@@ -77,15 +92,17 @@ const DoctorsDetails: React.FC = () => {
   return (
     <>
       <Header />
-<div className="profile_bg" style={{ minHeight: 'calc(100vh - 100px)' }}>
-  <DoctorsList doctor={doctor} />
-  <div className="flex justify-center w-full text-white">
-    <button className="bg-[#edc77b] p-1 w-[250px] px-10 rounded-full text-xl font-extralight" onClick={handleSeeAvailableSlots}>
-      {showBookings ? "Hide Available Slots" : "See Available Slots"}
-    </button>
-  </div>
-  {showBookings && <Timeslot bookings={bookings} />}
-</div>
+      <div className="profile_bg" style={{ minHeight: 'calc(100vh - 100px)' }}>
+        <DoctorsList doctor={doctor} />
+        <div className="flex justify-center gap-x-6 w-full text-white">
+
+          <button className="bg-[#edc77b] p-1 w-[250px] px-10 rounded-full text-xl font-extralight" onClick={handleSeeAvailableSlots}>
+            {showBookings ? "Hide Available Slots" : "See Available Slots"}
+          </button>
+          <input type="date" defaultValue={currentDate} onChange={(e: any) => setSelected(e.target.value)} className="bg-[#edc77b] outline-none rounded-full p-0 m-0 px-3 py-1" name="" id="" />
+        </div>
+        {showBookings && <Timeslot bookings={bookings} />}
+      </div>
 
     </>
   );

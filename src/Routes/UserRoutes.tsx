@@ -1,7 +1,5 @@
 
 
-
-
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from '../Pages/User/Home'
@@ -17,7 +15,7 @@ import Otp from '../Pages/User/otp'
 import ProtectedRoute from './Protected'
 import Application from '../Pages/DoctorsPage/Application'
 import Mybookings from '../Pages/User/Mybookings'
-import Chat from '../components/Conversation/Conversation'
+// import Chat from '../components/Conversation/Conversation'
 import Messenger from '../Pages/CommonPage/Messages/Messenger'
 
 const UserRoutes:React.FC = () => {

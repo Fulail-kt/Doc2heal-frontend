@@ -16,7 +16,7 @@ const navLinks: NavLinkItem[] = [
   },
   {
     path: '/doctors',
-    display: 'Find a Doctors',
+    display: 'Find Doctors',
   },
   {
     path: '/services',

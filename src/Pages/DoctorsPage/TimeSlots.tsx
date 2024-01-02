@@ -10,11 +10,14 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const TimeSlots: FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [date, setDate] = useState<string | null>(null);
-    const [time, setTime] = useState<string | null>(null);
+    // const [date, setDate] = useState<string | null>(null);
+    // const [time, setTime] = useState<string | null>(null);
     const [bookings, setBookings] = useState<bookingModal[]>();
     const [refresh, setRefresh] = useState<boolean>(false);
-
+    const [endTime, setEndTime] = useState()
+    const [startTime, setStartTime] = useState<string | null>()
+    const [endDate, setEndDate] = useState()
+    const [startDate, setStartDate] = useState()
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -28,52 +31,57 @@ const TimeSlots: FC = () => {
         const currentDateTime = moment();
         return {
             currentDate: currentDateTime.format('YYYY-MM-DD'),
-            currentTime: currentDateTime.format('HH:mm'), // Use 'HH:mm' for 24-hour format
+            currentTime: currentDateTime.format('HH:mm'),
         };
     };
 
     const { currentDate, currentTime } = getCurrentDateTime();
 
+    
+    const [selected, setSelected] = useState(currentDate)
+
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
         try {
-            if (!date || !time) {
-                const currentDateTime = moment();
-                setDate(currentDateTime.format('YYYY-MM-DD'))
-                setTime(currentDateTime.format('HH:mm'))
+            
+            console.log(startDate, endDate, startTime, endTime);
+            const startDateTime = moment(`${startDate}T${startTime}`);
+            const endDateTime = moment(`${endDate}T${endTime}`);
+            
+            // if (endDateTime.diff(startDateTime, 'hours') <= 5) return;
+            
+            
+            console.log("hello");
+
+            if (startDateTime.isAfter(endDateTime)) {
+               toast.error("invalid date or time")
+                return;
             }
+            const occurrences = [];
 
+            const interval = moment.duration(1, 'hours');
+            let currentDateTime = startDateTime.clone();
 
-
-
-            if (!date || !time) {
-                return
-            }
-
-            // Convert to UTC before sending to the server
-            const utcDate = moment.utc(`${date}T${time}Z`);
-
-            if (date && time) {
-
-                const response = await Api.post('/doctor/setTimeslot', {
-                    date: utcDate.format('YYYY-MM-DD'),
-                    time: utcDate.format('HH:mm'),
+            while (currentDateTime.isBefore(endDateTime) && currentDateTime.diff(startDateTime, 'days') <= 2) {
+                occurrences.push({
+                    start: currentDateTime.format('YYYY-MM-DD hh:mm:ss A'),
+                    end: currentDateTime.add(interval).format('YYYY-MM-DD hh:mm:ss A')
                 });
-
-
-                console.log(response);
-                if(response.data.message){
-
-                    toast.success(response.data.message)
-                    setRefresh((prev) => !prev);
-                    closeModal()
+                // Check if the current time has exceeded the specified end time
+                if (currentDateTime.isSameOrAfter(moment(`${currentDateTime.format('YYYY-MM-DD')}T${endTime}`))) {
+                    currentDateTime.set('hour', startTime.split(':')[0]);
+                    currentDateTime.set('minute', startTime.split(':')[1]);
+                    currentDateTime.add(1, 'days');
                 }
-                console.log('API Response:', response);
             }
+            const response = await Api.post('/doctor/setTimeslot', { occurrences });
+            if (response.data.message) {
 
-
-
+                toast.success(response.data.message)
+                setRefresh((prev) => !prev);
+                closeModal()
+            }
         } catch (error) {
             console.log((error as Error).message);
         }
@@ -86,16 +94,14 @@ const TimeSlots: FC = () => {
     useEffect(() => {
         const fetchSlots = async () => {
             try {
-                const slots = await Api.get('/getbookings', { params: { id } });
-
-                setBookings(slots.data.bookings);
+                const slots = await Api.get(`/getbookings`, { params: { id,selected } });
+                setBookings(slots.data.bookings);  
             } catch (error) {
                 console.error(error);
             }
         };
-
         fetchSlots();
-    }, [id,refresh]);
+    }, [id, refresh,selected]);
 
     return (
         <>
@@ -117,54 +123,93 @@ const TimeSlots: FC = () => {
                         </div>
                         <Modal isOpen={isModalOpen} onClose={closeModal}>
                             <>
-                                <form onSubmit={handleSubmit}>
+                                <form className='w-full' onSubmit={handleSubmit}>
                                     <div className='flex flex-col justify-center items-center'>
-                                        <div className='flex justify-around w-full items-center'>
-                                            <span className='overline'>Date :</span>{' '}
-                                            <div className='border p-3 w-40 rounded-md'>
-                                                <input type='date' name='date' defaultValue={currentDate} onChange={(e) => setDate(e.target.value)} />
+                                        <div className='w-full flex p-1 gap-x-9  items-center '>
+                                            <div className='flex justify-around w-1/2 items-center'>
+                                                <div className='border grid place-items-center  rounded-md'>
+                                                    <div className='bg-slate-400 w-full text-white text-center rounded-sm'><span className='text-sm'>Start Date :</span></div>
+                                                    <input
+                                                        type='date'
+                                                        name='startDate'
+                                                        defaultValue={currentDate}
+                                                        onChange={(e:any) => setStartDate(e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className='flex justify-around w-1/2 items-center'>
+                                                <div className='border grid place-items-center  rounded-md'>
+                                                    <div className='bg-slate-400 w-full text-white text-center rounded-sm'><span className='text-sm'>End Date :</span></div>
+                                                    <input
+                                                        type='date'
+                                                        name='endDate'
+                                                        // defaultValue={currentDate}
+                                                        onChange={(e:any) => setEndDate(e.target.value)}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className='flex justify-around w-full items-center'>
-                                            <span className='overline'>Time :</span>{' '}
-                                            <div className='border p-3 w-40 rounded-md'>
-                                                <input type='time' name='time' defaultValue={currentTime} onChange={(e) => setTime(e.target.value)} />
+                                        <div className='flex w-full p-1 items-center '>
+                                            <div className='flex justify-around w-1/2 items-center'>
+                                                <div className='border grid place-items-center  rounded-md'>
+                                                    <div className='bg-slate-400 w-full text-white text-center rounded-sm'><span className='text-sm '>Start Time :</span></div>
+                                                    <input
+                                                        type='time'
+                                                        name='startTime'
+                                                        defaultValue={currentTime}
+                                                        onChange={(e) => setStartTime(e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className='flex justify-around w-1/2 items-center'>
+                                                <div className='border grid place-items-center rounded-md'>
+                                                    <div className='bg-slate-400 w-full text-white text-center rounded-sm'><span className='text-sm'>End Time :</span>{' '}</div>
+                                                    <input
+                                                        type='time'
+                                                        name='endTime'
+                                                        defaultValue={currentTime}
+                                                        onChange={(e:any) => setEndTime(e.target.value)}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
-                                        <button type='submit' className='btn p-2 px-5 mt-2 bg-slate-500 tracking-widest'>Create</button>
+                                        <button
+                                            type='submit'
+                                            className='btn p-2 px-5 mt-2 bg-slate-500 tracking-widest'>
+                                            Create
+                                        </button>
                                     </div>
                                 </form>
                             </>
                         </Modal>
                         <div className='flex flex-wrap justify-center w-full'>
-  {bookings?.map((booking) => (
-    <div
-      className={`${
-        booking.status === 'booked'? 'bg-green-500': booking.status === 'completed'? 'bg-[#5046a8]': booking.status === 'cancelled'? 'bg-red-500': 'bg-orange-400'} flex-shrink-0 w-1/4 rounded-md border font-light p-1 m-2 text-white text-center`} key={booking._id}>
-      <p>{moment(booking.date).local().format('ll')}</p>
-      <p>
-        {moment(booking.time)
-          .tz('Asia/Kolkata')
-          .subtract(5, 'hours')
-          .subtract(30, 'minutes')
-          .format('h:mm A')}{' '}
-        to{' '}
-        {moment(booking.end)
-          .tz('Asia/Kolkata')
-          .subtract(5, 'hours')
-          .subtract(30, 'minutes')
-          .format('h:mm A')}
-      </p>
-      <p>{booking.status}</p>
-    </div>
-  ))}
-</div>
+                            <div className='w-full flex  justify-center text-white'>
+                                <label className='border  p-1 rounded-md' htmlFor="">Select Date: <input type="Date" className='bg-transparent  outline-none' name="" id="" onChange={(e:any)=>setSelected(e.target.value)}  defaultValue={currentDate}/></label>
+                                
+                            </div>
+                            {bookings && bookings.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any TimeSlots Created</p>) : (bookings?.map((booking) => (
+                                <div
+                                    className={`${booking.status === 'booked' ? 'bg-green-500' : booking.status === 'completed' ? 'bg-[#5046a8]' : booking.status === 'cancelled' ? 'bg-red-500' : 'bg-orange-400'} flex-shrink-0 w-1/4 rounded-md border font-light p-1 m-2 text-white text-center`} key={booking._id}>
+                                    <p>{moment(booking.date).local().format('ll')}</p>
+                                    <p>
+                                        {moment(booking.time)
+                                            .tz('Asia/Kolkata')
+
+                                            .format('h:mm A')}{' '}
+                                        to{' '}
+                                        {moment(booking.end)
+                                            .tz('Asia/Kolkata')
+
+                                            .format('h:mm A')}
+                                    </p>
+                                    <p>{booking.status}</p>
+                                </div>
+                            )))}
+                        </div>
 
                     </div>
                 </div>
             </div>
-
-
         </>
     );
 };

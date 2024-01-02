@@ -136,7 +136,7 @@ const DoctorForm: FC<DoctorFormProps> = ({ user,fetchUser}) => {
         <>
             <Toaster />
             {formStatus == 'submited' ? (<div className='w-full text-center h-96 flex justify-center items-center'>
-                <p className='text-2xl font-bold tracking-wide text-yellow-600'>Request Already Submitted ! Wait for Admin Response</p>
+                <p className='text-2xl font-bold tracking-wide text-yellow-600'>Request Submitted ! Wait for Admin Response</p>
             </div>) : formStatus == "rejected" ? (<div className='w-full text-center text-red-600 h-96 flex justify-center items-center'>
                 <p className='text-2xl font-bold tracking-wide'>Request has been Rejected by Admin ! Please Contact Admin</p>
             </div>) : (

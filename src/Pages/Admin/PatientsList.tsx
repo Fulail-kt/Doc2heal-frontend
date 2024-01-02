@@ -43,7 +43,7 @@ const PatientsList: FC = () => {
   }, [refresh]);
 
   if (loading) {
-    return <Spinner />;
+    return <div className='bg-gray-200  h-screen'> <Spinner /></div>;
   }
 
   if (error) {
@@ -63,10 +63,11 @@ const PatientsList: FC = () => {
 
   return (
     <>
-      <AdminHeader />
-      <div>
-        <h1>Users List</h1>
-        <Table onBlock={handleBlock} user={patients} />
+       <div className='bg-gray-200 h-screen'>
+        <AdminHeader />
+        <div>
+          <Table onBlock={handleBlock} user={patients} />
+        </div>
       </div>
     </>
   );

@@ -1,20 +1,18 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import "./Conversation.css";
 import Api from "../../services/api";
+import User from "../../@types";
 
-export default function Conversation({ conversation, currentUserId }) {
-  const [user, setUser] = useState(null);
+export default function Conversation({ conversation, currentUserId }:{conversation:any;currentUserId:string}) {
+  const [user, setUser] = useState<User>();
 
 
   useEffect(() => {
-    const friendId = conversation.members.find((m) => m !== currentUserId);
+    const friendId = conversation.members.find((m:any) => m !== currentUserId);
 
     const getUser = async () => {
       try {
         const res = await Api.get("/getuser",{params:{id:friendId}});
-
-        console.log(res);
         
         setUser(res.data.user);
       } catch (err) {
@@ -25,17 +23,13 @@ export default function Conversation({ conversation, currentUserId }) {
   }, [currentUserId, conversation]);
 
   return (
-    <div className="conversation ">
-      {/* <img
-        className="conversationImg"
-        src={
-          user?.profilePicture
-            ? PF + user.profilePicture
-            : PF + "person/noAvatar.png"
-        }
+    <div className=" cursor-pointer m-5 flex space-x-3 items-center hover:bg-gray-800 hover:text-white px-3 rounded-md h-10">
+      <img
+        className="rounded-full w-7 h-7 -x-4"
+        src={user?.image} 
         alt=""
-      /> */}
-      <span className="conversationName">{user?.username}</span>
+      />
+      <span className="w-full ">{user?.username}</span>
     </div>
   );
 }

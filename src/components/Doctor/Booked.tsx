@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import socket from '../../services/socket';
-
 import Booking from '../../@types';
+import Spinner from '../Spinner/Spinner';
 
 const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Bookings: Booking[]; handleCancelBooking: any; handleCompleteBooking: any }) => {
   const [page, setPage] = useState('upcoming');
@@ -35,6 +35,9 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
     const upcom = Bookings?.filter((bk: { status: string }) => bk.status === 'booked');
     setUbooking(upcom);
 
+    console.log(upcom,"upco");
+    
+
     const completed = Bookings?.filter((bk: { status: string }) => bk.status === 'completed');
     setFbooking(completed);
 
@@ -56,24 +59,23 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
     const isBeforeEndTime = currentTime.isSameOrBefore(endTime);
     return isAfterStartTime && isBeforeEndTime;
   };
-  
+
 
 
   const handleStartSession = useCallback((e: React.MouseEvent, bookId: string) => {
     e.preventDefault();
     setRoomId(bookId);
-    const roomId=bookId
+    const roomId = bookId
     console.log(roomId);
-    
+
     socket.emit('room:join', { email: 'hello', roomId });
     handleJoinRoom({ email: 'hello', roomId });
   }, [roomId]);
-  
+
 
   const handleJoinRoom = useCallback((data: { email: string; roomId: string }) => {
-    const { email, roomId } = data;
-    console.log(data,"data");
-    
+    const { roomId } = data;
+
     navigate(`/room/${roomId}`);
   }, [navigate]);
 
@@ -126,47 +128,52 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
           </span>
         </div>
       </div>
+      {/* {Bookings && Bookings.length&& <p></p>} */}
 
       <div className='mt-4 flex justify-center'>
         {page === 'upcoming' && (
           <>
             {loading ? (
-              <p>Loading...</p>
+              <Spinner />
             ) : (
               <div className='w-[85%] flex flex-col justify-center items-center cursor-default '>
-                {uBooking?.map((ubook) => (
+                {uBooking && uBooking?.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any Upcomming Bookings</p>) : (uBooking?.map((ubook) => (
                   <div key={ubook._id} className='w-[90%] flex flex-col text-center justify-center items-center border m-2 rounded-md shadow-lg'>
                     <div>
-                      {location.pathname === '/doctor/bookings' && (
+                      {location.pathname === '/doctor/bookings' ? (
                         <>
-                          <p className='text-lg font-mono'>Session with {capitalizeFirstLetter(ubook.userName)} ({ubook.userAge})</p>
-                          <p className='text-center'>{ubook.note}</p>
+                          <p className='text-lg font-mono'>Session with {capitalizeFirstLetter(ubook?.userName)} ({ubook?.userAge})</p>
+                          <p className='text-center'>{ubook?.note}</p>
                         </>
-                      )}
+                      ):( <>
+                   <p className='text-lg font-mono'>Session with {capitalizeFirstLetter(ubook?.doctorId?.username)}</p>
+
+                      </>)}
                     </div>
                     <div className='w-[70%] rounded-lg p-2 px-5 bg-gray-500 text-white justify-around  m-3 items-center  flex' key={ubook?._id}>
-                      <p>{new Intl.DateTimeFormat('en-IN').format(new Date(ubook.date))}</p>
+                      <p>{new Intl.DateTimeFormat('en-IN').format(new Date(ubook?.date))}</p>
                       <p>
-                        {ubook.time} to {ubook.end}
+                        {ubook?.time} to {ubook?.end}
                       </p>
-                      {showSessionStartButton(ubook.time, ubook.end) && (
-                        <button onClick={(e) => handleStartSession(e, ubook._id)} className='btn bg-green-600 p-2 mt-0'>
+                      {showSessionStartButton(ubook?.time, ubook?.end) && (
+                        <button onClick={(e) => handleStartSession(e, ubook?._id)} className='btn bg-green-600 p-2 mt-0'>
                           Start Session
                         </button>
                       )}
-                      {cancelButton(ubook.time) && (
-                        <button onClick={() => handleCancelBooking(ubook._id)} className='btn bg-red-600 p-2 mt-0'>
+                      {cancelButton(ubook?.time) && (
+                        <button onClick={() => handleCancelBooking(ubook?._id)} className='btn bg-red-600 p-2 mt-0'>
                           Cancel Booking
                         </button>
                       )}
-                      {CompletedButton(ubook.end) && location.pathname === "/doctor/messages" && (
-                        <button onClick={() => handleCompleteBooking(ubook._id)} className='btn bg-green-600 p-2 mt-0'>
+                      {CompletedButton(ubook?.end) && location.pathname === "/doctor/bookings" && (
+                        <button onClick={() => handleCompleteBooking(ubook?._id)} className='btn bg-green-600 p-2 mt-0'>
                           Completed
                         </button>
                       )}
                     </div>
                   </div>
-                ))}
+                )))
+                }
               </div>
             )}
           </>
@@ -177,8 +184,8 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
             {loading ? (
               <p>Loading...</p>
             ) : (
-              <div className='w-[85%] flex flex-col justify-center items-center border rounded-md '>
-                {fBooking?.map((fbook) => (
+              <div className='w-[85%] flex flex-col justify-center items-center  '>
+                {fBooking && fBooking?.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any Completed Bookings </p>) : (fBooking?.map((fbook) => (
                   <div className=' w-[70%] rounded-lg p-2 px-5 bg-white justify-around border m-3 items-center text-black flex' key={fbook?._id}>
                     <p>{new Intl.DateTimeFormat('en-IN').format(new Date(fbook.date))}</p>
                     <p>
@@ -186,7 +193,7 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
                     </p>
                     <p className='text-white bg-green-600 rounded-md p-1'>{fbook.status}</p>
                   </div>
-                ))}
+                )))}
               </div>
             )}
           </>
@@ -197,8 +204,8 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
             {loading ? (
               <p>Loading...</p>
             ) : (
-              <div className='w-[85%] flex flex-col justify-center items-center border rounded-md'>
-                {cBooking?.map((cbook) => (
+              <div className='w-[85%] flex flex-col justify-center items-center '>
+                {cBooking && cBooking.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any Cancelled Bookings</p>) : (cBooking?.map((cbook) => (
                   <>
                     <div>
                       {location.pathname === '/doctor/bookings' && (
@@ -217,7 +224,7 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
                       <p className='text-white bg-red-600 rounded-md p-1'>{cbook.status}</p>
                     </div>
                   </>
-                ))}
+                )))}
               </div>
             )}
           </>

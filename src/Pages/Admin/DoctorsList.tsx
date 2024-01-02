@@ -71,8 +71,6 @@ const DoctorsList: FC = () => {
     }
   };
 
-
-  // const { fetchData, loading, data, error } = useApi<Doctor[]>('/getAllDoctors', 'get');
   const { fetchData, loading, data, error } = useApi<{ user: User[] }>('/getAllusers', 'get',);
 
   useEffect(() => {
@@ -80,7 +78,8 @@ const DoctorsList: FC = () => {
   }, [refresh]);
 
   if (loading) {
-    return <Spinner />;
+    
+    return <div className='bg-gray-200  h-screen'> <Spinner /></div>;
   }
 
   if (error) {
@@ -99,10 +98,12 @@ const DoctorsList: FC = () => {
 
 return (
     <>
-    <Adminheader/>
-      <div>
-        <Table user={doctors} onApprove={handleApprove} onBlock={handleBlock} />
-      </div>
+     <div className='bg-gray-200 h-screen'>
+      <Adminheader/>
+        <div>
+          <Table user={doctors} onApprove={handleApprove} onBlock={handleBlock} />
+        </div>
+    </div>
     </>
   )
 }
