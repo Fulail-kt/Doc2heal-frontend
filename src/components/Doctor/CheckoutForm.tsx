@@ -26,7 +26,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ savebooking }) => {
       });
 
       if (error ) {
-        setMessage(error.message);
+        setMessage((error as unknown as Error).message);
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
         savebooking();
         setRefresh((prev) => !prev);
@@ -46,11 +46,13 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ savebooking }) => {
   },[refresh])
 
   return (
+    <>
     <form onSubmit={handleSubmit}>
       <PaymentElement />
       <div>{message}</div>
-      <button disabled={!stripe || isLoading}>Submit</button>
+      <button className='bg-gray-500 rounded-lg mt-2 text-white px-3' disabled={!stripe || isLoading}>Submit</button>
     </form>
+    </>
   );
 };
 

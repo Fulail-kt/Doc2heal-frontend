@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from 'react';
-import DoctorCard from '../../components/Doctor/DoctorCard';
+import { FC, useEffect, useState, lazy, Suspense } from 'react';
+// import DoctorCard from '../../components/Doctor/DoctorCard';
 import useApi from '../../hooks/useApi';
 import Spinner from '../../components/Spinner/Spinner';
 import Navbar from '../../components/Navbar/Navbar';
@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/authSlice';
 import User from '../../@types';
 import moment from 'moment';
+
+const DoctorCard = lazy(() => import('../../components/Doctor/DoctorCard'));
 
 const Doctors: FC = () => {
   const dispatch = useDispatch();
@@ -26,9 +28,6 @@ const Doctors: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [selectedFeeRange,setSelectedFeeRange]=useState<string>("")
-
-  console.log(selectedFeeRange,'fee');
-  
 
   const { fetchData: fetchUsers, loading: loadingUsers, data: userData, error: userError } = useApi<{ doctors: User[], totalPages: any }>(`/doctor/getAlldoctors?page=${currentPage}`, 'get');
   const { fetchData: fetchBookings, loading: loadingBookings, data: bookingData, error: bookingError } = useApi<any>('/doctor/getbookings', 'get');
@@ -54,14 +53,6 @@ const Doctors: FC = () => {
     setInitialLoadComplete(true);
   }, [date]);
 
-  // useEffect(() => {
-  //   if (initialLoadComplete) {
-  //     const updatedDoctors = users.filter((doc) => (
-  //       doc.role === 'doctor' && doc.isApproved && (!date || isDoctorAvailableOnDate(doc._id, date))
-  //     ));
-  //     setDoctors(updatedDoctors);
-  //   }
-  // }, [date, users, bookingData, initialLoadComplete]);
 
   useEffect(() => {
     if (initialLoadComplete) {
@@ -130,12 +121,14 @@ const Doctors: FC = () => {
         </div>
         <section className='p-0'>
           <div className='container'>
-            <div className='grid grid-cols-4 m-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
-              {doctors.map((doctor) => (
-                <div key={doctor._id} className=' shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
+            <div className='grid grid-cols-4 m-4  md:grid-cols-3 lg:grid-cols-4 gap-5'>
+            {doctors.map((doctor) => (
+              <div key={doctor._id} className=' shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
+                <Suspense fallback={<Spinner />}>
                   <DoctorCard doctor={doctor} />
-                </div>
-              ))}
+                </Suspense>
+              </div>
+            ))}
             </div>
           </div>
           <div className='flex justify-center'>

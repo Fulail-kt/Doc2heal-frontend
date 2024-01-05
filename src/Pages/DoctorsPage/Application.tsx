@@ -33,7 +33,6 @@ const Application: React.FC = () => {
         const decode: Token = jwtDecode<Token>(token);
 
         setId(decode.id);
-        console.log(decode.id, "af");
 
         if (decode.role === 'doctor') {
           return navigate('/dashboard');
@@ -52,7 +51,6 @@ const Application: React.FC = () => {
   }, [navigate, id,]);
 
   const fetchData = async () => {
-    console.log("seconde");
     
     try {
       const response = await Api.get('/getuser', { params: { id } })

@@ -19,8 +19,6 @@ const useApi = <T>(url: string, method: Method,user?:string) => {
 
   const fetchData = async (body?:any) => {
     setResponse({ data: response.data, message: '', error: null, loading: true });
-
-    console.log(user,"us");
     
     try {
       const queryParams = user ? `user=${encodeURIComponent(user)}` : '';
@@ -35,7 +33,7 @@ const useApi = <T>(url: string, method: Method,user?:string) => {
       const result: AxiosResponse<T> = await api(axiosConfig);
 
       setResponse({ data:result.data, message: 'Success!', loading: false, error: null  });
-    } catch (error) {
+    } catch (error:any) {
       setResponse({ data: response.data, message: 'Error occurred.', error, loading: false });
       throw error; 
     }

@@ -10,6 +10,7 @@ import Messenger from '../Pages/CommonPage/Messages/Messenger'
 import Lobby from '../components/lobby'
 import DisApproved from '../Pages/DoctorsPage/DisApproved'
 import DocPayment from '../Pages/DoctorsPage/DocPayment'
+import NotFound from '../components/404/404'
 
 const DoctorRoutes = () => {
     return (
@@ -23,7 +24,9 @@ const DoctorRoutes = () => {
          <Route path='/profile' element={<ProtectedRoute allowedRole="doctor"><DocProfile /></ProtectedRoute>} />
          <Route path='/messages' element={<ProtectedRoute allowedRole="doctor"><Messenger /></ProtectedRoute>} />
          <Route path='/payments' element={<ProtectedRoute allowedRole="doctor"><DocPayment /></ProtectedRoute>} />
-         <Route path="/disapproved" element={<DisApproved/>} /> </Routes>
+         <Route path="/disapproved" element={<DisApproved/>} /> 
+         <Route path="/*" element={<NotFound/>} />
+         </Routes>
         </>
     )
 }

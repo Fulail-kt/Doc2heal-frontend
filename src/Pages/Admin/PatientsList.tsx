@@ -6,12 +6,13 @@ import api from '../../services/api';
 import Swal from 'sweetalert2';
 import AdminHeader from '../../components/Header/AdminHeader';
 import User from '../../@types';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const PatientsList: FC = () => {
   const [refresh, setRefresh] = useState<boolean>(false);
-
+  const navigate=useNavigate()
   const handleBlock = async (userId: string) => {
     try {
       const result = await Swal.fire({
@@ -28,7 +29,12 @@ const PatientsList: FC = () => {
       });
 
       if (result.isConfirmed) {
-        await api.put(`/admin/blockUser/${userId}`);
+         const res=await api.put(`/admin/blockUser/${userId}`);
+
+         if (res?.data?.notAdmin) {
+          localStorage.removeItem('token')
+          navigate('/')
+        }
         setRefresh((prev) => !prev);
       }
     } catch (error) {

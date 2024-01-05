@@ -4,16 +4,23 @@ import Api from '../../services/api'
 import User from '../../@types'
 import toast, { Toaster } from 'react-hot-toast';
 import Modal from '../../components/modal/modal';
+import { useNavigate } from 'react-router-dom';
 
 const Applications: FC = () => {
 
   const [appliedUsers, setAppliedUsers] = useState<User[]>()
-  const [expandedUser, setExpandedUser] = useState<User[]>();
+  const [expandedUser, setExpandedUser] = useState<User[]|any>();
   const [refresh, setRefresh] = useState(false);
-
+  const navigate = useNavigate()
   const fetchUser = async () => {
     try {
       const res = await Api.get('/getAllusers');
+
+      if (res?.data?.notAdmin) {
+        localStorage.removeItem('token')
+        navigate('/')
+      }
+
       if (res.data.user.length > 0) {
         const users: User[] = res.data.user;
         const appliedUsers = users.filter((user) => {
@@ -41,22 +48,20 @@ const Applications: FC = () => {
 
 
   const handleVerify = async (userId: string, status: string) => {
-    console.log(userId, status);
-
-
-
+   
     try {
 
       const res = await Api.put('/admin/applicationStatus', { userId, status })
-
-      console.log(res?.data);
+      if (res?.data?.notAdmin) {
+        localStorage.removeItem('token')
+        navigate('/')
+      }
       if (res?.data) {
         toast.success(res?.data?.message)
         setRefresh((prev) => !prev)
-    setOpen(false);
-
+        setOpen(false);
       }
-    } catch (error) {
+    } catch (error:any) {
       const errorMessage = error.response.data.message
       toast.error(errorMessage)
     }
@@ -74,7 +79,7 @@ const Applications: FC = () => {
     setOpen(true);
   };
 
-  const handleOpenInNewTab = (documentUrl) => {
+  const handleOpenInNewTab = (documentUrl:string) => {
     window.open(documentUrl, '_blank');
   };
 
@@ -108,14 +113,14 @@ const Applications: FC = () => {
           {open && (
             <Modal isOpen={true} onClose={closeModal}>
               <>
-                <div className='mt-1 cursor-default border w-full bg-slate-200 rounded-md flex flex-col justify-center items-center p-4 '>
+                <div className='mt-1 w-60 sm:w-80 md:w-[400px] cursor-default border bg-slate-200 rounded-md flex flex-col justify-center items-center p-4 '>
                   <div className='overflow-auto'>
-                    <p className='text-center'>User Details:</p>
+                    <p className='text-center font-semibold text-xl'>User Details:</p>
                     <p>Name: {expandedUser?.username}</p>
                     <p>Email: {expandedUser?.email}</p>
                     Documents:
                     <div className='flex-col'>
-                      {expandedUser?.documents?.map((item, index) => (
+                      {expandedUser?.documents?.map((item:any, index:number) => (
                         <div key={index} className='m-2'>
                           <button onClick={() => handleOpenInNewTab(item)} className='bg-slate-600 text-white p-1 rounded-md text-sm'>
                             View Document {index + 1}
@@ -123,10 +128,10 @@ const Applications: FC = () => {
                         </div>
                       ))}
                     </div>
-                    {expandedUser.formStatus=="submited"?(<>
+                    {expandedUser.formStatus == "submited" ? (<>
                       <div className='flex justify-around w-full'><button className='bg-green-500 rounded-full px-2 text-white' onClick={() => handleVerify(expandedUser?._id, "Accepted")}>Accept</button><button onClick={() => handleVerify(expandedUser?._id, "Rejected")} className='bg-red-500 text-white rounded-full px-2'>Reject</button></div>
-                    </>):(<>
-                    <div className='flex justify-center w-full bg-gray-400 text-white rounded-md'><h1>Request {expandedUser.formStatus}</h1></div>
+                    </>) : (<>
+                      <div className='flex justify-center w-full bg-gray-400 text-white rounded-md'><h1>Request {expandedUser.formStatus}</h1></div>
                     </>)}
                   </div>
                 </div>

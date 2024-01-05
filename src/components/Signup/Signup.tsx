@@ -37,15 +37,12 @@ const Signup: React.FC = () => {
 
 
       const response = await api.post(`/register`, { username, email, password, phone, gender })
-
-      console.log(response.data, "this is forntedn");
       // if(!response.data.isVerified){
 
       // }
       if (response.data?.success || !response.data.isVerified) {
-        navigate('/otp', { state: { otp: true, email: response?.data?.email, id: response?.data?.id } })
+        navigate('/otp', { state: { otp: true, email: response?.data?.email, id: response?.data?.id,username:response?.data?.username } })
       } else {
-        console.log(response.data, "this is forntedn");
         toast.error(response.data.message)
       }
 

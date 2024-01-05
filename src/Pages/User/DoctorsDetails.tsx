@@ -8,13 +8,13 @@ import bookingModal from "../../@types";
 import Api from "../../services/api";
 import { useEffect, useState } from "react";
 import Timeslot from "../../components/Doctor/time";
-import { current } from "@reduxjs/toolkit";
+// import { current } from "@reduxjs/toolkit";
 import moment from "moment";
 
 const DoctorsDetails: React.FC = () => {
   const { id } = useParams();
-  const [doctor, setDoctor] = useState<User | undefined>();
-  const [bookings, setBookings] = useState<bookingModal[] | undefined>();
+  const [doctor, setDoctor] = useState<User | undefined|any>();
+  const [bookings, setBookings] = useState<bookingModal[] | undefined|any>();
   const [showBookings, setShowBookings] = useState(false);
 
   const currentDate = moment().format('YYYY-MM-DD');
@@ -30,16 +30,22 @@ const DoctorsDetails: React.FC = () => {
     }
   };
 
+
   // const fetchBookings = async () => {
   //   try {
-  //     const slots = await Api.get("/getbookings", { params: { id } });
+  //     // const selected="2024-01-02"
+  //     const slots = await Api.get("/getbookings", { params: { id, selected } });
   //     const allBookings: bookingModal[] = slots.data.bookings;
-  //     const filteredBookings = allBookings.filter(
-  //       (item) => item.status === "booked" || item.status === "pending"
-  //     ).filter((item)=>{
-  //       const currentTime=moment()
-  //       return  currentTime.isAfter(item?.end)
-  //     })
+
+  //     const filteredBookings = allBookings.filter((item) => {
+  //       const currentTime = moment();
+  //       const isAfterEndTime = currentTime.isBefore(item?.end);
+  //       const isBookedOrPending = item?.status === "booked" || item?.status === "pending";
+  //       // const isToday = moment(item?.date).isSame(currentTime, 'day');
+  //       const isTodayOrLater = moment(item?.date).isSameOrAfter(currentTime, 'day');
+  //       return isBookedOrPending && isTodayOrLater && isAfterEndTime;
+  //     });
+
   //     setBookings(filteredBookings);
   //   } catch (error) {
   //     console.error("Error fetching bookings:", error);
@@ -47,32 +53,32 @@ const DoctorsDetails: React.FC = () => {
   // };
 
 
-  console.log(selected, "ds");
-
-
   const fetchBookings = async () => {
     try {
-      // const selected="2024-01-02"
-      const slots = await Api.get("/getbookings", { params: { id, selected } });
-      const allBookings: bookingModal[] = slots.data.bookings;
+        // const selected="2024-01-02"
+        const slots = await Api.get("/getbookings", { params: { id, selected } });
+        const allBookings: bookingModal[] = slots.data.bookings;
 
-      console.log(slots.data, "daa");
+        const filteredBookings = allBookings.filter((item) => {
+            const currentTime = moment();
+            
+            const bookingEndTime = moment(item?.end);
+            console.log(bookingEndTime);
+            
+            console.log(currentTime.isSameOrAfter(bookingEndTime),"dle");
+            const isAfterCurrentTime = currentTime.isSameOrBefore(bookingEndTime);
+            const isNotbefore=!currentTime.isAfter(item.time)
+            const isBookedOrPending = item?.status === "booked" || item?.status === "pending";
+            const isTodayOrLater = moment(item?.date).isSameOrAfter(currentTime, 'day');
 
+            return isBookedOrPending && isTodayOrLater && isAfterCurrentTime &&isNotbefore ;
+        });
 
-      const filteredBookings = allBookings.filter((item) => {
-        const currentTime = moment();
-        const isAfterEndTime = currentTime.isBefore(item?.end);
-        const isBookedOrPending = item?.status === "booked" || item?.status === "pending";
-        // const isToday = moment(item?.date).isSame(currentTime, 'day');
-        const isTodayOrLater = moment(item?.date).isSameOrAfter(currentTime, 'day');
-        return isBookedOrPending && isTodayOrLater && isAfterEndTime;
-      });
-
-      setBookings(filteredBookings);
+        setBookings(filteredBookings);
     } catch (error) {
-      console.error("Error fetching bookings:", error);
+        console.error("Error fetching bookings:", error);
     }
-  };
+};
 
 
 
@@ -101,7 +107,7 @@ const DoctorsDetails: React.FC = () => {
           </button>
           <input type="date" defaultValue={currentDate} onChange={(e: any) => setSelected(e.target.value)} className="bg-[#edc77b] outline-none rounded-full p-0 m-0 px-3 py-1" name="" id="" />
         </div>
-        {showBookings && <Timeslot bookings={bookings} />}
+        { doctor && showBookings && <Timeslot bookings={bookings} fetchbooking={fetchBookings} />}
       </div>
 
     </>

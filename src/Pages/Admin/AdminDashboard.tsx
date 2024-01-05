@@ -5,11 +5,15 @@ import Api from '../../services/api'
 import doctorImg from '../../assets/images/edit.png'
 import patientImg from '../../assets/images/patient.png'
 import PieChart from '../../components/Chart/PieChart'
+import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 
 const AdminDashboard: FC = () => {
   const [earnings, setEarnings] = useState([])
   const [bookings, setbookings] = useState({})
+
+  const navigate=useNavigate()
 
   const convertToShortMonth = (monthString: string) => {
     const [year, month] = monthString.split('-');
@@ -22,17 +26,20 @@ const AdminDashboard: FC = () => {
       try {
         const res = await Api.get('/admin/totalEarnings')
 
-        console.log(res, "dh");
-
         const data = res.data.result.map((entry: { month: string }) => ({
           ...entry,
           month: convertToShortMonth(entry.month)
         }));
         data.sort((a: { year: string }, b: { year: string }) => a.year.localeCompare(b.year));
+
+        if(res?.data?.notAdmin){
+          localStorage.removeItem('token')
+          navigate('/')
+        }
         setEarnings(data)
         setbookings(res.data.booking)
-      } catch (error) {
-
+      } catch (error:any) {
+        toast.error(error.message)
       }
     }
     fetchData()
@@ -46,24 +53,24 @@ const AdminDashboard: FC = () => {
             <div className='w-1/2 bg-gray-500 h-96 p-2 rounded-md'><ChartExample data={earnings} /></div>
             <div className='w-1/2 flex flex-col justify-around  rounded-md'>
               <div className=' flex justify-around items-center cursor-default  bg-gray-500 h-40 rounded-md'>
-                <div className='w-1/2 border flex justify-center items-center text-center font-semibold h-20' ><span><img src={doctorImg} width={60} height={50} alt="" /></span><h1>Doctors 10</h1></div>
-                <div className='w-1/2 border flex items-center justify-center text-center font-semibold h-20'><span><img src={patientImg} width={60} height={50} className='' /></span><h1>Patients 40</h1></div>
+                <div className='w-1/2 border flex justify-center items-center text-center font-semibold h-20' ><span><img src={doctorImg} width={60} height={50} alt="" /></span><h1>Doctors 7</h1></div>
+                <div className='w-1/2 border flex items-center justify-center text-center font-semibold h-20'><span><img src={patientImg} width={60} height={50} className='' /></span><h1>Patients 3</h1></div>
               </div>
               <div className=' flex justify-around items-center  cursor-default bg-gray-500 h-40 rounded-md'>
-                <div className='w-1/2 border grid place-items-center text-center font-semibold h-20' >Non Blocked 50</div>
-                <div className='w-1/2 border grid place-items-center text-center font-semibold h-20'>Blocked 5</div>
+                <div className='w-1/2 border grid place-items-center text-center font-semibold h-20' >Non Blocked 9</div>
+                <div className='w-1/2 border grid place-items-center text-center font-semibold h-20'>Blocked 0</div>
               </div>
             </div>
           </div>
           <div className=' flex w-3/4 mt-8 justify-center gap-x-10'>
             <div className='w-1/2 flex flex-col justify-around  rounded-md'>
               <div className=' flex justify-around items-center cursor-default  bg-gray-500 h-32 rounded-md'>
-                <div className='w-1/2 border flex justify-center items-center text-center font-semibold h-14' ><span><img src={doctorImg} width={60} height={50} alt="" /></span><h1>Doctors 10</h1></div>
-                <div className='w-1/2 border flex items-center justify-center text-center font-semibold h-14'><span><img src={patientImg} width={60} height={50} className='' /></span><h1>Patients 40</h1></div>
+                <div className='w-1/2 border flex justify-center items-center text-center font-semibold h-14' ><span><img src={doctorImg} width={60} height={50} alt="" /></span><h1>Doctors 7</h1></div>
+                <div className='w-1/2 border flex items-center justify-center text-center font-semibold h-14'><span><img src={patientImg} width={60} height={50} className='' /></span><h1>Patients 3</h1></div>
               </div>
               <div className=' flex justify-around items-center  cursor-default bg-gray-500 h-32 rounded-md'>
-                <div className='w-1/2 border grid place-items-center text-center font-semibold h-14' >Non Blocked 50</div>
-                <div className='w-1/2 border grid place-items-center text-center font-semibold h-14'>Blocked 5</div>
+                <div className='w-1/2 border grid place-items-center text-center font-semibold h-14' >Non Blocked 9</div>
+                <div className='w-1/2 border grid place-items-center text-center font-semibold h-14'>Blocked 0</div>
               </div>
             </div>
             <div className='w-2/4  bg-gray-500 max-h-80 p-1 rounded-md'><PieChart data={bookings} /></div>

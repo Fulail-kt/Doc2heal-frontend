@@ -9,11 +9,6 @@ interface NavLinkItem {
   display: string;
 }
 
-
-// interface NavbarProps {
-//   handleLogout: (event: MouseEvent<HTMLButtonElement>) => void; // Include the MouseEvent parameter
-// }
-
 interface NavbarProps {
   handleLogout: () => void;
 }

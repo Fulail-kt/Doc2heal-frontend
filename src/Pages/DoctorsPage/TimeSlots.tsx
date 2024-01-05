@@ -10,12 +10,10 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const TimeSlots: FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [date, setDate] = useState<string | null>(null);
-    // const [time, setTime] = useState<string | null>(null);
     const [bookings, setBookings] = useState<bookingModal[]>();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [endTime, setEndTime] = useState()
-    const [startTime, setStartTime] = useState<string | null>()
+    const [startTime, setStartTime] = useState()
     const [endDate, setEndDate] = useState()
     const [startDate, setStartDate] = useState()
 
@@ -45,25 +43,24 @@ const TimeSlots: FC = () => {
         event.preventDefault();
         try {
             
-            console.log(startDate, endDate, startTime, endTime);
             const startDateTime = moment(`${startDate}T${startTime}`);
             const endDateTime = moment(`${endDate}T${endTime}`);
             
             // if (endDateTime.diff(startDateTime, 'hours') <= 5) return;
-            
-            
-            console.log("hello");
 
             if (startDateTime.isAfter(endDateTime)) {
                toast.error("invalid date or time")
                 return;
             }
             const occurrences = [];
-
             const interval = moment.duration(1, 'hours');
-            let currentDateTime = startDateTime.clone();
 
-            while (currentDateTime.isBefore(endDateTime) && currentDateTime.diff(startDateTime, 'days') <= 2) {
+            let currentDateTime = startDateTime.clone();
+            
+            console.log("haaaaaaaaaai");
+            while (currentDateTime.isBefore(endDateTime) ) {
+                console.log("haaaaaaaaaai");
+                
                 occurrences.push({
                     start: currentDateTime.format('YYYY-MM-DD hh:mm:ss A'),
                     end: currentDateTime.add(interval).format('YYYY-MM-DD hh:mm:ss A')
@@ -75,6 +72,8 @@ const TimeSlots: FC = () => {
                     currentDateTime.add(1, 'days');
                 }
             }
+            
+            console.log("ehllog",occurrences);
             const response = await Api.post('/doctor/setTimeslot', { occurrences });
             if (response.data.message) {
 
@@ -87,7 +86,8 @@ const TimeSlots: FC = () => {
         }
     };
 
-    const token = localStorage.getItem("token")
+
+    const token:any = localStorage.getItem("token")
     const decode = jwtDecode<{ id: string; role: string }>(token);
     const id = decode?.id
 
@@ -132,7 +132,6 @@ const TimeSlots: FC = () => {
                                                     <input
                                                         type='date'
                                                         name='startDate'
-                                                        defaultValue={currentDate}
                                                         onChange={(e:any) => setStartDate(e.target.value)}
                                                     />
                                                 </div>

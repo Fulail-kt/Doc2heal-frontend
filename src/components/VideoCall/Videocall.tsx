@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const VideoCall: FC = () => {
 
     const [remoteSocketId, setRemoteSocketId] = useState("")
-    const [myStream, setMyStream] = useState({})
-    const [remoteStream, setRemoteStream] = useState({})
+    const [myStream, setMyStream] = useState<any>({})
+    const [remoteStream, setRemoteStream] = useState<any>({})
 
     const handleUserJoined = useCallback(({ email, id }: { email: string, id: string }) => {
         console.log(email, "joined room");
@@ -24,6 +24,40 @@ const VideoCall: FC = () => {
         audio: true,
     };
 
+
+    const handleLeaveCall = () => {
+        // Your existing logic for leaving the call
+        if (myStream && myStream instanceof MediaStream) {
+            myStream.getTracks().forEach((track) => {
+                track.stop();
+            });
+        }
+
+        setMyStream(null);
+        setRemoteStream(null);
+        // Additional cleanup if needed
+    };
+
+    const handleToggleMicrophone = () => {
+        
+        const audioTrack = myStream.getAudioTracks()[0];
+        if (audioTrack) {
+            audioTrack.enabled = !audioTrack.enabled;
+        }
+        // Update the state if needed
+    };
+
+    const handleToggleVideo = () => {
+        // Add logic to toggle video
+        // For example, you can toggle the video track in the local strea
+
+        const videoTrack = myStream.getVideoTracks()[0];
+        if (videoTrack) {
+            videoTrack.enabled = !videoTrack.enabled;
+        }
+        // Update the state if needed
+    };
+
     const handleCallUser = useCallback(async () => {
         const stream = await navigator.mediaDevices.getUserMedia(constrains)
         const offer = await peer.getOffer()
@@ -37,7 +71,6 @@ const VideoCall: FC = () => {
         setRemoteSocketId(from)
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
         setMyStream(stream)
-        console.log(from, offer);
         const ans = await peer.getAnswer(offer);
         socket.emit('call:accepted', { to: from, ans })
     }, [socket])
@@ -135,18 +168,17 @@ const VideoCall: FC = () => {
                     </>}
                 <div className='absolute bottom-10 w-[80%] justify-center items-center flex '> 
                 <div className='w-[25%] flex justify-around cursor-pointer items-center bg-white bg-opacity-20 shadow-md rounded-full h-16'>
-                    <button className='bg-red-500 rounded-full text-center h-10 w-10'>
+                    <button onClick={handleLeaveCall} className='bg-red-500 rounded-full text-center h-10 w-10'>
                         <FontAwesomeIcon icon={faPhoneSlash} />
                     </button>
-                    <button className='bg-red-500 rounded-full h-10 w-10'>
+                    <button onClick={handleToggleVideo} className='bg-red-500 rounded-full h-10 w-10'>
                         <FontAwesomeIcon icon={faVideo} />
                     </button>
-                    <button className='bg-red-500 rounded-full h-10 w-10'>
+                    {/* <button onClick={handleToggleMicrophone} className='bg-red-500 rounded-full h-10 w-10'>
                         <FontAwesomeIcon icon={faMicrophoneSlash} />
-                    </button>
+                    </button> */}
                 </div> </div>
             </div>
-
         </div>
     )
 }

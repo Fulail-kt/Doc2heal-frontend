@@ -1,12 +1,21 @@
-import {FC} from 'react'
-import git from '../../assets/images/404.gif'
+import { FC } from 'react';
+import notFound from '../../assets/images/404construct.gif';
+import Header from '../Header/Header';
+import { Link, useLocation } from 'react-router-dom';
 
-const NotFound:FC = () => {
+const NotFound: FC = () => {
+
+  const location=useLocation()
   return (
-    <div className='w-100 overflow-y-hidden'>
-      <img className='w-full h-[600px] bg-cover overflow-hidden' src={git} alt="" />
+    <div className='w-full profile_bg h-screen flex flex-col  items-center '>
+ {!location.pathname.startsWith("/doctor") ? <Header />:(<div className=' h-20 flex justify-center items-center'> <Link to="/doctor" ><span className='bg-blue-500 px-4 py-1 rounded-2xl shadow-lg text-white'>Back Home</span></Link> </div>)}
+      <div className='w-full justify-center flex bg-black'>
+        <div className='w-full flex justify-center overflow-y-hidden' style={{ position: 'absolute', mixBlendMode: 'multiply' }}>
+          <img className='bg-cover' src={notFound} alt="" />
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default NotFound
+export default NotFound;

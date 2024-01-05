@@ -10,7 +10,7 @@ import Navbar from '../../components/Navbar/Navbar'
 const Mybookings: FC = () => {
 
   const [loading, setLoading] = useState(true)
-  const [books, setBooked] = useState<Array<Booking>>()
+  const [books, setBooked] = useState<Array<Booking>|any>()
   const [referesh,setRefresh]=useState(false)
 
 
@@ -18,8 +18,6 @@ const Mybookings: FC = () => {
   const fetchData = async () => {
     try {
       const mybookings = await Api.get('/getAllbookings')
-
-      // console.log(mybookings);
       if (mybookings.data.success) {
 
         const BookedBookings = mybookings.data.bookings.map((ubook: { time: Date, end: Date }) => ({
@@ -54,8 +52,7 @@ const Mybookings: FC = () => {
       const response = await Api.post('/cancelBooking', { bookingId, status });
 
       if (response.data.success) {
-        console.log(response.data.success);
-        
+    
         toast.success(response.data.message)
         setRefresh((prev) => !prev);
       } else {
@@ -76,7 +73,7 @@ const Mybookings: FC = () => {
           <Navbar handleLogout={false} />
         </div>
         <div className='w-full'>
-          <Booked Bookings={books} handleCancelBooking={handleCancelBooking} />
+          <Booked Bookings={books} handleCancelBooking={handleCancelBooking} handleCompleteBooking={false} />
         </div>
       </div>
     </>

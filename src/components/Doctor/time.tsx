@@ -10,6 +10,7 @@ import CheckoutForm from './CheckoutForm';
 import moment from 'moment';
 import 'moment-timezone';
 import toast, { Toaster } from 'react-hot-toast';
+import { jwtDecode } from 'jwt-decode';
 const stripePromise = loadStripe("pk_test_51OLmR8SJmqVejvmLLPACje9c0hQVTUj3etLYfOMT7U4k9QrrBQdVTx9P4VbCJDwkeWjGjJEaAwkdlmYNwwPxpL1r00YkqK8KIv")
 
 type FormValues = {
@@ -20,13 +21,15 @@ type FormValues = {
 
 
 
-const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
+const Timeslot: FC<{ bookings: bookingModal[], fetchbooking: any }> = ({ bookings, fetchbooking }) => {
     const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
-    const [amount, setSelectedamount] = useState<number | null>(null);
+    const [amount, setSelectedamount] = useState<number>(0);
     const [open, setOpen] = useState(false);
     const [bookingData, setBookingData] = useState({});
-    const [clientSecret, setClientSecret] = useState<string | null>(null);
+    const [clientSecret, setClientSecret] = useState<string | null | any>(null);
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [useWallet, setUseWallet] = useState<boolean>(false);
+    const [wallet, setWallet] = useState<number>(0);
 
     const options = {
         clientSecret: clientSecret,
@@ -37,6 +40,7 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
     };
 
     const openModal = () => {
+
         closeModal();
         setOpen(true);
     };
@@ -49,16 +53,18 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
 
     const navigate = useNavigate();
 
-    const handleClick = (id: string, amount: number) => {
-        const token = localStorage.getItem('token');
+    const handleClick = async (id: string, amount: number) => {
+        const token: any = localStorage.getItem('token');
         if (!token) {
             navigate('/login');
         }
+        const decode: any = jwtDecode(token)
+        const userId = decode.id
         setSelectedBookingId(id);
-
-
         setSelectedamount(amount);
         openModal();
+        const user = await Api.get(`/getuser`, { params: { id: userId } });
+        setWallet(user?.data?.user?.wallet?.balance);
     };
 
     const handleCloseModal = () => {
@@ -91,15 +97,18 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
 
     const SaveBooking = async () => {
         try {
-            const response = await Api.post('/savebooking', { selectedBookingId, bookingData });
+
+            console.log(useWallet, "wlae");
+
+            const response = await Api.post('/savebooking', { selectedBookingId, bookingData, useWallet });
 
             if (response.data?.success) {
                 toast.success(response.data?.message);
-
+                fetchbooking()
             }
-
             closeModal();
             setRefresh((prev) => !prev);
+
 
         } catch (error) {
             console.log((error as Error).message);
@@ -120,15 +129,19 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
                 )}
                 {clientSecret && (
                     <Modal isOpen={open} onClose={closeModal} >
-                        <Elements stripe={stripePromise} options={options}>
-                            <CheckoutForm savebooking={SaveBooking} />
-                        </Elements>
+                        <div className='w-52 sm:w-64 md:w-80'>
+                            <Elements stripe={stripePromise} options={options}>
+                                {!useWallet && <CheckoutForm savebooking={SaveBooking} />}
+                                {amount <= wallet && <div className='w-full bg-gray-500 h-9 text-white flex justify-center items-center gap-x-3 rounded-md mt-2'><input type="checkbox" onChange={() => setUseWallet(!useWallet)} />Wallet : ₹ {wallet}</div>}
+                                {useWallet && <button className='bg-gray-500 rounded-md px-4 mt-2 text-white' onClick={SaveBooking}>Submit</button>}
+                            </Elements>
+                        </div>
                     </Modal>
                 )}
                 <div className='flex justify-center w-full'>
 
                     <div className='flex w-[80%] justify-center  m-3'>
-                        {bookings?.map((booking) => (
+                        {bookings?.map((booking: { _id: any; status: string; date: string; time: string; end: string; } | any) => (
                             <div
                                 className={`${booking.status === 'booked' ? 'bg-slate-500' : 'bg-gray-700'
                                     } m-3  rounded-md items-center font-light p-1 text-white text-center w-1/4 tracking-widest`}
@@ -137,9 +150,10 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
                             >
                                 <p>{moment(booking.date).tz('Asia/Kolkata').format('L')}</p>
                                 <p>
-
-                                    {moment(booking.time).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')} to{' '}
-                                    {moment(booking.end).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')}
+                                    {/*                                 {moment(booking.time).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')} to{' '}
+                                    {moment(booking.end).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')} */}
+                                    {moment(booking.time).tz('Asia/Kolkata').format('LT')} to{' '}
+                                    {moment(booking.end).tz('Asia/Kolkata').format('LT')}
                                 </p>
                                 <p className={`${booking.status === 'pending' ? 'text-green-500' : ''}`}>
                                     {booking.status === 'pending' ? 'Available' : booking.status}
@@ -152,7 +166,7 @@ const Timeslot: FC<{ bookings: bookingModal[] }> = ({ bookings }) => {
             </div>
             {selectedBookingId && !clientSecret && (
                 <Modal isOpen={true} onClose={handleCloseModal}>
-                    <div>
+                    <div className='w-48 sm:w-60 md:w-80'>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className='mt-2'>
                                 <label htmlFor='Name'>Name:</label>

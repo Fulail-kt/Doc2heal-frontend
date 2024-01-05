@@ -15,13 +15,15 @@ type FormData = {
 };
 
 type Token={
-  _id:string,
+  id:string,
   role:string
 }
 const Login: React.FC = () => {
   const {register,handleSubmit,formState: { errors },} = useForm<FormData>();
 
-  const { fetchData, loading, data,  } = useApi<{user: User; success: string; value: any; message: string; isVerified: boolean;email:string,token:string}>('/login', 'POST');
+  const { fetchData, loading, data,  } = useApi<{
+    username: any;user: User; success: string; value: any; message: string; isVerified: boolean;email:string,token:string
+}>('/login', 'POST');
 
   const navigate = useNavigate();
 
@@ -33,9 +35,9 @@ const Login: React.FC = () => {
     try {
       await fetchData(value);
 
-    } catch (error) {
+    } catch (error:any) {
         
-      const errorMessage = (error as Error).response.data.message || "An error occurred please try after some times";
+      const errorMessage = error?.response?.data.message || "An error occurred please try after some times";
       toast.error(errorMessage);
      
     }
@@ -47,14 +49,14 @@ const Login: React.FC = () => {
     }
     
     if (data.isVerified === false && data.message) {
-      navigate("/otp", { state: { otp: true, email: data.email, msg: data.message } });
+      navigate("/otp", { state: { otp: true, email: data.email, msg: data.message,username:data?.username } });
       toast.error(data.message);
     } else if (data.success) {
       const { token, user } = data;
       const decode: Token | null = jwtDecode<Token>(token);
       
       dispatch(login({
-        id: decode?._id,
+        id: decode?.id,
         username: user.username,
         email: user.email,
         role: user.role,
@@ -83,7 +85,7 @@ const Login: React.FC = () => {
     <>
        <Toaster />
        {loading?(<Spinner/>):(
-    <div className="login_bg overflow-y-auto py-6 flex flex-col sm:py-12">
+    <div className="login_bg h-screen py-6 flex flex-col sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-14">

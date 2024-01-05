@@ -10,7 +10,7 @@ import Booked from '../../components/Doctor/Booked'
 
 const Bookings = () => {
 
-    const [Books, setBookings] = useState<Array<Booking>>()
+    const [Books, setBookings] = useState<Array<Booking>|any>()
 
 
 
@@ -18,9 +18,9 @@ const Bookings = () => {
     const Upcomming = async () => {
         try {
             // for upcomming
+            console.log("sail");
+            
             const upcomming = await Api.get('/doctor/getAllbookings');
-            console.log(upcomming, 'res');
-
             if (upcomming.data.success) {
                 const updatedUBooking = upcomming.data.booking.map((ubook: { time: Date, end: Date }) => ({
                     ...ubook,
@@ -44,7 +44,7 @@ const Bookings = () => {
 
     const handleCancelBooking = async (bookingId: string) => {
         try {
-            console.log(bookingId, "this is form bookings");
+         
             const status = 'cancelled'
             const response = await Api.post('/doctor/updateBookingStatus', { bookingId, status });
 
@@ -65,7 +65,7 @@ const Bookings = () => {
 
    const handleCompleteBooking=async(bookingId:string)=>{
     try {
-        console.log(bookingId, "this is form bookings");
+      
         const status = 'completed'
         const response = await Api.post('/doctor/updateBookingStatus', { bookingId, status });
 
@@ -75,6 +75,7 @@ const Bookings = () => {
         } else {
             toast.error(response.data.message)
         }
+        Upcomming()
     } catch (error) {
         toast.success((error as Error).message)
 

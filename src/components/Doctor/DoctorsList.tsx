@@ -7,11 +7,9 @@ const DoctorsList: React.FC<{ doctor: User }> = ({ doctor }) => {
 
 
   if(!doctor){
-    return <p>empty</p>
+    return <div className='w-full h-96 flex justify-center items-center'><h1>Doctor is not Available</h1></div>
   }
   
-
-
   return (
     <section className='pb-[30px] pt-[20px]'>
       <div className='flex justify-center'>
@@ -25,8 +23,6 @@ const DoctorsList: React.FC<{ doctor: User }> = ({ doctor }) => {
           <p className='bg-cyan-300 w-32 py-1 rounded-sm text-sm text-white'>{doctor?.specialization}</p>
           <p className='pt-1 font-mono'>at <span className=''>{doctor?.hospital}</span></p>
           <p className=' font-mono'><span className='p-0 m-0'>{doctor?.experience} years Experience</span></p>
-          
-
         </div>
       </div>
     </section>

@@ -12,16 +12,16 @@ import socket from '../../../services/socket';
 
 export default function Messenger() {
   const [conversations, setConversations] = useState([]);
-  const [currentChat, setCurrentChat] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [currentChat, setCurrentChat] = useState<any>(null);
+  const [messages, setMessages] = useState<any>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [arrivalMessage, setArrivalMessage] = useState('');
+  const [arrivalMessage, setArrivalMessage] = useState<any>('');
 
 
-  const scrollRef = useRef();
+  const scrollRef:any = useRef();
   const location = useLocation()
 
-  const token = localStorage.getItem('token');
+  const token:any = localStorage.getItem('token');
   const decode = jwtDecode<{ id: string; role: string }>(token);
   const id = decode.id;
 
@@ -29,7 +29,6 @@ export default function Messenger() {
   useEffect(() => {
     socket.emit('addUser', id);
     socket.on("getUsers", (users) => {
-      console.log(users,"user");
     });
   }, []);
 
@@ -38,7 +37,6 @@ export default function Messenger() {
     const getMessages = async () => {
       try {
           const res = await Api.get('/messages/' + currentChat?._id);
-          console.log('Messages response:', res.data);
             setMessages(res.data);
       } catch (err) {
         console.error(err);
@@ -61,7 +59,7 @@ export default function Messenger() {
   }, [id]);
 
   // Post messages
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
     if (!newMessage.trim()) {
       return;
@@ -72,11 +70,10 @@ export default function Messenger() {
       conversationId: currentChat?._id,
     };
 
-    const receiverId = currentChat?.members?.find(member => member !== id)
+    const receiverId = currentChat?.members?.find((member: string) => member !== id)
 
     try {
       const res = await Api.post('/messages', message);
-      console.log('Post message response:', res.data);
 
       socket.emit("sendMessage", {
         senderId: id,
@@ -105,7 +102,7 @@ export default function Messenger() {
 
 
   useEffect(() => {
-    arrivalMessage && currentChat?.members.includes(arrivalMessage.senderId) && setMessages((prev) => [...prev, arrivalMessage])
+    arrivalMessage && currentChat?.members?.includes(arrivalMessage?.senderId) && setMessages((prev:any) => [...prev, arrivalMessage])
   }, [arrivalMessage, currentChat])
 
   useEffect(() => {
@@ -127,7 +124,7 @@ export default function Messenger() {
               <div className="chatMenu border-r-2">
                 <div className="chatMenuWrapper ">
                   <div className='w-full flex flex-col items-center '><input placeholder="Search for friends" className="chatMenuInput outline-none rounded-full h-10 px-3" /></div>
-                  {conversations.map((c) => (
+                  {conversations.map((c:any) => (
                     <div key={c._id} onClick={() => setCurrentChat(c)}>
                       <Conversation conversation={c} currentUserId={id} />
                     </div>
@@ -142,7 +139,7 @@ export default function Messenger() {
                         <p>{ }</p>
                       </div>
                       <div className="chatBoxTop">
-                        {messages.map((m, index) => (
+                        {messages.map((m:any, index:number) => (
                           <div key={index}>
                             <Message message={m} own={m.senderId === id} />
                           </div>

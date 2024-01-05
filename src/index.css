@@ -37,6 +37,13 @@
   .profile_bg{
     @apply bg-[url('./assets/images/hero-bg.png')] bg-no-repeat bg-center bg-cover
   }
+
+  .doctor_bg{
+    @apply bg-[url('./assets/images/doctor.webp')] bg-no-repeat bg-center bg-cover
+  }
+  .patient_bg{
+    @apply bg-[url('./assets/images/patientjoin.jpg')] bg-no-repeat bg-center bg-cover
+  }
 }
 
 @media only screen and (max-width:1024px) {

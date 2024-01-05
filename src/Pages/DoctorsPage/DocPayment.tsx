@@ -6,8 +6,8 @@ import User from '../../@types';
 import Modal from '../../components/modal/modal';
 import moment from 'moment';
 import Swal from 'sweetalert2';
+import toast, { Toaster } from 'react-hot-toast';
 // import toast from 'react-hot-toast';
-
 const DocPayment = () => {
     const [doctor, setDoctor] = useState<User>();
     const [acNumber, setAcNumber] = useState<number>();
@@ -19,7 +19,7 @@ const DocPayment = () => {
     const [repeatAcNumberError, setRepeatAcNumberError] = useState('');
     const [ifscCodeError, setIfscCodeError] = useState('');
     const [accountHolderError, setAccountHolderError] = useState('');
-    // const [id,setId]=useState("")
+    const [Id,setId]=useState("")
 
     const token = localStorage.getItem('token');
     let id=""
@@ -28,7 +28,8 @@ const DocPayment = () => {
         if (token) {
             const decode = jwtDecode<{ id: string; role: string }>(token);
              id = decode.id;
-        
+             setId(id)
+             
           }
 
     },[token])
@@ -111,14 +112,8 @@ const DocPayment = () => {
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-
-
-
         if (validateForm()) {
-
             const res = await Api.post(`/doctor/bankDetailsUpdate/${id}`, { acNumber, repeatAcNumber, ifscCode, accountHolder })
-
-            console.log(res);
             if (res.data.success) {
                 // toast.success(res.data.message)
             }
@@ -126,6 +121,11 @@ const DocPayment = () => {
     };
 
     const handleWithdraw = async () => {
+        const balance:number|undefined=doctor?.wallet?.balance
+        if( balance){
+            if(balance<500)
+            return toast.error("wallet Amount must have 500")
+        }
         Swal.fire({
             width: '320px',
             text: 'You won\'t be able to revert this!',
@@ -133,9 +133,13 @@ const DocPayment = () => {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes',
-        }).then((result) => {
+        }).then(async(result) => {
             if (result.isConfirmed) {
-                Swal.fire('Withdrawal!', 'Your withdraw request has been sent.', 'success');
+                const response = await Api.post(`/doctor/requestPayment?id=${Id}`);
+                if (!response.data.success){
+                    toast.error(response?.data?.message)
+                }
+                toast.success(response?.data?.message)
             }
         });
     };
@@ -144,11 +148,12 @@ const DocPayment = () => {
         fetchUser();
     }, []);
 
-    console.log(doctor?.bankDetails?.AcNumber);
+ 
 
 
     return (
         <div className='flex flex-col min-h-screen bg-gray-400'>
+        <Toaster/>
             <div className='bg-[#202231] w-full h-16'></div>
             <div className='flex flex-1 w-full '>
                 <div className='bg-[#202231]'>
@@ -163,8 +168,8 @@ const DocPayment = () => {
                     </div>
 
                     <div className='flex w-2/3 justify-center mt-3 gap-x-10 '>
-                        <button className='bg-blue-600 rounded-2xl w-32 text-white font-light p-2' onClick={handleWithdraw} >Withdraw</button>
-                        <button className='bg-blue-600 rounded-2xl w-32 text-white font-light p-2' onClick={openModal}>BankDetails</button>
+                        <button className='bg-[#202231] rounded-2xl w-32 text-white font-light p-2' onClick={handleWithdraw} >Withdraw</button>
+                        <button className='bg-[#202231] rounded-2xl w-32 text-white font-light p-2' onClick={openModal}>BankDetails</button>
                     </div>
 
                     <div className='flex justify-start w-[60%]'>

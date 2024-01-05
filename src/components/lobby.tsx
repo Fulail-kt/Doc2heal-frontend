@@ -15,8 +15,6 @@ const Lobby: FC = () => {
 
   const handleJoinRoom = useCallback((data: { email: string; roomId: string }) => {
     const { email, roomId } = data;
-    console.log('helloooooooooooooo');
-    console.log(email, roomId, "'''''''''''");
     navigate(`/room/${roomId}`);
   }, [navigate]);
 

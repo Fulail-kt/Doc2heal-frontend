@@ -2,17 +2,17 @@ import { FC, useEffect,useState } from 'react'
 import Table from '../../components/Admin/Table'
 import useApi from '../../hooks/useApi';
 import Spinner from '../../components/Spinner/Spinner';
-import api from '../../services/api';
 import Swal from 'sweetalert2'
 import Adminheader from '../../components/Header/AdminHeader';
 import User from '../../@types';
+import Api from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 
 
 const DoctorsList: FC = () => {
 
- 
-
   const [refresh, setRefresh] = useState<boolean>(false);
+  const navigate=useNavigate()
 
   const handleBlock = async (userId: string) => {
     try {
@@ -30,16 +30,17 @@ const DoctorsList: FC = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
 
-           await api.put(`/admin/blockUser/${userId}`)
+            const res=await Api.put(`/admin/blockUser/${userId}`)
           setRefresh((prev) => !prev);
-          console.log(doctors, "---0-0-0-0-0-0-0-0-0");
+
+          if (res?.data?.notAdmin) {
+            localStorage.removeItem('token')
+            navigate('/')
+          }
         }
       });
 
-
-
     } catch (error) {
-
       console.log((error as Error).message);
     }
   };
@@ -60,9 +61,13 @@ const DoctorsList: FC = () => {
         },
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const response = await api.put(`/admin/ApproveUser/${userId}`);
+          const response = await Api.put(`/admin/ApproveUser/${userId}`);
+
+          if (response?.data?.notAdmin) {
+            localStorage.removeItem('token')
+            navigate('/')
+          }
           setRefresh((prev) => !prev);
-          console.log(response.data);
         }
       });
     } catch (error) {
@@ -81,7 +86,6 @@ const DoctorsList: FC = () => {
     
     return <div className='bg-gray-200  h-screen'> <Spinner /></div>;
   }
-
   if (error) {
     return <p>Error: {error.message}</p>;
   }
@@ -91,9 +95,6 @@ const DoctorsList: FC = () => {
   const doctors=user.filter((user)=>{
     return user.role==="doctor"
   })
-
-
-
 
 
 return (
