@@ -18,8 +18,7 @@ const Bookings = () => {
     const Upcomming = async () => {
         try {
             // for upcomming
-            console.log("sail");
-            
+          
             const upcomming = await Api.get('/doctor/getAllbookings');
             if (upcomming.data.success) {
                 const updatedUBooking = upcomming.data.booking.map((ubook: { time: Date, end: Date }) => ({

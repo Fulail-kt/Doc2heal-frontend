@@ -1,6 +1,5 @@
-import React,{useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import useApi from '../../hooks/useApi';
 import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
@@ -8,78 +7,88 @@ import toast, { Toaster } from 'react-hot-toast';
 import { login } from '../../redux/authSlice';
 import Spinner from '../Spinner/Spinner';
 import User from '../../@types';
+import api from '../../services/api';
 
 type FormData = {
   email: string;
   password: string;
 };
 
-type Token={
-  id:string,
-  role:string
-}
+type Token = {
+  id: string;
+  role: string;
+};
+
 const Login: React.FC = () => {
-  const {register,handleSubmit,formState: { errors },} = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const { fetchData, loading, data,  } = useApi<{
-    username: any;user: User; success: string; value: any; message: string; isVerified: boolean;email:string,token:string
-}>('/login', 'POST');
-
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const dispatch=useDispatch();
-
-  
-  const onSubmit: SubmitHandler<FormData> = async (value) => {
-
+  const fetchData = async (data: FormData) => {
     try {
-      await fetchData(value);
+      setLoading(true); 
 
-    } catch (error:any) {
-        
-      const errorMessage = error?.response?.data.message || "An error occurred please try after some times";
-      toast.error(errorMessage);
-     
+      const res = await api.post('/login', data, { withCredentials: true });
+      return res.data;
+    } finally {
+      setLoading(false); 
     }
   };
-  
-  useEffect(() => {
-    if (loading || !data) {
-      return;
-    }
-    
-    if (data.isVerified === false && data.message) {
-      navigate("/otp", { state: { otp: true, email: data.email, msg: data.message,username:data?.username } });
-      toast.error(data.message);
-    } else if (data.success) {
-      const { token, user } = data;
-      const decode: Token | null = jwtDecode<Token>(token);
-      
-      dispatch(login({
-        id: decode?.id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-        isApproved:user.isApproved
-      }));
-      
-      localStorage.setItem("token", token);
 
-      if(decode?.role==="admin"){
-        navigate('/admin');
-      }else if (decode?.role === 'doctor') {
-        navigate('/doctor',{replace:true});
-      } else {
-        navigate('/',{replace:true});
+  const onSubmit: SubmitHandler<FormData> = async (value) => {
+    try {
+      const data = await fetchData(value);
+
+      if (data.isVerified === false && data.message) {
+        navigate('/otp', {
+          state: {
+            otp: true,
+            email: data.email,
+            msg: data.message,
+            username: data?.username,
+          },
+        });
+        toast.error(data.message);
+      } else if (data.success) {
+        const { token, user, refresh } = data;
+        const decode: Token | null = jwtDecode<Token>(token);
+
+        dispatch(
+          login({
+            id: decode?.id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            isApproved: user.isApproved,
+          })
+        );
+
+        localStorage.setItem('token', token);
+        // document.cookie = `refresh=${refresh}; max-age=${24 * 60 * 60}; path=/`;
+
+        if (decode?.role === 'admin') {
+          navigate('/admin');
+        } else if (decode?.role === 'doctor') {
+          navigate('/doctor', { replace: true });
+        } else {
+          navigate('/', { replace: true });
+        }
+      } else if (data.message) {
+        toast.error(data.message);
       }
-    } else if (data.message) {
-      toast.error(data.message);
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data.message ||
+        'An error occurred. Please try again after some time';
+      toast.error(errorMessage);
     }
-  }, [loading, data, navigate, dispatch]);
-
-
-
-  
+  };
  
   return (
     <>

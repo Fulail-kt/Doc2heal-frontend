@@ -49,21 +49,21 @@ const AdminDashboard: FC = () => {
       <div className='bg-gray-200 min-h-screen p-2'>
         <Adminheader />
         <div className=' flex flex-col items-center justify-center  mt-4 '>
-          <div className='flex w-3/4 justify-center gap-x-10'>
-            <div className='w-1/2 bg-gray-500 h-96 p-2 rounded-md'><ChartExample data={earnings} /></div>
-            <div className='w-1/2 flex flex-col justify-around  rounded-md'>
+          <div className='flex flex-col gap-y-2 md:gap-y-0 items-center w-full md:flex-row  md:w-3/4 justify-center md:gap-x-10'>
+            <div className='w-[90%] md:w-1/2 bg-gray-500 h-100 md:h-96 p-2 rounded-md'><ChartExample data={earnings} /></div>
+            <div className=' w-[90%] md:w-1/2 flex flex-col justify-around   gap-y-2 rounded-md'>
               <div className=' flex justify-around items-center cursor-default  bg-gray-500 h-40 rounded-md'>
                 <div className='w-1/2 border flex justify-center items-center text-center font-semibold h-20' ><span><img src={doctorImg} width={60} height={50} alt="" /></span><h1>Doctors 7</h1></div>
                 <div className='w-1/2 border flex items-center justify-center text-center font-semibold h-20'><span><img src={patientImg} width={60} height={50} className='' /></span><h1>Patients 3</h1></div>
               </div>
-              <div className=' flex justify-around items-center  cursor-default bg-gray-500 h-40 rounded-md'>
+              <div className=' flex justify-around items-center   cursor-default bg-gray-500 h-40 rounded-md'>
                 <div className='w-1/2 border grid place-items-center text-center font-semibold h-20' >Non Blocked 9</div>
                 <div className='w-1/2 border grid place-items-center text-center font-semibold h-20'>Blocked 0</div>
               </div>
             </div>
           </div>
-          <div className=' flex w-3/4 mt-8 justify-center gap-x-10'>
-            <div className='w-1/2 flex flex-col justify-around  rounded-md'>
+          <div className='flex flex-col-reverse items-center  gap-y-2 md:gap-y-0 w-full md:flex-row  md:w-3/4 justify-center md:gap-x-10'>
+            <div className='w-[90%] md:w-1/2 flex flex-col justify-around  gap-y-2  rounded-md'>
               <div className=' flex justify-around items-center cursor-default  bg-gray-500 h-32 rounded-md'>
                 <div className='w-1/2 border flex justify-center items-center text-center font-semibold h-14' ><span><img src={doctorImg} width={60} height={50} alt="" /></span><h1>Doctors 7</h1></div>
                 <div className='w-1/2 border flex items-center justify-center text-center font-semibold h-14'><span><img src={patientImg} width={60} height={50} className='' /></span><h1>Patients 3</h1></div>
@@ -73,7 +73,7 @@ const AdminDashboard: FC = () => {
                 <div className='w-1/2 border grid place-items-center text-center font-semibold h-14'>Blocked 0</div>
               </div>
             </div>
-            <div className='w-2/4  bg-gray-500 max-h-80 p-1 rounded-md'><PieChart data={bookings} /></div>
+            <div className='w-[90%] md:w-2/4  bg-gray-500 h-100  gap-y-2 mt-2 md:mt-0 md:h-80 p-1 rounded-md'><PieChart data={bookings} /></div>
           </div>
         </div>
       </div>

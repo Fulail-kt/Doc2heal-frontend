@@ -33,6 +33,7 @@ const Profile: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const imgRef = useRef<HTMLInputElement | null>(null);
+  const submitRef = useRef<HTMLInputElement | any>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [editedUser, setEditedUser] = useState<User>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,11 +60,16 @@ const Profile: FC = () => {
       const user = await Api.get(`/getuser`, { params: { id } });
       setUser(user.data.user);
     } catch (error: any) {
+      
+      if (error?.response?.data.accessToken) {
+        localStorage.setItem('token',error?.response?.data.accessToken);
+        navigate('/', { replace: true });
+      }
       if (error?.response?.data.isBlocked) {
         localStorage.removeItem('token');
         navigate('/', { replace: true });
       }
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
@@ -151,70 +157,87 @@ const Profile: FC = () => {
   useEffect(() => {
     fetchPayment()
     fetchData();
-  }, [])
+  }, [token])
 
   return (
-    <div className='profile_bg h-screen'>
+    <div className='profile_bg min-h-screen'>
       {
         loading ? (<Spinner />) : (<>
           <Toaster />
           <Header />
           <section className='m-0 p-0'>
-            <div className='w-full flex items-center '>
-              <div className='sm:w-100 lg:w-1/6'>
+            <div className='w-full flex items-center'>
+              <div className='sm:w-1/6 lg:w-1/6'>
                 <Navbar handleLogout={handleLogout} />
               </div>
-              <div className='w-3/4 flex justify-center'>
-                <div className='px-3 gap-x-3  rounded-xl w-[56%] flex items-center justify-center h-52 '>
-                  <div className='w-2/6 bg-gray-600 rounded-xl flex justify-center items-center shadow-xl h-[90%]'>
-                    {
-                      imgloading ? (<Spinner />) : (<img src={user?.image ? user?.image : userImg} className='rounded-xl bg-contain w-full h-full' onClick={() => imgRef.current?.click()} alt="" />)
-                    }
+              <div className='w-[50%] mr-2 ml-2 sm:mx-0 sm:w-full flex flex-col items-center justify-center'>
+                <div className='w-32 sm:w-40 md:w-44 bg-gray-600 rounded-xl flex justify-center items-center shadow-xl h-auto mb-3 sm:mb-0'>
+                  <div className='w-full'>
+                    {imgloading ? (
+                      <Spinner />
+                    ) : (
+                      <img src={user?.image ? user?.image : userImg} className='rounded-xl bg-contain w-full h-full cursor-pointer' onClick={() => imgRef.current?.click()} alt="" />
+                    )}
                     <input type="file" ref={imgRef} className='hidden' accept="image/*" onChange={profileUpload} />
                   </div>
-                  <div className='w-4/6 rounded-xl  h-[90%] flex  items-center  shadow-xl bg-[#ffffffd0]'>
-                    <div className='w-1/3 ml-5 text-lg font-semibold tracking-wider'>
-                      <p>Name</p>
-                      <p>Email</p>
-                      <p>Phone</p>
-                      <p>Gender</p>
-                    </div>
-                    {isEdit ? (<div className='text-lg tracking-wider'>
-                      <form onSubmit={(e) => handleSubmit(e)} className='mt-7'>
-                        <p>: <input type="text" className='tracking-wider' defaultValue={user?.username} onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })} /></p>
-                        <p>: <input type="text" className='tracking-wider' readOnly defaultValue={user?.email} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /></p>
-                        <p>: <input type="number" className='tracking-wider' defaultValue={user?.phone} onChange={(e) => setEditedUser({ ...editedUser, phone: e.target.value })} /></p>
-                        <p>:
-                          <select className='tracking-wider' value={editedUser?.gender} onChange={(e) => setEditedUser({ ...editedUser, gender: e.target.value })}>
-                            <option defaultValue={user?.gender}>{user?.gender}</option>
-                            <option value="male">male</option>
-                            <option value="female">Female</option>
-                          </select>
-                        </p>
-                        <div className='w-full flex justify-end'><button type='submit' className='bg-green-500 rounded-full text-white px-3 py-0'>Submit</button></div>
-                      </form>
-                    </div>) :
-                      (<div className='text-lg tracking-wider'>
-
-                        <p>: {user?.username}</p>
-                        <p>: {user?.email}</p>
-                        <p>: {user?.phone}</p>
-                        <p>: {user?.gender}</p>
-
-                      </div>)}
-                    <div className='absolute cursor-pointer bg-red-400 text-white px-2 rounded-xl select-none right-72'><span onClick={() => setIsEdit(!isEdit)} className=''>Edit</span></div>
-                  </div>
                 </div>
-                <div>
+                <div className='w-[100%] flex flex-col'>
+                  <div className='flex justify-center items-center w-full  '>
+                    <div className=' bg-[#ffffffd0] flex justify-center w-72  rounded-md  shadow-xl'>
+                      <div className='text-xs sm:text-sm md:text-lg font-semibold h-full tracking-wider'>
+                        <p>Name</p>
+                        <p>Email</p>
+                        <p>Phone</p>
+                        <p>Gender</p>
+                      </div>
+                      {isEdit ? (
+                        <div className='w-2/3 text-xs sm:text-sm md:text-lg'>
+                          <form onSubmit={(e) => handleSubmit(e)} className='w-full'>
+                            <p className='flex'>: <input type="text" className='tracking-wider w-[90%]' defaultValue={user?.username} onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })} /></p>
+                            <p className='flex'>: <input type="text" className='tracking-wider w-[90%]' readOnly defaultValue={user?.email} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /></p>
+                            <p className='flex'>: <input type="number" className='tracking-wider w-[90%]' defaultValue={user?.phone} onChange={(e) => setEditedUser({ ...editedUser, phone: e.target.value })} /></p>
+                            <p className='flex'>:
+                              <select className='tracking-wider w-[90%]' value={editedUser?.gender} onChange={(e) => setEditedUser({ ...editedUser, gender: e.target.value })}>
+                                <option defaultValue={user?.gender}>{user?.gender}</option>
+                                <option value="male">male</option>
+                                <option value="female">Female</option>
+                              </select>
+                            </p>
+                            <button type='submit' className='bg-green-500 hidden rounded-full text-white px-3 py-0' ref={submitRef}></button>
+                          </form>
+                        </div>
+                      ) : (
+                        <div className='w-2/3 text-xs sm:text-sm md:text-lg'>
+                          <p className='flex'>: {user?.username}</p>
+                          <p className='flex'>: {user?.email}</p>
+                          <p className='flex'>: {user?.phone}</p>
+                          <p className='flex'>: {user?.gender}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className=' flex justify-center  p-2'>
+                    <div className='flex  gap-x-6'>
+                      <div className='cursor-pointer bg-red-400 text-white px-2  rounded-xl '>
+                        <span onClick={() => setIsEdit(!isEdit)} className=''>{isEdit ? "Cancel" : "Edit"}</span>
+                      </div>
+                      {isEdit && (
+                        <button type='button' className='cursor-pointer bg-green-400 text-white px-2 rounded-xl select-none ' onClick={() => submitRef.current.click()}>
+                          Submit
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
-          <div className='w-full cursor-default flex items-center justify-center gap-x-14 h-44 '>
-            <div className='w-2/6 border rounded-xl shadow-md  h-40'>
-              <p className='text-center font-semibold text-lg shadow-md py-3'>Wallet Amount: ₹ {user?.wallet?.balance}</p>
+
+          <div className=' grid w-full place-items-center md:grid-cols-2'>
+            <div className='w-[80%] md:w-4/6 border rounded-xl shadow-md  h-40'>
+              <p className='text-center font-semibold sm:text-base md:text-lg shadow-md py-3'>Wallet Amount: ₹ {user?.wallet?.balance}</p>
               {/* <p className='text-center text-blue-400'>history</p> */}
-              <div className='flex w-full justify-center flex-col items-center h-1/2'>
+              <div className='flex w-full justify-center flex-col text-xs sm:text-sm md:text-base items-center h-1/2'>
                 <div>
                   {user?.wallet?.transactions.slice(-2).map((history: { _id: string; paymentType: string; amount: number; date: string }) => (
                     <p key={history?._id} className={`text-center font-mono ${history?.paymentType === 'credit' ? 'text-green-500' : 'text-red-500'}`}>
@@ -225,7 +248,7 @@ const Profile: FC = () => {
               </div>
               <h3 className='cursor-pointer text-center text-blue-500' onClick={handleViewMore}>view more</h3>
               <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                <div className='w-100'>
+                <div className='w-100 text-xs sm:text-sm md:text-base'>
                   {user?.wallet?.transactions.slice().reverse().map((history: { _id: string; paymentType: string; amount: number, date: string }) => (
                     <p key={history?._id} className={`text-center font-mono ${history?.paymentType === 'credit' ? 'text-green-500' : 'text-red-500'}`}>
                       {history?.amount} {history?.paymentType == "credit" ? "credited to" : "debited from"} your wallet at {moment(history.date).format('DD/MM/YYYY')}
@@ -234,10 +257,10 @@ const Profile: FC = () => {
                 </div>
               </Modal>
             </div>
-            <div className='w-2/6 bg-white border rounded-xl shadow-md  h-40'>
-              <p className='text-center font-semibold text-lg shadow-md py-3'>Total Payment: ₹ {total}</p>
+            <div className='w-[80%] mt-2 md:mt-0 md:w-4/6 bg-white border rounded-xl shadow-md  h-40'>
+              <p className='text-center font-semibold sm:text-base md:text-lg shadow-md py-3'>Total Payment: ₹ {total}</p>
               {/* <p className='text-center text-blue-400'>history</p> */}
-              <div className='flex w-full justify-center flex-col items-center h-1/2'>
+              <div className='flex w-full justify-center text-xs sm:text-sm md:text-base flex-col items-center h-1/2'>
                 <div>
                   {payment.slice(-2).map((history: { _id: string; date: Date; fee: number; doctorId: { username: string } }) => (
                     <p className='text-center font-mono' key={history?._id}>
@@ -249,7 +272,7 @@ const Profile: FC = () => {
               <h3 className='cursor-pointer text-center text-blue-500' onClick={handleView}>view more</h3>
               <div>
                 <Modal isOpen={isModalOpen2} onClose={handleCloseModal}>
-                  <div className=''>
+                  <div className='text-xs'>
                     {payment.slice().reverse().map((history: { _id: string; fee: number; doctorId: { username: string } }) => (
                       <p key={history?._id} className={`text-center font-mono`}>
                         {history?.fee} debited for booking with {history?.doctorId?.username}

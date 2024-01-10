@@ -70,11 +70,6 @@ const DocProfile: React.FC = () => {
                     <div className='w-full flex-col flex justify-center items-center '>
                         <div className='flex flex-col justify-center mt-3 items-center w-full'>
                             {doctor && (<>
-                                {/* <div className='flex  justify-center'>
-
-                                    <img src={doctor.image} className='shadow-2xl rounded-lg' width={150} height={80} alt="" />
-                                </div> */}
-
                                 <div className='flex  justify-center'>
 
                                     {
@@ -88,7 +83,7 @@ const DocProfile: React.FC = () => {
 
                                 <div className='text-center flex w-[80%] mt-3 mb-2  justify-center'>
 
-                                    <div className="w-[70%] rounded-md">
+                                    <div className="w-[85%] md:w-[70%] rounded-md">
                                         <dl>
                                             <div className="bg-gray-300 bg-opacity-30 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                 <dt className="text-sm font-medium text-gray-900 text-left">
@@ -145,8 +140,8 @@ const DocProfile: React.FC = () => {
 
                             </>)}
                         </div>
-                        <div className='w-full flex justify-around '>
-                            <div className='bg-gray-300 bg-opacity-50 w-1/3 m-1 h-56 rounded-lg'>
+                        <div className='w-full flex  justify-around '>
+                            <div className='bg-gray-300 bg-opacity-50 w-[95%] md:w-1/3 m-1 md:h-56 rounded-lg'>
                                 <h1 className='text-center m-1'>ADDRESS</h1>
                                 <div className=' flex m-3 rounded-md bg-slate-300 bg-opacity-40'>
                                     <div className='flex flex-col w-full justify-center '>

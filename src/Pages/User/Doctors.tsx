@@ -9,6 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/authSlice';
 import User from '../../@types';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
 
 const DoctorCard = lazy(() => import('../../components/Doctor/DoctorCard'));
 
@@ -101,13 +104,16 @@ const Doctors: FC = () => {
           <div className='sm:w-1/4 md:w-[5%]'><Navbar handleLogout={handleLogout} /></div>
           <div className='container w-100  text-center'>
             <h2 className='text-[30px] font-bold text-blue-500'>Find a Doctor</h2>
-            <div className='max-w-[570px] mt-2 mx-auto bg-[#0066ff2c] rounded-md flex items-center justify-between'>
+            <div className='max-w-[60%] mt-2 mx-auto bg-[#0066ff2c] rounded-md flex items-center justify-between'>
               <input type="search" className='py-4 pl-4 pr-2 bg-transparent w-full focus:outline-none cursor-pointer placeholder:text-slate-700' placeholder='Search Doctor' />
-              <button className='btn mt-0 rounded-[0px] rounded-r-md'>Search</button>
+              <button className="btn mt-0 rounded-[0px] rounded-r-md">
+      <span className="hidden sm:inline">Search</span> {/* Display on medium and larger screens */}
+      <FontAwesomeIcon icon={faSearch} className="sm:hidden w-5 h-5" />
+    </button>
             </div>
-            <div className='flex justify-center gap-x-2 sm:gap-x-10  w-100 '>
+            <div className='flex justify-center gap-x-2 sm:gap-x-10   sm:w-100 '>
               <select
-                className='bg-blue-500 cursor-pointer p-1 px-1 rounded-md text-white mt-3 w-24 focus:outline-none'
+                className='bg-blue-500 cursor-pointer p-1 px-1 rounded-md text-white mt-3 w-14 sm:w-24 focus:outline-none'
                 value={selectedFeeRange} 
                 onChange={(e) => setSelectedFeeRange(e.target.value)}
               >
@@ -115,13 +121,13 @@ const Doctors: FC = () => {
                 <option value="lowToHigh">Low to High</option>
                 <option value="highToLow">High to Low</option>
               </select>
-              <div className='flex'><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className=' m-0 bg-blue-500 rounded p-1 mt-3 outline-none text-sm text-white h-8 w-28' /></div>
+              <div className='flex'><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className=' m-0 bg-blue-500 rounded p-1 mt-3 outline-none text-sm text-white h-8 w-14 sm:w-28' /></div>
             </div>
           </div>
         </div>
         <section className='p-0'>
           <div className='container'>
-            <div className='grid grid-cols-4 m-4  md:grid-cols-3 lg:grid-cols-4 gap-5'>
+            <div className='grid grid-cols-2 m-4  md:grid-cols-3 lg:grid-cols-4 gap-5'>
             {doctors.map((doctor) => (
               <div key={doctor._id} className=' shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
                 <Suspense fallback={<Spinner />}>

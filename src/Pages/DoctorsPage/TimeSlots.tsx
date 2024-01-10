@@ -34,20 +34,19 @@ const TimeSlots: FC = () => {
     };
 
     const { currentDate, currentTime } = getCurrentDateTime();
-
-    
     const [selected, setSelected] = useState(currentDate)
-
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
+            if(!startDate ||!endDate){
+                return toast.error("please fill all fields")
+            }
             
             const startDateTime = moment(`${startDate}T${startTime}`);
             const endDateTime = moment(`${endDate}T${endTime}`);
-            
-            // if (endDateTime.diff(startDateTime, 'hours') <= 5) return;
 
+            // if (endDateTime.diff(startDateTime, 'hours') <= 5) return;
             if (startDateTime.isAfter(endDateTime)) {
                toast.error("invalid date or time")
                 return;
@@ -56,12 +55,9 @@ const TimeSlots: FC = () => {
             const interval = moment.duration(1, 'hours');
 
             let currentDateTime = startDateTime.clone();
-            
-            console.log("haaaaaaaaaai");
+    
             while (currentDateTime.isBefore(endDateTime) ) {
-                console.log("haaaaaaaaaai");
-                
-                occurrences.push({
+                     occurrences.push({
                     start: currentDateTime.format('YYYY-MM-DD hh:mm:ss A'),
                     end: currentDateTime.add(interval).format('YYYY-MM-DD hh:mm:ss A')
                 });
@@ -72,20 +68,32 @@ const TimeSlots: FC = () => {
                     currentDateTime.add(1, 'days');
                 }
             }
-            
-            console.log("ehllog",occurrences);
+             
             const response = await Api.post('/doctor/setTimeslot', { occurrences });
             if (response.data.message) {
-
                 toast.success(response.data.message)
                 setRefresh((prev) => !prev);
                 closeModal()
             }
         } catch (error) {
-            console.log((error as Error).message);
+            // console.log((error as Error).message);
         }
     };
 
+    const handleDelete=async(bookingId:string)=>{
+        try {
+            const res = await Api.delete('/doctor/deleteBooking', {params: {id: bookingId,}, });
+
+            if(res.data.success){
+                toast.success("successfully deleted")
+                setRefresh((prev) => !prev);
+            }else{
+               toast.error(res.data.message)
+            }
+        } catch (error) {
+            // toast.error((error as Error).message)
+        }
+    }
 
     const token:any = localStorage.getItem("token")
     const decode = jwtDecode<{ id: string; role: string }>(token);
@@ -156,7 +164,7 @@ const TimeSlots: FC = () => {
                                                         type='time'
                                                         name='startTime'
                                                         defaultValue={currentTime}
-                                                        onChange={(e) => setStartTime(e.target.value)}
+                                                        onChange={(e:any) => setStartTime(e.target.value)}
                                                     />
                                                 </div>
                                             </div>
@@ -189,19 +197,20 @@ const TimeSlots: FC = () => {
                             {bookings && bookings.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any TimeSlots Created</p>) : (bookings?.map((booking) => (
                                 <div
                                     className={`${booking.status === 'booked' ? 'bg-green-500' : booking.status === 'completed' ? 'bg-[#5046a8]' : booking.status === 'cancelled' ? 'bg-red-500' : 'bg-orange-400'} flex-shrink-0 w-1/4 rounded-md border font-light p-1 m-2 text-white text-center`} key={booking._id}>
-                                    <p>{moment(booking.date).local().format('ll')}</p>
-                                    <p>
-                                        {moment(booking.time)
-                                            .tz('Asia/Kolkata')
-
-                                            .format('h:mm A')}{' '}
-                                        to{' '}
-                                        {moment(booking.end)
-                                            .tz('Asia/Kolkata')
-
-                                            .format('h:mm A')}
-                                    </p>
-                                    <p>{booking.status}</p>
+                                    <div>
+                                        { booking.status=="pending" ? <div className='flex items-center'>  <p className='w-full text-center'>{moment(booking.date).local().format('ll')}</p><p className='absolute cursor-pointer select-none text-red-500 text-center bg-white flex justify-center items-center p-0 m-0 rounded-full pb-0.5 w-4 h-4' onClick={()=>handleDelete(booking._id)}>x</p></div>:
+                                        <p>{moment(booking.date).local().format('ll')}</p>}
+                                        <p>
+                                            {moment(booking.time)
+                                                .tz('Asia/Kolkata')
+                                                .format('h:mm A')}{' '}
+                                            to{' '}
+                                            {moment(booking.end)
+                                                .tz('Asia/Kolkata')
+                                                .format('h:mm A')}
+                                        </p>
+                                        <p>{booking.status}</p>
+                                    </div>
                                 </div>
                             )))}
                         </div>

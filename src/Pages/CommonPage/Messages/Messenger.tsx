@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import Navbar from '../../../components/Navbar/Navbar';
 import Header from '../../../components/Header/Header';
 import socket from '../../../services/socket';
+import { FaPaperPlane } from 'react-icons/fa'; 
 
 export default function Messenger() {
   const [conversations, setConversations] = useState([]);
@@ -111,64 +112,81 @@ export default function Messenger() {
 
   return (
     <>
-      <div className={`flex flex-col min-h-screen ${location.pathname === "/doctor/messages" ? 'bg-gray-400' : 'profile_bg '}`}>
-        {location.pathname === "/doctor/messages" ? (<div className='bg-[#202231] h-16'></div>) : (<Header />)}
-        <div className='flex flex-1'>
-          {location.pathname == "/doctor/messages" ? (<div className='bg-[#202231]'>
-            <DocNavbar />
-          </div>) : (<div className=''>
-            <Navbar handleLogout={false} />
-          </div>)}
-          <div className='w-full flex justify-center mt-4 '>
-            <div className={`messenger w-[90%] rounded-lg shadow-2xl shadow-slate-800 ${location.pathname == "/doctor/messages" ? '  ' : 'bg-[#71a1ee]'} `}>
-              <div className="chatMenu border-r-2">
-                <div className="chatMenuWrapper ">
-                  <div className='w-full flex flex-col items-center '><input placeholder="Search for friends" className="chatMenuInput outline-none rounded-full h-10 px-3" /></div>
-                  {conversations.map((c:any) => (
-                    <div key={c._id} onClick={() => setCurrentChat(c)}>
-                      <Conversation conversation={c} currentUserId={id} />
+      
+<div className={`flex flex-col min-h-screen ${location.pathname === "/doctor/messages" ? 'bg-gray-400' : 'profile_bg '}`}>
+  {location.pathname === "/doctor/messages" ? (
+    <div className='bg-[#202231] h-16'></div>
+  ) : (
+    <Header />
+  )}
+  <div className='flex flex-1'>
+    {location.pathname === "/doctor/messages" ? (
+      <div className='bg-[#202231]'>
+        <DocNavbar />
+      </div>
+    ) : (
+      <div className=''>
+        <Navbar handleLogout={false} />
+      </div>
+    )}
+    <div className='w-full flex flex-col sm:flex-row justify-center mt-4'>
+      <div className={`messenger w-[97%] sm:w-[90%] rounded-lg shadow-2xl shadow-slate-800 ${location.pathname === "/doctor/messages" ? '  ' : 'bg-[#71a1ee]'} `}>
+        <div className="w-1/3 mt-3  border-r-2 sm:border-r-0 sm:border-b-2">
+          <div className="">
+            <div className='w-full flex flex-col items-center '>
+              <input
+                placeholder="Search for friends"
+                className="chatMenuInput w-[90%]  outline-none rounded-full h-10 px-3"
+              />
+            </div>
+            {conversations.map((c: any) => (
+              <div key={c._id} onClick={() => setCurrentChat(c)}>
+                <Conversation conversation={c} currentUserId={id} />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="chatBox flex-1">
+          <div className="chatBoxWrapper">
+            {currentChat ? (
+              <>
+                <div className='bg-[#202231] text-center h-12 rounded-full '>
+                  <p>{}</p>
+                </div>
+                <div className="chatBoxTop overflow-y-auto">
+                  {messages.map((m: any, index: number) => (
+                    <div key={index}>
+                      <Message message={m} own={m.senderId === id} />
                     </div>
                   ))}
+                  <div ref={scrollRef}></div>
                 </div>
-              </div>
-              <div className="chatBox">
-                <div className="chatBoxWrapper">
-                  {currentChat ? (
-                    <>
-                      <div className='bg-[#202231] text-center h-12 rounded-full '>
-                        <p>{ }</p>
-                      </div>
-                      <div className="chatBoxTop">
-                        {messages.map((m:any, index:number) => (
-                          <div key={index}>
-                            <Message message={m} own={m.senderId === id} />
-                          </div>
-                        ))}
-                        <div ref={scrollRef}></div>
-                      </div>
-                      <div className=" flex items-center justify-between mt-2">
-                        <input
-                          className="w-full m-3  h-8 rounded-full px-4"
-                          placeholder="Write something..."
-                          onChange={(e) => setNewMessage(e.target.value)}
-                          value={newMessage}
-                        />
-                        <button className="border-none bg-blue-600 text-white px-2 rounded-full py-1" onClick={handleSubmit}>
-                          Send
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <span className="text-center text-white text-lg font-medium flex items-center justify-center sm:text-xs  md:text-sm min-h-full">
-                      Open a conversation to start a chat.
-                    </span>
-                  )}
+                <div className="flex w-full items-center justify-between mt-2">
+                  <input
+                    className="w-full m-3 h-8  rounded-full px-4"
+                    placeholder="Write something..."
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    value={newMessage}
+                  />
+                 <button className="border-none bg-blue-600 text-white px-2 rounded-full py-1" onClick={handleSubmit}>
+  <span className="hidden sm:inline">Send</span>
+  <span className="sm:hidden">
+    <FaPaperPlane />
+  </span>
+</button>
                 </div>
-              </div>
-            </div>
+              </>
+            ) : (
+              <span className="text-center text-white text-lg font-medium flex items-center justify-center sm:text-xs md:text-sm min-h-full">
+                Open a conversation to start a chat.
+              </span>
+            )}
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
 
     </>
   );

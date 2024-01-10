@@ -102,13 +102,13 @@ const Home: FC = () => {
                   </div>
 
 
-                  <div className="flex justify-center mt-9 gap-x-10 w-full">
+                  <div className="flex flex-col items-center sm:flex-row  md:flex-row  justify-center mt-9 gap-x-10 w-full">
 
-                    <div className="w-1/3 patient_bg bg-slate-600 rounded-md h-52 flex justify-center  items-end">
+                    <div className="w-[80%]  sm:w-1/3 patient_bg bg-slate-600 rounded-md h-52 flex justify-center  items-end">
                       <Link to='/doctors'><button className="bg-blue-500 rounded-full p-1 px-2 font-semibold mb-2 text-white">Join as Patient</button></Link>
                     </div>
 
-                    <div className="w-1/3 doctor_bg bg-slate-600 rounded-md h-52 flex justify-center items-end" >
+                    <div className="w-[80%] mt-1 sm:w-1/3 doctor_bg bg-slate-600 rounded-md h-52 flex justify-center items-end" >
                       <Link to='/application'>
                         <button className="bg-blue-500 rounded-full p-1 px-2 font-semibold mb-2 text-white">Join as Doctor</button>
                       </Link>

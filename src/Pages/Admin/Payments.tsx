@@ -65,14 +65,14 @@ const Payments: FC = () => {
             <Adminheader />
             <div className='w-full flex justify-center items-center'>
                 <div className='w-[60%]'>
-                    <h2 className='text-2xl font-bold text-center mb-4'>Payment Requests</h2>
+                    <h2 className='text-base md:text-2xl font-bold text-center mb-4'>Payment Requests</h2>
 
                     <div className='w-full cursor-pointer flex text-w justify-around'><span onClick={() => setStatus('requested')} className={` ${status == "requested" ? "bg-blue-500 text-white px-5 py-1 shadow-lg shadow-gray-400 text-center rounded-full w-32" : "w-32 px-5 py-1 text-center"}`}>All</span><span onClick={() => setStatus('accepted')} className={`${status == "accepted" ? "bg-blue-500 text-white px-5 py-1 shadow-lg shadow-gray-400 text-center  rounded-full w-32" : "w-32 px-5 py-1 text-center"}`} >Approved</span><span onClick={() => setStatus('rejected')} className={` ${status == "rejected" ? "bg-blue-500 text-white px-5 py-1 shadow-lg shadow-gray-400 text-center rounded-full w-32" : "w-32 px-5 py-1 text-center"}`}>Rejected</span></div>
                     <ul className='w-full cursor-pointer flex justify-center m-4'>
                         {paymentReq.length === 0 ? (
                             <p className='text-center text-gray-500 mt-4'>No payment requests found.</p>
                         ) : (
-                            <ul className='w-full cursor-pointer flex justify-center m-4'>
+                            <ul className='w-full cursor-pointer text-xs md:text-base flex justify-center m-4'>
                                 {paymentReq.map((payment:{_id:string,status:string,doctorId:{username:string}}) => (
                                     <li key={payment._id} className='mb-4' onClick={() => openModal(payment)}>
                                         <h3>

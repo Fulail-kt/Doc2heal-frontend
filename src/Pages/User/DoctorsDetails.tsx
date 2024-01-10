@@ -63,7 +63,7 @@ const DoctorsDetails: React.FC = () => {
             const currentTime = moment();
             
             const bookingEndTime = moment(item?.end);
-            console.log(bookingEndTime);
+           
             
             console.log(currentTime.isSameOrAfter(bookingEndTime),"dle");
             const isAfterCurrentTime = currentTime.isSameOrBefore(bookingEndTime);

@@ -98,8 +98,6 @@ const Timeslot: FC<{ bookings: bookingModal[], fetchbooking: any }> = ({ booking
     const SaveBooking = async () => {
         try {
 
-            console.log(useWallet, "wlae");
-
             const response = await Api.post('/savebooking', { selectedBookingId, bookingData, useWallet });
 
             if (response.data?.success) {

@@ -7,6 +7,7 @@ import Booking from '../../@types';
 import Spinner from '../Spinner/Spinner';
 import Modal from '../modal/modal';
 import Api from '../../services/api';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Bookings: Booking[]; handleCancelBooking: any; handleCompleteBooking: any }) => {
   const [page, setPage] = useState('upcoming');
@@ -116,7 +117,7 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
     const currentTime = moment();
     const isBeforeStart = currentTime.isSameOrBefore(startTime);
     // const isBeforeEndTime = currentTime.isSameOrBefore(endTime);
-    console.log(isBeforeStart,"canc");
+
     
     return  isBeforeStart;
     
@@ -145,13 +146,10 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
   const handleSubmit = async (e: any) => {
 
     e.preventDefault()
-
-    console.log(prescription, selected);
-
     try {
       const res = await Api.post('/doctor/prescription', { prescription, selected })
 
-      console.log(res);
+      toast.success(res.data.message)
 
     } catch (error) {
 
@@ -160,7 +158,8 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
 
   return (
     <>
-      <div className='flex justify-center'>
+    <Toaster/>
+      <div className='flex justify-center text-[10px] sm:text-sm'>
         <div className='w-[90%] flex h-12 items-center bg-gray-500 rounded-3xl mt-5 justify-around cursor-pointer'>
           <span
             onClick={handleUpcomingClick}
