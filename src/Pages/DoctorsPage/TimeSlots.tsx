@@ -13,7 +13,7 @@ const TimeSlots: FC = () => {
     const [bookings, setBookings] = useState<bookingModal[]>();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [endTime, setEndTime] = useState()
-    const [startTime, setStartTime] = useState()
+    const [startTime, setStartTime] = useState<any>()
     const [endDate, setEndDate] = useState()
     const [startDate, setStartDate] = useState()
 

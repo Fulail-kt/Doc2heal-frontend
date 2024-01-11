@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Api from '../../services/api';
-import User from '../../@types';
+import {User} from '../../@types';
 
 
 interface Conversation {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 import { login } from '../../redux/authSlice';
 import Spinner from '../Spinner/Spinner';
-import User from '../../@types';
 import api from '../../services/api';
 
 type FormData = {
@@ -56,7 +55,7 @@ const Login: React.FC = () => {
         });
         toast.error(data.message);
       } else if (data.success) {
-        const { token, user, refresh } = data;
+        const { token, user } = data;
         const decode: Token | null = jwtDecode<Token>(token);
 
         dispatch(

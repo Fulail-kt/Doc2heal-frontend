@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { Route, Routes } from 'react-router-dom'
 import DocDashboard from '../Pages/DoctorsPage/DocDashboard'
 import TimeSlots from '../Pages/DoctorsPage/TimeSlots'
@@ -7,7 +7,6 @@ import Bookings from '../Pages/DoctorsPage/Bookings'
 import DocProfile from '../Pages/DoctorsPage/DocProfile'
 
 import Messenger from '../Pages/CommonPage/Messages/Messenger'
-import Lobby from '../components/lobby'
 import DisApproved from '../Pages/DoctorsPage/DisApproved'
 import DocPayment from '../Pages/DoctorsPage/DocPayment'
 import NotFound from '../components/404/404'
@@ -16,7 +15,6 @@ const DoctorRoutes = () => {
     return (
         <>
             <Routes>
-         <Route path='/lobby' element={<Lobby />} />
 
          <Route path='/' element={<ProtectedRoute allowedRole="doctor"><DocDashboard /></ProtectedRoute>} />
          <Route path='/bookings' element={<ProtectedRoute allowedRole="doctor"><Bookings /></ProtectedRoute>} />

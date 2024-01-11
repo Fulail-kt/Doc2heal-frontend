@@ -1,7 +1,7 @@
 import { useState, useEffect, SetStateAction } from 'react';
 import { AgChartsReact } from 'ag-charts-react';
 
-const ChartExample = ({ data }) => {
+const ChartExample = ({ data }:{data:any}) => {
   
   const [selectedFilter, setSelectedFilter] = useState('monthly');
   const [chartOptions, setChartOptions] = useState({});

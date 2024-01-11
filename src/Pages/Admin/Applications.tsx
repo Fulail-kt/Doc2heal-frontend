@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import Adminheader from '../../components/Header/AdminHeader'
 import Api from '../../services/api'
-import User from '../../@types'
+import {User} from '../../@types'
 import toast, { Toaster } from 'react-hot-toast';
 import Modal from '../../components/modal/modal';
 import { useNavigate } from 'react-router-dom';

@@ -9,7 +9,6 @@ import Doctors from '../Pages/User/Doctors'
 import DoctorsDetails from '../Pages/User/DoctorsDetails';
 import Profile from '../Pages/User/Profile'
 import Room from '../Pages/Room'
-import Lobby from '../components/lobby'
 import NotFound from '../components/404/404'
 import Otp from '../Pages/User/otp'
 import ProtectedRoute from './Protected'
@@ -40,7 +39,6 @@ const UserRoutes:React.FC = () => {
 <Route path='/messages' element={<ProtectedRoute allowedRole="patient"><Messenger /></ProtectedRoute>} />
 
       <Route path="/room/:id" element={<Room/>} />
-      <Route path="/lobby" element={<Lobby/>} />
       <Route path="/success" element={<h1>this is scucesss</h1>} />
 
 

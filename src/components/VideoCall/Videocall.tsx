@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react'
 import socket from '../../services/socket'
 import ReactPlayer from 'react-player'
 import peer from '../../services/peer'
-import { faPhoneSlash, faVideo, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
+import { faPhoneSlash, faVideo} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const VideoCall: FC = () => {
 
@@ -38,14 +38,7 @@ const VideoCall: FC = () => {
         // Additional cleanup if needed
     };
 
-    const handleToggleMicrophone = () => {
-        
-        const audioTrack = myStream.getAudioTracks()[0];
-        if (audioTrack) {
-            audioTrack.enabled = !audioTrack.enabled;
-        }
-        // Update the state if needed
-    };
+   
 
     const handleToggleVideo = () => {
         // Add logic to toggle video
@@ -86,7 +79,7 @@ const VideoCall: FC = () => {
         }
     }, [myStream])
 
-    const handleCallAccepted = useCallback(({ from, ans }: { from: any; ans: any }) => {
+    const handleCallAccepted = useCallback(({ ans }: { from: any; ans: any }) => {
         peer.setLocalsDescription(ans)
         console.log("call accepted");
         sendStreams()

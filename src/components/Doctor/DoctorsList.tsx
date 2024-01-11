@@ -1,7 +1,7 @@
 import React from 'react';
 // import Modal from '../modal/modal';
 // import BookingForm from './time';
-import User from '../../@types';
+import {User} from '../../@types';
 
 const DoctorsList: React.FC<{ doctor: User }> = ({ doctor }) => {
 

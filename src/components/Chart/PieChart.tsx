@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AgChartsReact } from 'ag-charts-react';
+import { AgPieSeriesOptions } from 'ag-charts-community';
 
 // Chart Component
 const PieChart = ({ data }: { data: any }) => {
   const [chartOptions, setChartOptions] = useState({
-    data: [], // Initialize with empty data
+    data: [{}], // Initialize with empty data
     title: {
       text: 'Booking Status',
     },
-    series: [
-      {
-        type: 'pie',
-        angleKey: 'value',
-        labelKey: 'status',
-        calloutLabelKey: 'status',
-        innerRadiusRatio: 0.7,
-      },
-    ],
+    series: [{
+      type: 'pie',
+      angleKey: 'value',
+      labelKey: 'status',
+      calloutLabelKey: 'status',
+      innerRadiusRatio: 0.7,
+    } as AgPieSeriesOptions], 
   });
 
   useEffect(() => {

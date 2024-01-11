@@ -29,7 +29,7 @@ export default function Messenger() {
 // add user
   useEffect(() => {
     socket.emit('addUser', id);
-    socket.on("getUsers", (users) => {
+    socket.on("getUsers", (_users) => {
     });
   }, []);
 
@@ -74,7 +74,7 @@ export default function Messenger() {
     const receiverId = currentChat?.members?.find((member: string) => member !== id)
 
     try {
-      const res = await Api.post('/messages', message);
+       await Api.post('/messages', message);
 
       socket.emit("sendMessage", {
         senderId: id,
@@ -126,7 +126,7 @@ export default function Messenger() {
       </div>
     ) : (
       <div className=''>
-        <Navbar handleLogout={false} />
+      <Navbar handleLogout={() => {}} />
       </div>
     )}
     <div className='w-full flex flex-col sm:flex-row justify-center mt-4'>

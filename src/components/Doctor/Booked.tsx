@@ -115,7 +115,7 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
     const showCancel=startTime.subtract(1, 'hour')
  
     const currentTime = moment();
-    const isBeforeStart = currentTime.isSameOrBefore(startTime);
+    const isBeforeStart = currentTime.isSameOrBefore(showCancel);
     // const isBeforeEndTime = currentTime.isSameOrBefore(endTime);
 
     

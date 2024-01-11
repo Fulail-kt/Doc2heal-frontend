@@ -5,7 +5,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import api from '../../services/api';
 import Swal from 'sweetalert2';
 import AdminHeader from '../../components/Header/AdminHeader';
-import User from '../../@types';
+import {User} from '../../@types';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -58,7 +58,7 @@ const PatientsList: FC = () => {
 
   const user: User[] = data.user || [];
 
-  const patients=user.filter((user)=>{
+  const patients=user.filter((user:any)=>{
    return user.role==="patient"
   })
 

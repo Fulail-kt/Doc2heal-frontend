@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import DocNavbar from '../../components/Navbar/DocNavbar';
 import { jwtDecode } from 'jwt-decode';
 import Api from '../../services/api';
-import User from '../../@types';
+import {User} from '../../@types';
 import Modal from '../../components/modal/modal';
 import moment from 'moment';
 import Swal from 'sweetalert2';

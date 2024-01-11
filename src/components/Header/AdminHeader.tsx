@@ -1,10 +1,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import userImg from '../../assets/images/avatar.png';
 import Logo from '../../assets/images/Logo.png';
 import { BiMenu } from 'react-icons/bi';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 interface NavLinkItem {
   path: string;

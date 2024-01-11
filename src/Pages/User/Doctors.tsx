@@ -59,7 +59,7 @@ const Doctors: FC = () => {
 
   useEffect(() => {
     if (initialLoadComplete) {
-      const updatedDoctors = users.filter((doc) => (
+      const updatedDoctors = users.filter((doc:any) => (
         doc.role === 'doctor' &&
         doc.isApproved &&
         (!date || isDoctorAvailableOnDate(doc._id, date))

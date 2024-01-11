@@ -1,15 +1,14 @@
 
 
-export default interface User {
-    bankDetails: any;
-    bankDetails: User | undefined;
+export interface User {
+    bankDetails?:any;
     _id: string;
     username: string;
     email: string;
-    password: string;
+    password?: string;
     image?: string;
     documents?:[string]
-    phone: number;
+    phone?: number|null;
     gender:string;
     address?: {
       name: string;
@@ -22,7 +21,7 @@ export default interface User {
     }[];
     specialization?: string;
     fee?: number;
-    formStatus:string;
+    formStatus?:string;
     hospital?: string;
     experience?: string;
     role?: 'patient' | 'doctor'|'admin';
@@ -58,7 +57,7 @@ export default interface User {
   
 
   export default interface ApplyFormValues {
-    phone: number;
+    phone?: number|null;
     email: string;
     address?: {
       name: string;

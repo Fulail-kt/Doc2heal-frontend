@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import {User} from '../../@types';
 
 
 interface TableProps {
@@ -25,7 +26,7 @@ useEffect(() => {
     setPath(location.pathname)
     
   setLocalUser(user);
-}, [user]);
+}, [user,localUser]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;

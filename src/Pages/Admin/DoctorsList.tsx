@@ -4,7 +4,7 @@ import useApi from '../../hooks/useApi';
 import Spinner from '../../components/Spinner/Spinner';
 import Swal from 'sweetalert2'
 import Adminheader from '../../components/Header/AdminHeader';
-import User from '../../@types';
+import {User} from '../../@types';
 import Api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 

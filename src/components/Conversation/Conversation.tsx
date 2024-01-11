@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import "./Conversation.css";
 import Api from "../../services/api";
-import User from "../../@types";
+import {User} from "../../@types";
 
 export default function Conversation({ conversation, currentUserId }: { conversation: any; currentUserId: string }) {
   const [user, setUser] = useState<User>();

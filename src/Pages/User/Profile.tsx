@@ -7,7 +7,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import Header from '../../components/Header/Header';
 import Spinner from '../../components/Spinner/Spinner';
 import Api from '../../services/api';
-import User from '../../@types';
+import {User} from '../../@types';
 import { logout } from '../../redux/authSlice';
 import { jwtDecode } from 'jwt-decode';
 import Modal from '../../components/modal/modal';
@@ -35,7 +35,14 @@ const Profile: FC = () => {
   const imgRef = useRef<HTMLInputElement | null>(null);
   const submitRef = useRef<HTMLInputElement | any>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
-  const [editedUser, setEditedUser] = useState<User>({});
+  const [editedUser, setEditedUser] = useState<User>({
+    _id: '',
+    username: '',
+    email: '',
+    phone: 0,
+    gender: '',
+  });
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -83,10 +90,10 @@ const Profile: FC = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-    if (editedUser.phone && editedUser.phone?.length != 10) {
+    if (editedUser.phone && editedUser.phone.toString().length !== 10) {
       toast.error('Phone number must be 10 characters long');
       return;
-    }
+    }    
     try {
       const response = await Api.put(`/updateUser/${user?._id}`, {
         phone: editedUser.phone,
@@ -195,7 +202,8 @@ const Profile: FC = () => {
                           <form onSubmit={(e) => handleSubmit(e)} className='w-full'>
                             <p className='flex'>: <input type="text" className='tracking-wider w-[90%]' defaultValue={user?.username} onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })} /></p>
                             <p className='flex'>: <input type="text" className='tracking-wider w-[90%]' readOnly defaultValue={user?.email} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /></p>
-                            <p className='flex'>: <input type="number" className='tracking-wider w-[90%]' defaultValue={user?.phone} onChange={(e) => setEditedUser({ ...editedUser, phone: e.target.value })} /></p>
+                            <p className='flex'>: <input type="number" className='tracking-wider w-[90%]' defaultValue={user?.phone ? user.phone.toString() : ''}onChange={(e) => setEditedUser({ ...editedUser, phone: parseInt(e.target.value) || 0})}/></p>
+
                             <p className='flex'>:
                               <select className='tracking-wider w-[90%]' value={editedUser?.gender} onChange={(e) => setEditedUser({ ...editedUser, gender: e.target.value })}>
                                 <option defaultValue={user?.gender}>{user?.gender}</option>

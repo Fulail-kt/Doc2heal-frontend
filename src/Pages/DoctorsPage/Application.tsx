@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import DoctorForm from '../../components/Doctor/DoctorForm';
 import Header from '../../components/Header/Header';
 import Spinner from '../../components/Spinner/Spinner';
-import User from '../../@types';
+import {User} from '../../@types';
 import Api from '../../services/api';
 
 const Application: React.FC = () => {

@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useEffect, useState, } from 'react';
 import { useForm, SubmitHandler, } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
-import User from '../../@types';
+import {User} from '../../@types';
 import api from '../../services/api';
 import Api from '../../services/api';
 import { useNavigate } from 'react-router-dom'; 
@@ -42,7 +42,7 @@ const DoctorForm: FC<DoctorFormProps> = ({ user,fetchUser}) => {
     const [formStatus, setformStatus] = useState("")
 
     const [loading, setLoading] = useState(false);
-    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedFiles, setSelectedFiles] = useState<any>([]);
     const navigate = useNavigate()
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -74,7 +74,7 @@ const DoctorForm: FC<DoctorFormProps> = ({ user,fetchUser}) => {
                     localStorage.setItem("second", "true")
                     setSecond(true)
                 }
-            } catch (error) {
+            } catch (error:any) {
                 if (error?.response?.data.isBlocked) {
                     localStorage.removeItem('token');
                     navigate('/', { replace: true });
@@ -102,7 +102,7 @@ const DoctorForm: FC<DoctorFormProps> = ({ user,fetchUser}) => {
         setSelectedFiles(files);
     };
 
-    const handleDocSubmit = async (e) => {
+    const handleDocSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         setLoading(true);
       

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import './Message.css';
 import moment from 'moment';
 
-export default function Message({ message, own }) {
+export default function Message({ message, own }:{message:any;own:any}) {
   const [displayTime, setDisplayTime] = useState('Just now');
 
   useEffect(() => {
