@@ -1,5 +1,6 @@
 import {FC} from 'react'
-import VideoCall from '../components/VideoCall/VideoCall'
+import VideoCall from '../components/VideoCall/VideoCall.tsx';
+
 
 
 const Room:FC = () => {
