@@ -10,7 +10,7 @@ import { logout } from '../../redux/authSlice';
 import User from '../../@types';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons'; 
 
 
 const DoctorCard = lazy(() => import('../../components/Doctor/DoctorCard'));
