@@ -31,28 +31,6 @@ const DoctorsDetails: React.FC = () => {
   };
 
 
-  // const fetchBookings = async () => {
-  //   try {
-  //     // const selected="2024-01-02"
-  //     const slots = await Api.get("/getbookings", { params: { id, selected } });
-  //     const allBookings: bookingModal[] = slots.data.bookings;
-
-  //     const filteredBookings = allBookings.filter((item) => {
-  //       const currentTime = moment();
-  //       const isAfterEndTime = currentTime.isBefore(item?.end);
-  //       const isBookedOrPending = item?.status === "booked" || item?.status === "pending";
-  //       // const isToday = moment(item?.date).isSame(currentTime, 'day');
-  //       const isTodayOrLater = moment(item?.date).isSameOrAfter(currentTime, 'day');
-  //       return isBookedOrPending && isTodayOrLater && isAfterEndTime;
-  //     });
-
-  //     setBookings(filteredBookings);
-  //   } catch (error) {
-  //     console.error("Error fetching bookings:", error);
-  //   }
-  // };
-
-
   const fetchBookings = async () => {
     try {
         // const selected="2024-01-02"
