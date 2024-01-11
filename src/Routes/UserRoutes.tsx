@@ -16,7 +16,8 @@ import Application from '../Pages/DoctorsPage/Application'
 import Mybookings from '../Pages/User/Mybookings'
 // import Chat from '../components/Conversation/Conversation'
 import Messenger from '../Pages/CommonPage/Messages/Messenger'
-import VideoCall from '../components/VideoCall/VideoCall'
+// import VideoCall from '../components/VideoCall/VideoCall'
+import Video from '../components/Video/Video'
 
 const UserRoutes:React.FC = () => {
   return (
@@ -39,7 +40,7 @@ const UserRoutes:React.FC = () => {
 <Route path='/appointments' element={<ProtectedRoute allowedRole="patient"><Mybookings /></ProtectedRoute>} />
 <Route path='/messages' element={<ProtectedRoute allowedRole="patient"><Messenger /></ProtectedRoute>} />
 
-      <Route path="/room/:id" element={<VideoCall/>} />
+      <Route path="/room/:id" element={<Video/>} />
       <Route path="/success" element={<h1>this is scucesss</h1>} />
 
 
