@@ -79,9 +79,9 @@ const VideoCall: FC = () => {
         }
     }, [myStream])
 
-    const handleCallAccepted = useCallback(({ ans }: { from: any; ans: any }) => {
+    const handleCallAccepted = useCallback(({from, ans }: { from: any; ans: any }) => {
         peer.setLocalsDescription(ans)
-        console.log("call accepted");
+        console.log("call accepted",from);
         sendStreams()
     }, [sendStreams])
 
