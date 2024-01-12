@@ -21,9 +21,10 @@ const Mybookings: FC = () => {
 
         const BookedBookings = mybookings.data.bookings.map((ubook: { time: Date, end: Date }) => ({
           ...ubook,
-          // time: moment(ubook.time).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
-          time: moment(ubook.time).format('hh:mm A'),
-          end: moment(ubook.end).format('hh:mm A'),
+          time: moment(ubook.time).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
+          // time: moment(ubook.time).format('hh:mm A'),
+          // end: moment(ubook.end).format('hh:mm A'),
+          end: moment(ubook.end).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
         }));
 
         setBooked(BookedBookings)

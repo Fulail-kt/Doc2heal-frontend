@@ -23,10 +23,10 @@ const Bookings = () => {
             if (upcomming.data.success) {
                 const updatedUBooking = upcomming.data.booking.map((ubook: { time: Date, end: Date }) => ({
                     ...ubook,
-                    // time: moment(ubook.time).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
-                    time: moment(ubook.time).format('hh:mm A'),
-                    // end: moment(ubook.end).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
-                    end: moment(ubook.end).format('hh:mm A'),
+                    time: moment(ubook.time).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
+                    // time: moment(ubook.time).format('hh:mm A'),
+                    end: moment(ubook.end).subtract(5, 'hours').subtract(30, 'minutes').format('hh:mm A'),
+                    // end: moment(ubook.end).format('hh:mm A'),
                 }));
                 setBookings(updatedUBooking)
             } else {
