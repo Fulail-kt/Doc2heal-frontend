@@ -197,56 +197,35 @@ const TimeSlots: FC = () => {
                             {bookings && bookings.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any TimeSlots Created</p>) : (bookings?.map((booking) => (
                                 <div
                                     className={`${booking.status === 'booked' ? 'bg-green-500' : booking.status === 'completed' ? 'bg-[#5046a8]' : booking.status === 'cancelled' ? 'bg-red-500' : 'bg-orange-400'} flex-shrink-0 w-1/4 rounded-md border font-light p-1 m-2 text-white text-center`} key={booking._id}>
-                                    {/* <div>
-                                        { booking.status=="pending" ? <div className='flex items-center'>  <p className='w-full text-center'>{moment(booking.date).local().format('ll')}</p><p className='absolute cursor-pointer select-none text-red-500 text-center bg-white flex justify-center items-center p-0 m-0 rounded-full pb-0.5 w-4 h-4' onClick={()=>handleDelete(booking._id)}>x</p></div>:
-                                        <p>{moment(booking.date).local().format('ll')}</p>}
+                                    <div>
+                                        {booking.status == "pending" ? <div className='flex items-center'>  <p className='w-full text-center'>{moment(booking.date).local().format('ll')}</p><p className='absolute cursor-pointer select-none text-red-500 text-center bg-white flex justify-center items-center p-0 m-0 rounded-full pb-0.5 w-4 h-4' onClick={() => handleDelete(booking._id)}>x</p></div> :
+                                            <p>{moment(booking.date).local().format('ll')}</p>}
                                         <p>
-                                            {moment(booking.time)
+                                            {/* {moment(booking.time)
                                                 .tz('Asia/Kolkata')
                                                 .format('h:mm A')}{' '}
                                             to{' '}
                                             {moment(booking.end)
                                                 .tz('Asia/Kolkata')
+                                                .format('h:mm A')} */}
+
+                                            {moment(booking.time)
+                                                .tz('Asia/Kolkata')
+                                                .subtract(5, 'hours')
+                                                .subtract(30, 'minutes')
+                                                .format('h:mm A')}
+                                            {' '}
+                                            to{' '}
+                                            {moment(booking.end)
+                                                .tz('Asia/Kolkata')
+                                                .subtract(5, 'hours')
+                                                .subtract(30, 'minutes')
                                                 .format('h:mm A')}
                                         </p>
                                         <p>{booking.status}</p>
-                                    </div> */}
-
-                                    <div>
-                                        {booking.status === "pending" ? (
-                                            <div className='flex items-center'>
-                                                <p className='w-full text-center'>
-                                                    {moment(booking.date).local().format('ll')}
-                                                </p>
-                                                <p
-                                                    className='absolute cursor-pointer select-none text-red-500 text-center bg-white flex justify-center items-center p-0 m-0 rounded-full pb-0.5 w-4 h-4'
-                                                    onClick={() => handleDelete(booking._id)}
-                                                >
-                                                    x
-                                                </p>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <p>
-                                                    {moment(booking.date).local().subtract(5, 'hours').subtract(30, 'minutes').format('ll')}
-                                                </p>
-                                                <p>
-                                                    {moment(booking.time)
-                                                        .tz('Asia/Kolkata')
-                                                        .subtract(5, 'hours')
-                                                        .subtract(30, 'minutes')
-                                                        .format('h:mm A')}{' '}
-                                                    to{' '}
-                                                    {moment(booking.end)
-                                                        .tz('Asia/Kolkata')
-                                                        .subtract(5, 'hours')
-                                                        .subtract(30, 'minutes')
-                                                        .format('h:mm A')}
-                                                </p>
-                                                <p>{booking.status}</p>
-                                            </div>
-                                        )}
                                     </div>
+
+
 
                                 </div>
                             )))}
