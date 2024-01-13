@@ -8,19 +8,15 @@ const DisApproved: FC = () => {
 
   const navigate=useNavigate()
   const token=localStorage.getItem('token')
-  
   useEffect(()=>{
 if(token){
   const decode= jwtDecode<{ _id: string; role: string;isApproved:boolean}>(token);
-
   if(decode.isApproved){
     navigate('/')
   }
 }
   },[navigate, token])
-
   const Logout=()=>{
-
     localStorage.removeItem('token'); 
     navigate('/')
     

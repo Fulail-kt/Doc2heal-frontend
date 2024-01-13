@@ -39,25 +39,25 @@ const TimeSlots: FC = () => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            if(!startDate ||!endDate){
+            if (!startDate || !endDate) {
                 return toast.error("please fill all fields")
             }
-            
+
             const startDateTime = moment(`${startDate}T${startTime}`);
             const endDateTime = moment(`${endDate}T${endTime}`);
 
             // if (endDateTime.diff(startDateTime, 'hours') <= 5) return;
             if (startDateTime.isAfter(endDateTime)) {
-               toast.error("invalid date or time")
+                toast.error("invalid date or time")
                 return;
             }
             const occurrences = [];
             const interval = moment.duration(1, 'hours');
 
             let currentDateTime = startDateTime.clone();
-    
-            while (currentDateTime.isBefore(endDateTime) ) {
-                     occurrences.push({
+
+            while (currentDateTime.isBefore(endDateTime)) {
+                occurrences.push({
                     start: currentDateTime.format('YYYY-MM-DD hh:mm:ss A'),
                     end: currentDateTime.add(interval).format('YYYY-MM-DD hh:mm:ss A')
                 });
@@ -68,7 +68,7 @@ const TimeSlots: FC = () => {
                     currentDateTime.add(1, 'days');
                 }
             }
-             
+
             const response = await Api.post('/doctor/setTimeslot', { occurrences });
             if (response.data.message) {
                 toast.success(response.data.message)
@@ -80,36 +80,36 @@ const TimeSlots: FC = () => {
         }
     };
 
-    const handleDelete=async(bookingId:string)=>{
+    const handleDelete = async (bookingId: string) => {
         try {
-            const res = await Api.delete('/doctor/deleteBooking', {params: {id: bookingId,}, });
+            const res = await Api.delete('/doctor/deleteBooking', { params: { id: bookingId, }, });
 
-            if(res.data.success){
+            if (res.data.success) {
                 toast.success("successfully deleted")
                 setRefresh((prev) => !prev);
-            }else{
-               toast.error(res.data.message)
+            } else {
+                toast.error(res.data.message)
             }
         } catch (error) {
             // toast.error((error as Error).message)
         }
     }
 
-    const token:any = localStorage.getItem("token")
+    const token: any = localStorage.getItem("token")
     const decode = jwtDecode<{ id: string; role: string }>(token);
     const id = decode?.id
 
     useEffect(() => {
         const fetchSlots = async () => {
             try {
-                const slots = await Api.get(`/getbookings`, { params: { id,selected } });
-                setBookings(slots.data.bookings);  
+                const slots = await Api.get(`/getbookings`, { params: { id, selected } });
+                setBookings(slots.data.bookings);
             } catch (error) {
                 console.error(error);
             }
         };
         fetchSlots();
-    }, [id, refresh,selected]);
+    }, [id, refresh, selected]);
 
     return (
         <>
@@ -140,7 +140,7 @@ const TimeSlots: FC = () => {
                                                     <input
                                                         type='date'
                                                         name='startDate'
-                                                        onChange={(e:any) => setStartDate(e.target.value)}
+                                                        onChange={(e: any) => setStartDate(e.target.value)}
                                                     />
                                                 </div>
                                             </div>
@@ -151,7 +151,7 @@ const TimeSlots: FC = () => {
                                                         type='date'
                                                         name='endDate'
                                                         // defaultValue={currentDate}
-                                                        onChange={(e:any) => setEndDate(e.target.value)}
+                                                        onChange={(e: any) => setEndDate(e.target.value)}
                                                     />
                                                 </div>
                                             </div>
@@ -164,7 +164,7 @@ const TimeSlots: FC = () => {
                                                         type='time'
                                                         name='startTime'
                                                         defaultValue={currentTime}
-                                                        onChange={(e:any) => setStartTime(e.target.value)}
+                                                        onChange={(e: any) => setStartTime(e.target.value)}
                                                     />
                                                 </div>
                                             </div>
@@ -175,7 +175,7 @@ const TimeSlots: FC = () => {
                                                         type='time'
                                                         name='endTime'
                                                         defaultValue={currentTime}
-                                                        onChange={(e:any) => setEndTime(e.target.value)}
+                                                        onChange={(e: any) => setEndTime(e.target.value)}
                                                     />
                                                 </div>
                                             </div>
@@ -191,26 +191,42 @@ const TimeSlots: FC = () => {
                         </Modal>
                         <div className='flex flex-wrap justify-center w-full'>
                             <div className='w-full flex  justify-center text-white'>
-                                <label className='border  p-1 rounded-md' htmlFor="">Select Date: <input type="Date" className='bg-transparent  outline-none' name="" id="" onChange={(e:any)=>setSelected(e.target.value)}  defaultValue={currentDate}/></label>
-                                
+                                <label className='border  p-1 rounded-md' htmlFor="">Select Date: <input type="Date" className='bg-transparent  outline-none' name="" id="" onChange={(e: any) => setSelected(e.target.value)} defaultValue={currentDate} /></label>
+
                             </div>
                             {bookings && bookings.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any TimeSlots Created</p>) : (bookings?.map((booking) => (
                                 <div
                                     className={`${booking.status === 'booked' ? 'bg-green-500' : booking.status === 'completed' ? 'bg-[#5046a8]' : booking.status === 'cancelled' ? 'bg-red-500' : 'bg-orange-400'} flex-shrink-0 w-1/4 rounded-md border font-light p-1 m-2 text-white text-center`} key={booking._id}>
                                     <div>
-                                        { booking.status=="pending" ? <div className='flex items-center'>  <p className='w-full text-center'>{moment(booking.date).local().format('ll')}</p><p className='absolute cursor-pointer select-none text-red-500 text-center bg-white flex justify-center items-center p-0 m-0 rounded-full pb-0.5 w-4 h-4' onClick={()=>handleDelete(booking._id)}>x</p></div>:
-                                        <p>{moment(booking.date).local().format('ll')}</p>}
+                                        {booking.status == "pending" ? <div className='flex items-center'>  <p className='w-full text-center'>{moment(booking.date).local().format('ll')}</p><p className='absolute cursor-pointer select-none text-red-500 text-center bg-white flex justify-center items-center p-0 m-0 rounded-full pb-0.5 w-4 h-4' onClick={() => handleDelete(booking._id)}>x</p></div> :
+                                            <p>{moment(booking.date).local().format('ll')}</p>}
                                         <p>
-                                            {moment(booking.time)
+                                            {/* {moment(booking.time)
                                                 .tz('Asia/Kolkata')
                                                 .format('h:mm A')}{' '}
                                             to{' '}
                                             {moment(booking.end)
                                                 .tz('Asia/Kolkata')
+                                                .format('h:mm A')} */}
+
+                                            {moment(booking.time)
+                                                .tz('Asia/Kolkata')
+                                                .subtract(5, 'hours')
+                                                .subtract(30, 'minutes')
+                                                .format('h:mm A')}
+                                            {' '}
+                                            to{' '}
+                                            {moment(booking.end)
+                                                .tz('Asia/Kolkata')
+                                                .subtract(5, 'hours')
+                                                .subtract(30, 'minutes')
                                                 .format('h:mm A')}
                                         </p>
                                         <p>{booking.status}</p>
                                     </div>
+
+
+
                                 </div>
                             )))}
                         </div>

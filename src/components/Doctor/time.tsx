@@ -148,10 +148,10 @@ const Timeslot: FC<{ bookings: bookingModal[], fetchbooking: any }> = ({ booking
                             >
                                 <p>{moment(booking.date).tz('Asia/Kolkata').format('L')}</p>
                                 <p>
-                                    {/*                                 {moment(booking.time).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')} to{' '}
-                                    {moment(booking.end).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')} */}
-                                    {moment(booking.time).tz('Asia/Kolkata').format('LT')} to{' '}
-                                    {moment(booking.end).tz('Asia/Kolkata').format('LT')}
+                                                                    {moment(booking.time).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')} to{' '}
+                                    {moment(booking.end).tz('Asia/Kolkata').subtract(5, 'hours').subtract(30, 'minutes').format('LT')}
+                                    {/* {moment(booking.time).tz('Asia/Kolkata').format('LT')} to{' '} */}
+                                    {/* {moment(booking.end).tz('Asia/Kolkata').format('LT')} */}
                                 </p>
                                 <p className={`${booking.status === 'pending' ? 'text-green-500' : ''}`}>
                                     {booking.status === 'pending' ? 'Available' : booking.status}
