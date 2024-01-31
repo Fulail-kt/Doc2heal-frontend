@@ -7,6 +7,8 @@ import Spinner from '../../components/Spinner/Spinner'
 const PieChart =lazy(()=> import('../../components/Chart/PieChart'))
 const ChartExample = lazy(() => import('../../components/Chart/Chart'));
 import { FaSignOutAlt } from 'react-icons/fa';
+import logo from '../../assets/images/Untitled (2).png'
+
 
 type Token = {
   id: string,
@@ -53,7 +55,7 @@ const DocDashboard: FC = () => {
 
   return (
     <div className='bg-gray-400'>
-      <div className='bg-[#202231] overflow-y-auto h-16'><img src="" alt="Logo" /></div>
+      <div className='bg-[#202231] overflow-y-auto h-16'><div className='w-full items-center h-full md:w-48 flex justify-center'><img className=''  src={logo} width={160}  alt="Logo" /></div></div>
       <div className=''>
         <div className='flex w-full justify-center'>
           <div className='bg-[#202231]'>

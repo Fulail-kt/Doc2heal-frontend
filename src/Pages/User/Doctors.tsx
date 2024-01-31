@@ -11,6 +11,7 @@ import User from '../../@types';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons'; 
+import Footer from '../../components/Footer/Footer';
 
 
 const DoctorCard = lazy(() => import('../../components/Doctor/DoctorCard'));
@@ -137,7 +138,7 @@ const Doctors: FC = () => {
             ))}
             </div>
           </div>
-          <div className='flex justify-center'>
+          <div className='flex justify-center m-10 font-mono '>
             <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
               <svg className="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
@@ -153,6 +154,7 @@ const Doctors: FC = () => {
 
         </section>
       </div>
+      <Footer/>
     </>
   );
 }

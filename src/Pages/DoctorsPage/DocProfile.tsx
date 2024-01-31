@@ -9,14 +9,14 @@ import Spinner from '../../components/Spinner/Spinner'
 
 const DocProfile: React.FC = () => {
 
-    const [doctor, setDoctor] = useState<User|any>()
+    const [doctor, setDoctor] = useState<User | any>()
     const [imgLoading, setimgLoading] = useState<boolean>()
-    const navigate=useNavigate()
-    const token:any = localStorage.getItem('token')
+    const navigate = useNavigate()
+    const token: any = localStorage.getItem('token')
     const decode = jwtDecode<{ id: string; role: string }>(token);
     const id = decode.id
     const imgRef = useRef<HTMLInputElement | null>(null);
-  
+
     const fetchUser = async () => {
         const res = await Api.get('/getUser', { params: { id: id } })
         setDoctor(res.data.user)
@@ -60,7 +60,7 @@ const DocProfile: React.FC = () => {
 
     return (
         <>
-        <Toaster/>
+            <Toaster />
             <div className='flex flex-col min-h-screen bg-gray-400'>
                 <div className='bg-[#202231] w-full h-16'></div>
                 <div className='flex flex-1 w-full '>
@@ -75,7 +75,7 @@ const DocProfile: React.FC = () => {
                                     {
                                         imgLoading ? (<div className='w-40 h-40'>
                                             <Spinner />
-                                        </div>) : (<img src={doctor?.image && doctor?.image } className='shadow-2xl rounded-lg' width={150} height={80} alt={doctor?.username}  onClick={() => imgRef.current?.click()} />)
+                                        </div>) : (<img src={doctor?.image && doctor?.image} className='shadow-2xl rounded-lg' width={150} height={80} alt={doctor?.username} onClick={() => imgRef.current?.click()} />)
                                     }
 
                                     <input type="file" ref={imgRef} className='hidden' accept="image/*" onChange={profileUpload} />
@@ -141,54 +141,59 @@ const DocProfile: React.FC = () => {
                             </>)}
                         </div>
                         <div className='w-full flex  justify-around '>
-                            <div className='bg-gray-300 bg-opacity-50 w-[95%] md:w-1/3 m-1 md:h-56 rounded-lg'>
+                            <div className='bg-gray-300 bg-opacity-50 w-[80%] md:w-1/3 m-1 md:h-56 rounded-lg'>
                                 <h1 className='text-center m-1'>ADDRESS</h1>
                                 <div className=' flex m-3 rounded-md bg-slate-300 bg-opacity-40'>
                                     <div className='flex flex-col w-full justify-center '>
-                                        <div className="  bg-opacity-50 px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <div className="bg-opacity-50 px-4 py-1 grid gap-x-14 grid-cols-3 sm:px-6">
                                             <dt className="text-sm font-medium text-gray-900 text-left">
                                                 Name                                        </dt>
-                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2">
+                                            <dd className=" text-sm text-gray-950 text-left sm:mt-0 sm:col-span-2 text-right sm:text-left">
                                                 {doctor?.address[0]?.name}
                                             </dd>
                                         </div>
-                                        <div className="  bg-opacity-50 px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <div className="bg-opacity-50 px-4 py-1 grid gap-x-14 grid-cols-3 sm:px-6">
+
                                             <dt className="text-sm font-medium text-gray-900 text-left">
                                                 House
                                             </dt>
-                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2">
+                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2 text-right sm:text-left">
                                                 {doctor?.address[0]?.house}
                                             </dd>
                                         </div>
-                                        <div className="  bg-opacity-50 px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <div className="bg-opacity-50 px-4 py-1 grid gap-x-14 grid-cols-3 sm:px-6">
+
                                             <dt className="text-sm font-medium text-gray-900 text-left">
                                                 Contact
                                             </dt>
-                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2">
+                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2 text-right sm:text-left">
                                                 {doctor?.address[0]?.contact}
                                             </dd>
                                         </div>
-                                        <div className="  bg-opacity-50 px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <div className="bg-opacity-50 px-4 py-1 grid gap-x-14 grid-cols-3 sm:px-6">
+
                                             <dt className="text-sm font-medium text-gray-900 text-left">
                                                 Pin
                                             </dt>
-                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2">
+                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2 text-right sm:text-left">
                                                 {doctor?.address[0]?.pin}
                                             </dd>
                                         </div>
-                                        <div className="  bg-opacity-50 px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <div className="bg-opacity-50 px-4 py-1 grid gap-x-14 grid-cols-3 sm:px-6">
+
                                             <dt className="text-sm font-medium text-gray-900 text-left">
                                                 District
                                             </dt>
-                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2">
+                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2 text-right sm:text-left">
                                                 {doctor?.address[0]?.District}
                                             </dd>
                                         </div>
-                                        <div className="  bg-opacity-50 px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <div className="bg-opacity-50 px-4 py-1 grid gap-x-14 grid-cols-3 sm:px-6">
+
                                             <dt className="text-sm font-medium text-gray-900 text-left">
                                                 State
                                             </dt>
-                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2">
+                                            <dd className="mt-1 text-sm text-gray-950  sm:mt-0 sm:col-span-2 text-right sm:text-left">
                                                 {doctor?.address[0]?.state}
                                             </dd>
                                         </div>

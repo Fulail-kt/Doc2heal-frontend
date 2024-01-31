@@ -28,6 +28,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ savebooking }) => {
       if (error ) {
         setMessage((error as unknown as Error).message);
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
+        
         savebooking();
         setRefresh((prev) => !prev);
 

@@ -203,7 +203,7 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
 
                       </>)}
                     </div>
-                    <div className='w-[70%] rounded-lg p-2 px-5 bg-gray-500 text-white justify-around  m-3 items-center  flex' key={ubook?._id}>
+                    <div className='w-[70%] flex-col rounded-lg p-2 px-5 bg-gray-500 text-white justify-around  m-3 items-center  flex md:flex-row' key={ubook?._id}>
                       <p>{new Intl.DateTimeFormat('en-IN').format(new Date(ubook?.date))}</p>
                       <p>
                         {ubook?.time} to {ubook?.end}
@@ -240,7 +240,7 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
               <div className='w-[85%] flex flex-col justify-center items-center  '>
                 {fBooking && fBooking?.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any Completed Bookings </p>) : (fBooking?.map((fbook) => (
                   <div className='w-[70%] rounded-lg p-2 px-5 bg-gray-500 text-white justify-around border m-3 items-center  flex'>
-                    <div className=' w-[75%] rounded-lg p-2 px-5 bg-gray-500 text-white justify-around border m-3 items-center  flex' key={fbook?._id}>
+                    <div className=' w-[75%] flex-col rounded-lg p-2 px-5 bg-gray-500 text-white justify-around border m-3 items-center  flex md:flex-row' key={fbook?._id}>
                       <p>{new Intl.DateTimeFormat('en-IN').format(new Date(fbook.date))}</p>
                       <p>
                         {fbook.time} to {fbook.end}
@@ -291,7 +291,7 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
                       )}
                     </div>
 
-                    <div className=' w-[70%] rounded-lg p-2 px-5 bg-white justify-around border m-3 items-center text-black flex' key={cbook?._id}>
+                    <div className=' w-[70%] flex-col rounded-lg p-2 px-5 bg-white justify-around border m-3 items-center text-black flex md:flex-row' key={cbook?._id}>
                       <p>{new Intl.DateTimeFormat('en-IN').format(new Date(cbook.date))}</p>
                       <p>
                         {cbook.time} to {cbook.end}

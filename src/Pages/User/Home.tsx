@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react"
+import logo from '../../assets/images/Logo.png'
 import doc1 from '../../assets/images/hero-img01.png'
 import doc2 from '../../assets/images/hero-img02.png'
 import doc3 from '../../assets/images/hero-img03.png'
@@ -7,6 +8,10 @@ import { Link, useNavigate } from "react-router-dom"
 import { jwtDecode } from 'jwt-decode'
 import Spinner from "../../components/Spinner/Spinner"
 import Header from "../../components/Header/Header"
+import Footer from "../../components/Footer/Footer"
+import bg from '../../assets/images/cheerful-arab-female-doctor-working-online-in-the-clinic-using.webp'
+import bg2 from '../../assets/images/1a73b0_698c44f1c55b4a768ee913d908909ac1~mv2.webp'
+import bg1 from '../../assets/images/online-applointment-booking-calendar-modish-regristration_31965-60917.avif'
 
 const Home: FC = () => {
 
@@ -51,7 +56,7 @@ const Home: FC = () => {
           <>
             <Header />
 
-            <section className="hero_section pt-[60px] 2xl:h-[800px]">
+            <section className="hero_section pb-[50px]  pt-[60px] 2xl:h-[800px]">
 
               <div className="container">
 
@@ -62,9 +67,10 @@ const Home: FC = () => {
                         We help you live your best life.
                       </h1>
                       <p className="text__para">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Donec commodo nunc ac diam iaculis lacinia. In rutrum elit in
-                        ullamcorper consequat. Duis sed libero orci. Orci varius natoque
+                        Our platform connects you with renowned healthcare professionals,
+                        ensuring that you receive the highest standard of medical guidance.
+                        Your well-being is our priority, and we're here to support you on your journey to optimal health
+
                       </p>
                       <button className="btn">Request an Appointment</button>
                     </div>
@@ -84,21 +90,34 @@ const Home: FC = () => {
                 </div>
 
                 <div className="doctor_Card w-100 flex flex-col items-center justify-center">
-                  <h1>We Providing the best medical services.</h1>
+                  <h1 className="font-semibold text-black text-xl">We Providing the best medical services.</h1>
 
                   <div className="flex flex-wrap justify-center items-center gap-3 my-12">
-                    <div className="card w-40 sm:w-40 md:w-44 lg:w-44 xl:w-48 h-56 bg-slate-500 rounded-md"></div>
-                    <div className="card w-40 sm:w-40 md:w-44 lg:w-44 xl:w-48 h-64 bg-slate-500 rounded-md"></div>
-                    <div className="card w-40 sm:w-40 md:w-44 lg:w-44 xl:w-48 h-56 bg-slate-500 rounded-md"></div>
+                    <div className="card flex justify-center items-end pb-5 w-40 sm:w-40 md:w-44 lg:w-44 xl:w-48 h-56 bg-slate-500 rounded-md" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url(${bg1})`, backgroundSize: 'cover', backgroundPosition: 'center' }} >
+                      <h1 className="text-white font-semibold ">Online Appointments</h1>
+                    </div>
+                    <div className="card flex justify-center items-center pb-5 w-40 sm:w-40 md:w-44 lg:w-44 xl:w-48 h-64 bg-slate-500 rounded-md" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                      <h1 className="text-white font-semibold ">Instant video consultation</h1>
+                    </div>
+                    <div
+                      className="card flex justify-center items-end pb-5 w-40 sm:w-40 md:w-44 lg:w-44 xl:w-48 h-56 rounded-md"
+                      style={{
+                        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url(${bg2})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    >
+                      <h1 className="text-white font-semibold">Detailed Prescriptions</h1>
+                    </div>
                   </div>
 
 
                   <div className="text-center w-1/2">
-                    Publishing and graphic design, Lorem ipsum is
-                    a placeholder text commonly used to
-                    demonstrate the visual form of a document or
-                    a typeface without relying on meaningful
-                    content. Lorem ipsum ma
+                    Our dedicated team strives to ensure a superior and personalized healthcare experience,
+                    leveraging the latest technology to facilitate virtual consultations with skilled doctors.
+                    With a steadfast focus on patient well-being, we aim to redefine the landscape of healthcare delivery
+                    by combining expertise, convenience, and innovation. Trust us for your medical needs, and experience
+                    the future of healthcare, where quality meets convenience.
                   </div>
 
 
@@ -119,6 +138,8 @@ const Home: FC = () => {
               </div>
 
             </section>
+            <Footer />
+
           </>
         )}
     </>

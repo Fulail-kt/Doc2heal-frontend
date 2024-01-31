@@ -73,7 +73,7 @@ const Signup: React.FC = () => {
               <form action="" onSubmit={handleSubmit(onSubmit, onError)} noValidate>
                 <div className="max-w-md mx-auto">
                   <div className="w-full flex justify-center">
-                    <h1>SIGNUP</h1>
+                    <h1 className='text-blue-400 font-semibold tracking-widest text-xl'>SIGNUP</h1>
                   </div>
                   <div className="divide-y divide-gray-200">
                     <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
@@ -249,7 +249,7 @@ const Signup: React.FC = () => {
                   <p>Already have Account?</p> <Link to='/login'><span className='text-blue-500'>LogIn</span></Link>
                 </div>
               </form>
-              <DevTool control={control} />
+           
             </div>
           </div>
         </div>

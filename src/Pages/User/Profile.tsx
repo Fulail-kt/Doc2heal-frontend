@@ -12,6 +12,7 @@ import { logout } from '../../redux/authSlice';
 import { jwtDecode } from 'jwt-decode';
 import Modal from '../../components/modal/modal';
 import moment from 'moment';
+import Swal from 'sweetalert2';
 
 type Token = {
   id: string;
@@ -83,9 +84,26 @@ const Profile: FC = () => {
   };
 
   const handleLogout = () => {
-    dispatch(logout());
-    localStorage.removeItem("token");
-    navigate('/', { replace: true });
+    // Display a confirmation modal
+    Swal.fire({
+      title: 'Are you sure?',
+      width: '200px',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#718096',
+      confirmButtonText: 'Yes',
+      customClass: {
+        title: 'text-base',
+        confirmButton: 'px-4 py-2 text-sm', 
+        cancelButton: 'px-4 py-2 text-sm', 
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(logout());
+        localStorage.removeItem('token');
+        navigate('/', { replace: true });
+      }
+    });
   };
 
   const handleSubmit = async (e: any) => {
@@ -278,9 +296,9 @@ const Profile: FC = () => {
                 </div>
               </div>
               <h3 className='cursor-pointer text-center text-blue-500' onClick={handleView}>view more</h3>
-              <div>
+              <div className=''>
                 <Modal isOpen={isModalOpen2} onClose={handleCloseModal}>
-                  <div className='text-xs'>
+                <div className='w-100 text-xs sm:text-sm md:text-base'>
                     {payment.slice().reverse().map((history: { _id: string; fee: number; doctorId: { username: string } }) => (
                       <p key={history?._id} className={`text-center font-mono`}>
                         {history?.fee} debited for booking with {history?.doctorId?.username}
