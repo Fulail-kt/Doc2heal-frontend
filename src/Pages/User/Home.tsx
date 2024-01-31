@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import logo from '../../assets/images/Logo.png'
+
 import doc1 from '../../assets/images/hero-img01.png'
 import doc2 from '../../assets/images/hero-img02.png'
 import doc3 from '../../assets/images/hero-img03.png'

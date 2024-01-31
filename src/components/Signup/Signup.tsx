@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
-import { DevTool } from '@hookform/devtools';
 import api from '../../services/api';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify"
@@ -20,7 +19,7 @@ type FormData = {
 const Signup: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<FormData>();
-  const { register, control, handleSubmit, formState } = form;
+  const { register, handleSubmit, formState } = form;
   const { errors } = formState;
 
 
