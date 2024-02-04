@@ -133,7 +133,7 @@ const Doctors: FC = () => {
               <div className='grid grid-cols-2 m-4  md:grid-cols-3 lg:grid-cols-4 gap-5'>
                 {doctors.map((doctor) => (
                   <div key={doctor._id} className=' shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<Spinner/>}>
                       <DoctorCard doctor={doctor} loading={loadingUsers || loadingBookings} />
                     </Suspense>
                   </div>
