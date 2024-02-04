@@ -142,7 +142,7 @@ const DoctorForm: FC<DoctorFormProps> = ({ user,fetchUser}) => {
             </div>) : (
                 <div className="w-full justify-center flex mt-5 mb-5">
                     {!second ? (
-                        <div className="flex justify-center w-1/2 items-center p-4 border-4">
+                        <div className="flex justify-center w-[95%] md:w-1/2 items-center p-4 border-4">
                             <form className='' onSubmit={handleSubmit(onSubmit)}>
                                 <h1 className='w-100 flex justify-center text-2xl font-semibold'>Doctor Register</h1>
                                 <div className="flex justify-between">
@@ -289,7 +289,7 @@ const DoctorForm: FC<DoctorFormProps> = ({ user,fetchUser}) => {
 
                             </form>
                         </div>) : (<>
-                            <form onSubmit={handleDocSubmit}  className='border rounded-lg p-9'>
+                            <form onSubmit={handleDocSubmit}  className='border w-[90%] md:w-1/2 text-center rounded-lg p-9'>
                                 <div>
                                     <h1 className='text-lg text-center font-semibold'>Documents Submits</h1>
                                     <p className='text-lg text-center text-yellow-400'>Note : Read the rules and Regulation</p>
