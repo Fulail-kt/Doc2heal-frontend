@@ -6,7 +6,7 @@ import { FC, useEffect, useState } from "react"
 import doc1 from '../../assets/images/first.jpeg'
 import doc3 from '../../assets/images/ladydoc.jpeg'
 import doc2 from '../../assets/images/second.jpeg'
-import doc4 from '../../assets/images/4th.jpeg'
+import doc4 from '../../assets/images/doctor-img02.png'
 import { Link, useNavigate } from "react-router-dom"
 // import toast, { Toaster } from "react-hot-toast"
 import { jwtDecode } from 'jwt-decode'
@@ -65,7 +65,7 @@ const Home: FC = () => {
               <div className="container">
 
                 <div className="flex flex-col lg:flex-row gap-[90px] items-center justify-between">
-                  <div>
+                  <div className="flex items-center  md:mt-[-90px] ">
                     <div className="lg:w-[570px]">
                       <h1 className="text-[36px] leading-[46px] text-slate-900 font-[800] md:text-[60px] md:leading-[70px]">
                         We help you live your best life.
@@ -76,19 +76,19 @@ const Home: FC = () => {
                         Your well-being is our priority, and we're here to support you on your journey to optimal health
 
                       </p>
-                      <button className="btn">Request an Appointment</button>
+                      <Link to='/doctors'><button className="btn">Request an Appointment</button></Link>
                     </div>
                   </div>
 
-                  <div className="flex w-full gap-[13px] justify-end">
-                    <div className="flex flex-col items-center">
-                      <img className=" h-[50%] w-[80%] rounded-md" src={doc1} alt="" />
-                      <img className=" h-[30%] w-[80%] mt-3  rounded-md" src={doc4} alt="" />
+                  <div className="flex w-full gap-x-4 justify-evenly">
+                    <div className="flex flex-col  w-[90%] ">
+                      <img className=" h-[47%] rounded-md" src={doc1} alt="" />
+                      <img className=" h-[34%]  mt-3  rounded-md" src={doc4} height={100} alt="" />
                     </div>
-                    <div className="mt-[30px] ">
-                      <img className="w-full mb-[15px] rounded-md " src={doc2} alt="" />
+                    <div className="mt-[30px] w-[80%] h-56 ">
+                      <img className=" mb-[15px]   rounded-md " src={doc2} alt="" />
 
-                      <img className="w-full rounded-md" src={doc3} alt="" />
+                      <img className="rounded-md" src={doc3} alt="" />
                     </div>
                   </div>
 
