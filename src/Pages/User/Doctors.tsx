@@ -88,9 +88,9 @@ const Doctors: FC = () => {
     return bookingsOnDate.length > 0;
   };
 
-  if (loadingUsers || loadingBookings) {
-    return <Spinner />;
-  }
+  // if (loadingUsers || loadingBookings) {
+  //   return <Spinner />;
+  // }
 
   if (userError || bookingError) {
     return <p>Error: {userError ? userError.message : bookingError?.message}</p>;
@@ -134,7 +134,7 @@ const Doctors: FC = () => {
                 {doctors.map((doctor) => (
                   <div key={doctor._id} className=' shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
                     <Suspense fallback={<Spinner />}>
-                      <DoctorCard doctor={doctor} />
+                      <DoctorCard doctor={doctor} loading={loadingUsers || loadingBookings} />
                     </Suspense>
                   </div>
                 ))}

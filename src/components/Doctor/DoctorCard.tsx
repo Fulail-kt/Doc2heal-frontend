@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import defaultImg from '../../assets/images/placeholder-doctor-male.jpg'
+import Spinner from '../Spinner/Spinner';
 
 
 // import {BsArrowRight} from 'react-icons/bs'
@@ -14,11 +15,14 @@ interface Doctor {
 
 interface DoctorCardProps {
   doctor: Doctor;
+  loading:any
 }
 
-const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }:{doctor:any}) => {
+const DoctorCard: React.FC<DoctorCardProps> = ({ doctor,loading }:{doctor:any,loading:any}) => {
   const { username, _id, specialization, hospital } = doctor
-  return (
+  return (<>
+  {loading?(<Spinner/>):(
+ 
     <div className='w-3/4'>
       <Link to={`/doctors/${_id}`}>
         <div>
@@ -42,6 +46,8 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }:{doctor:any}) => {
         </div>
       </Link>
     </div>
+      )}
+     </>
   )
 }
 
