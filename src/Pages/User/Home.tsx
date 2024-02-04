@@ -99,10 +99,10 @@ const Home: FC = () => {
 
                   <div className="flex flex-wrap justify-center items-center gap-3 my-12">
                     <div className="card flex justify-center items-end pb-5 w-40 sm:w-40 md:w-44 lg:w-44 xl:w-48 h-56 bg-slate-500 rounded-md" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url(${bg1})`, backgroundSize: 'cover', backgroundPosition: 'center' }} >
-                      <h1 className="text-white font-semibold ">Online Appointments</h1>
+                      <h1 className="text-white font-semibold text-sm md:text-base ">Online Appointments</h1>
                     </div>
                     <div className="card flex justify-center items-center pb-5 w-40 sm:w-40 md:w-44 lg:w-44 xl:w-48 h-64 bg-slate-500 rounded-md" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                      <h1 className="text-white font-semibold ">Instant video consultation</h1>
+                      <h1 className="text-white font-semibold  text-[13px] md:text-base ">Instant video consultation</h1>
                     </div>
                     <div
                       className="card flex justify-center items-end pb-5 w-40 sm:w-40 md:w-44 lg:w-44 xl:w-48 h-56 rounded-md"
@@ -112,12 +112,12 @@ const Home: FC = () => {
                         backgroundPosition: 'center',
                       }}
                     >
-                      <h1 className="text-white font-semibold">Detailed Prescriptions</h1>
+                      <h1 className="text-white font-semibold  text-sm md:text-base">Detailed Prescriptions</h1>
                     </div>
                   </div>
 
 
-                  <div className="text-center w-1/2">
+                  <div className="text-center w-full sm:w-1/2 ">
                     Our dedicated team strives to ensure a superior and personalized healthcare experience,
                     leveraging the latest technology to facilitate virtual consultations with skilled doctors.
                     With a steadfast focus on patient well-being, we aim to redefine the landscape of healthcare delivery
