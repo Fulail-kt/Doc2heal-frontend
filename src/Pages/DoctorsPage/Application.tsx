@@ -72,7 +72,7 @@ const Application: React.FC = () => {
       {!isApproved ? (
         <>
           <Header />
-          <div className='profile_bg  min-h-[600px] flex flex-1 justify-center items-center'>
+          <div className='profile_bg min-h-screen md:min-h-[600px] flex flex-1 justify-center pt-20 md:pt-0 md:items-center'>
             <DoctorForm fetchUser={fetchData} user={user} />
           </div>
         </>
