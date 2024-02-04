@@ -1,8 +1,12 @@
 import { FC, useEffect, useState } from "react"
 
-import doc1 from '../../assets/images/hero-img01.png'
-import doc2 from '../../assets/images/hero-img02.png'
-import doc3 from '../../assets/images/hero-img03.png'
+// import doc1 from '../../assets/images/hero-img01.png'
+// import doc2 from '../../assets/images/hero-img02.png'
+// import doc3 from '../../assets/images/hero-img03.png'
+import doc1 from '../../assets/images/first.jpeg'
+import doc3 from '../../assets/images/ladydoc.jpeg'
+import doc2 from '../../assets/images/second.jpeg'
+import doc4 from '../../assets/images/4th.jpeg'
 import { Link, useNavigate } from "react-router-dom"
 // import toast, { Toaster } from "react-hot-toast"
 import { jwtDecode } from 'jwt-decode'
@@ -76,14 +80,15 @@ const Home: FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-[15px] justify-end">
-                    <div>
-                      <img className="w-full" src={doc1} alt="" />
+                  <div className="flex w-full gap-[13px] justify-end">
+                    <div className="flex flex-col items-center">
+                      <img className=" h-[50%] w-[80%] rounded-md" src={doc1} alt="" />
+                      <img className=" h-[30%] w-[80%] mt-3  rounded-md" src={doc4} alt="" />
                     </div>
-                    <div className="mt-[30px]">
-                      <img className="w-full mb-[15px]" src={doc2} alt="" />
+                    <div className="mt-[30px] ">
+                      <img className="w-full mb-[15px] rounded-md " src={doc2} alt="" />
 
-                      <img className="w-full" src={doc3} alt="" />
+                      <img className="w-full rounded-md" src={doc3} alt="" />
                     </div>
                   </div>
 

@@ -39,8 +39,8 @@ const Navbar: FC<NavbarProps> = ({ handleLogout }) => {
   const location = useLocation();
 
   return (
-    <nav className="sm:w-40 text-gray-300">
-      <div className='relative'>
+    <nav className=" flex items-center text-gray-300">
+      <div className='relative sm:w-40 flex justify-center'>
         <ul className="md:flex flex-col text-center items-center top-14 left-0 sm:w-[50%] md:w-[95%]   rounded-md p-4">
           {navLinks.map((link) => (
             <li key={link.path} className={`p-2 rounded-md w-full shadow-slate-400 shadow-lg ${link.path === "/profile" ? '' : 'mb-7'} hover:text-[#ffff] bg-[#538deb]`}>
