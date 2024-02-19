@@ -1,30 +1,39 @@
-# React + TypeScript + Vite
+# Doc2Heal Online Doctor Consultation Platform Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Doc2Heal is an online platform designed to facilitate doctor-patient consultations remotely. With Doc2Heal, users can connect with healthcare professionals from the comfort of their own homes, enabling convenient access to medical advice and assistance.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **User Registration**: Users can create accounts to access the platform.
+- **Doctor Profiles**: Detailed profiles of healthcare professionals, including specialization, qualifications, and experience.
+- **Appointment Scheduling**: Users can schedule appointments with doctors based on availability.
+- **Live Video Consultations**: Conduct real-time video consultations between doctors and patients securely.
+- **Chat Messaging**: Users can communicate with doctors via text-based messaging for quick inquiries and follow-ups.
+- **Prescription Management**: Doctors can issue electronic prescriptions for patients, which are accessible through the platform.
+- **Payment Integration**: Secure payment processing for consultations and services offered through the platform.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+To get started with Doc2Heal, follow these steps:
 
-- Configure the top-level `parserOptions` property like this:
+1. Clone the repository to your local machine:
+   ```bash
+   git clone https://github.com/fulail-kt/doc2heal-frontend
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+------------------------------------------------------------------------------Install dependencies:----------------------------------------------------------------------------------------
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+//  bash
+
+cd doc2heal-frontend
+npm install
+Configure environment variables:
+
+Create a .env file based on the provided .env.example.
+Update the configuration settings as required, backend BaseURL,               VITE_BASEURL = 'YOUR_BACKEND_SERVER'
+Start the development server:
+
+//     bash
+
+npm run dev
+
+Access the platform at http://localhost:5173 in your web browser.
