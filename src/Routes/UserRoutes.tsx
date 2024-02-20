@@ -18,37 +18,38 @@ import Mybookings from '../Pages/User/Mybookings'
 import Messenger from '../Pages/CommonPage/Messages/Messenger'
 // import VideoCall from '../components/VideoCall/VideoCall'
 import Video from '../components/Video/Video'
+import About from '../Pages/User/About'
+import Services from '../Pages/User/Services'
 
-const UserRoutes:React.FC = () => {
+const UserRoutes: React.FC = () => {
   return (
     <>
-    <Routes>
-      <Route path='/' element={<Home/>}/>
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/signup' element={<Signup/>}/>
-      <Route path="/otp" element={<Otp/>} />
-      <Route path='/doctors' element={<Doctors/>}/>
-      <Route path='/doctors/:id' element={<DoctorsDetails/>}/>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path="/otp" element={<Otp />} />
+        <Route path='/doctors' element={<Doctors />} />
+        <Route path='/doctors/:id' element={<DoctorsDetails />} />
 
 
 
 // Protected
 
 
-<Route path='/application' element={<Application />}/>
-<Route path='/profile' element={<ProtectedRoute allowedRole="patient"><Profile /></ProtectedRoute>} />
-<Route path='/appointments' element={<ProtectedRoute allowedRole="patient"><Mybookings /></ProtectedRoute>} />
-<Route path='/messages' element={<ProtectedRoute allowedRole="patient"><Messenger /></ProtectedRoute>} />
+        <Route path='/application' element={<Application />} />
+        <Route path='/profile' element={<ProtectedRoute allowedRole="patient"><Profile /></ProtectedRoute>} />
+        <Route path='/appointments' element={<ProtectedRoute allowedRole="patient"><Mybookings /></ProtectedRoute>} />
+        <Route path='/messages' element={<ProtectedRoute allowedRole="patient"><Messenger /></ProtectedRoute>} />
+        <Route path="/room/:id" element={<Video />} />
+        <Route path="/success" element={<h1>this is scucesss</h1>} />
+        <Route path="/about-us" element={<About/>} />
+        <Route path="/services" element={<Services/>} />
+        <Route path="/*" element={<NotFound />} />
 
-      <Route path="/room/:id" element={<Video/>} />
-      <Route path="/success" element={<h1>this is scucesss</h1>} />
 
+      </Routes>
 
-      <Route path="/*" element={<NotFound/>} />
-
-
-    </Routes>
-      
     </>
   )
 }

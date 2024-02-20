@@ -23,8 +23,8 @@ const navLinks: NavLinkItem[] = [
     display: 'Services',
   },
   {
-    path: '/contact',
-    display: 'Contact',
+    path: '/about-us',
+    display: 'About Us',
   },
 ];
 
