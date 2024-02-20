@@ -114,7 +114,7 @@ const Doctors: FC = () => {
               </div>
               <div className='flex justify-center gap-x-2 sm:gap-x-10   sm:w-100 '>
                 <select
-                  className='bg-blue-500 cursor-pointer p-1 px-1 rounded-md text-white mt-3 w-14 sm:w-24 focus:outline-none'
+                  className='bg-blue-500 cursor-pointer p-1 px-1 text-xs sm:text-sm rounded-md text-white mt-3 w-14 sm:w-24 focus:outline-none'
                   value={selectedFeeRange}
                   onChange={(e) => setSelectedFeeRange(e.target.value)}
                 >
@@ -122,7 +122,7 @@ const Doctors: FC = () => {
                   <option value="lowToHigh">Low to High</option>
                   <option value="highToLow">High to Low</option>
                 </select>
-                <div className='flex'><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className=' m-0 bg-blue-500 rounded p-1 mt-3 outline-none text-sm text-white h-8 w-14 sm:w-28' /></div>
+                <div className='flex '><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className=' m-0 bg-blue-500 rounded p-1 mt-3 outline-none text-xs sm:text-sm text-white h-8 w-14 sm:w-28' /></div>
               </div>
             </div>
           </div>
