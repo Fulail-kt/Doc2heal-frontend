@@ -36,7 +36,7 @@ const Doctors: FC = () => {
   const users: User[] = userData.doctors || [];
 
   const handlePageChange = (newPage: number, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); 
     setCurrentPage(newPage);
   };
 
@@ -88,9 +88,7 @@ const Doctors: FC = () => {
     return bookingsOnDate.length > 0;
   };
 
-  // if (loadingUsers || loadingBookings) {
-  //   return <Spinner />;
-  // }
+ 
 
   if (userError || bookingError) {
     return <p>Error: {userError ? userError.message : bookingError?.message}</p>;
@@ -131,13 +129,15 @@ const Doctors: FC = () => {
           <section className='p-0'>
             <div className='container flex justify-around '>
               <div className='grid grid-cols-2 m-4  md:grid-cols-3 lg:grid-cols-4 gap-5'>
-                {doctors.map((doctor) => (
+                {!loadingBookings||!loadingUsers ? doctors.map((doctor) => (
                   <div key={doctor._id} className=' shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
                     <Suspense fallback={<Spinner/>}>
                       <DoctorCard doctor={doctor} loading={loadingUsers || loadingBookings} />
                     </Suspense>
                   </div>
-                ))}
+                )):(
+                  <div className='w-full h-full flex justify-center items-center'><Spinner/></div>
+                )}
               </div>
             </div>
             <div className='flex justify-center p-10 font-mono '>

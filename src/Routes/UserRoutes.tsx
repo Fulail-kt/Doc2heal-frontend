@@ -39,7 +39,17 @@ const UserRoutes: React.FC = () => {
 
         <Route path='/application' element={<Application />} />
         <Route path='/profile' element={<ProtectedRoute allowedRole="patient"><Profile /></ProtectedRoute>} />
-        <Route path='/appointments' element={<ProtectedRoute allowedRole="patient"><Mybookings /></ProtectedRoute>} />
+        <Route path='/appointments' element={
+        
+        <ProtectedRoute allowedRole="patient">
+          
+          <Mybookings />
+          
+          
+          </ProtectedRoute>} />
+
+
+          
         <Route path='/messages' element={<ProtectedRoute allowedRole="patient"><Messenger /></ProtectedRoute>} />
         <Route path="/room/:id" element={<Video />} />
         <Route path="/success" element={<h1>this is scucesss</h1>} />

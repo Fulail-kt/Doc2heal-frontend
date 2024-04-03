@@ -105,29 +105,28 @@ const DoctorForm: FC<DoctorFormProps> = ({ user,fetchUser}) => {
     const handleDocSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         setLoading(true);
-      
         const formData = new FormData();
         for (let i = 0; i < selectedFiles.length; i++) {
+            console.log(selectedFiles[i])
           formData.append('files', selectedFiles[i]);
         }
+        console.log(formData,"form")
          try {
-      const documents = await Api.post('/submitDocuments', formData);
+            const documents = await Api.post('/submitDocuments',formData);
 
-      if (documents.data.success) {
-        toast.success(documents.data.message);
-        fetchUser();
-    
-      } else {
-        toast.error(documents.data.message);
-      }
-      setLoading(false);
-
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-      };
+            console.log(documents,"submits")
+            if (documents.data.success) {
+                toast.success(documents.data.message);
+                fetchUser();
+            } else {
+                toast.error(documents.data.message);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     if(!user){
         return <Spinner/>
