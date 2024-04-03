@@ -1,6 +1,5 @@
 import { FC, useEffect, useState, lazy, Suspense } from 'react';
 import useApi from '../../hooks/useApi';
-import Spinner from '../../components/Spinner/Spinner';
 import Skeleton from '../../components/Skeleton/Skeleton'
 import Navbar from '../../components/Navbar/Navbar';
 import Header from '../../components/Header/Header';
