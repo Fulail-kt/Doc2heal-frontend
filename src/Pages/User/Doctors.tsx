@@ -99,8 +99,8 @@ const Doctors: FC = () => {
       <Header />
       <div className='profile_bg'>
         <div className=' flex h-64 '>
-          <div className=' sm:w-[22%] flex justify-center h-full items-center  md:w-[18%]'><Navbar handleLogout={handleLogout} /></div>
-          <div className='container flex  justify-center items-center w-100 h-full text-center'>
+          <div className='sm:w-[22%] flex justify-center h-full items-center  md:w-[18%]'><Navbar handleLogout={handleLogout} /></div>
+          <div className='w-[70%] flex  justify-center items-center w-100 h-full text-center'>
             <div className='w-full'>
               <h2 className='text-[30px] font-bold text-blue-500'>Find a Doctor</h2>
               <div className='max-w-[60%] mt-2 mx-auto bg-[#0066ff2c] rounded-md flex items-center justify-between'>
@@ -128,17 +128,17 @@ const Doctors: FC = () => {
         <div className='flex w-full justify-evenly'>
           <section className='p-0'>
             <div className='container flex justify-around '>
-              <div className='grid grid-cols-2 m-4  md:grid-cols-3 lg:grid-cols-4 gap-5'>
-                {!loadingBookings||!loadingUsers ? doctors.map((doctor) => (
+              {!loadingBookings || !loadingUsers ? (<div className='grid grid-cols-2 m-4  md:grid-cols-3 lg:grid-cols-4 gap-5'>
+                {doctors.map((doctor) => (
                   <div key={doctor._id} className=' shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
                     <Suspense fallback={<Spinner/>}>
                       <DoctorCard doctor={doctor} loading={loadingUsers || loadingBookings} />
                     </Suspense>
                   </div>
-                )):(
-                  <div className='w-full h-full flex justify-center items-center'><Spinner/></div>
-                )}
-              </div>
+                ))}
+              </div>):(
+                <div className='h-52  w-36 flex  justify-center items-center'><Spinner/></div>
+              )}
             </div>
             <div className='flex justify-center p-10 font-mono '>
               <button onClick={(e) => handlePageChange(currentPage - 1, e)} disabled={currentPage === 1}>
