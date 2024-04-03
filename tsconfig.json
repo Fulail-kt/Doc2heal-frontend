@@ -1,42 +1,21 @@
-// {
-//   "compilerOptions": {
-//     "target": "ES2020",
-//     "useDefineForClassFields": true,
-//     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-//     "module": "ESNext",
-//     "skipLibCheck": true,
-//     "moduleResolution": "bundler", // Add this line
-//     "allowImportingTsExtensions": true,
-//     "resolveJsonModule": true,
-//     "isolatedModules": true,
-//     "noEmit": true, // Add this line
-//     "jsx": "react-jsx",
-//     "strict": true,
-//     "noUnusedLocals": true,
-//     "noUnusedParameters": true,
-//     "noFallthroughCasesInSwitch": true
-//   },
-//   "include": ["src/**/*.tsx", "src/**/*.ts"],
-//   "references": [{ "path": "./tsconfig.node.json" }]
-// }
-
 {
   "compilerOptions": {
-     "target": "es5",
-     "lib": ["dom", "dom.iterable", "esnext"],
-     "allowJs": true,
-     "skipLibCheck": true,
-     "esModuleInterop": true,
-     "allowSyntheticDefaultImports": true,
-     "strict": true,
-     "forceConsistentCasingInFileNames": true,
-     "module": "esnext",
-     "moduleResolution": "node",
-     "resolveJsonModule": true,
-     "isolatedModules": true,
-     "noEmit": true,
-     "jsx": "react-jsx"
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler", // Add this line
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true, // Add this line
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
- }
- 
+  "include": ["src/**/*.tsx", "src/**/*.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
