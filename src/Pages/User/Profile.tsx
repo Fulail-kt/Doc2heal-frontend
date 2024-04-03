@@ -185,7 +185,7 @@ const Profile: FC = () => {
   }, [token])
 
   return (
-    <div className='profile_bg min-h-screen'>
+    <div className='profile_bg min-h-screen '>
       {
         loading ? (<Spinner />) : (<>
           <Toaster />

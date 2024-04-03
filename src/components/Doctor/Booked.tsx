@@ -191,7 +191,7 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
             ) : (
               <div className='w-[85%] flex flex-col justify-center items-center cursor-default '>
                 {uBooking && uBooking?.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any Upcomming Bookings</p>) : (uBooking?.map((ubook: { note: string; userName: string; userAge: number; _id: string; time: string; end: string; date: string; doctorId: any }) => (
-                  <div key={ubook._id} className='w-[90%] flex flex-col text-center justify-center items-center border m-2 rounded-md shadow-lg'>
+                  <div key={ubook._id} className='w-[90%] flex flex-col text-center justify-center items-center border m-2 bg-orange-00 shadow-lg'>
                     <div>
                       {location.pathname === '/doctor/bookings' ? (
                         <>
@@ -238,16 +238,29 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
               <p>Loading...</p>
             ) : (
               <div className='w-[85%] flex flex-col justify-center items-center  '>
-                {fBooking && fBooking?.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any Completed Bookings </p>) : (fBooking?.map((fbook) => (
-                  <div className='w-[70%] rounded-lg p-2 px-5 bg-gray-500 text-white justify-around border m-3 items-center  flex'>
-                    <div className=' w-[75%] flex-col rounded-lg p-2 px-5 bg-gray-500 text-white justify-around border m-3 items-center  flex md:flex-row' key={fbook?._id}>
-                      <p>{new Intl.DateTimeFormat('en-IN').format(new Date(fbook.date))}</p>
-                      <p>
-                        {fbook.time} to {fbook.end}
-                      </p>
-                      <p className='text-white bg-green-600 rounded-md p-1'>{fbook.status}</p>
+                {fBooking && fBooking?.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any Completed Bookings </p>) : (fBooking?.map((fbook:{ note: string; userName: string; userAge: number;status:string; _id: string; time: string; end: string; date: string; doctorId: any }) => (
+                  <div className='w-[70%] rounded-lg p-2 px-5 bg-gray-500 text-white justify-around border m-3 items-center  flex flex-col'>
+                    <div>
+                      {location.pathname === '/doctor/bookings' ? (
+                        <>
+                          <p className='text-lg font-mono'>Session with {capitalizeFirstLetter(fbook?.userName)} ({fbook?.userAge})</p>
+                          <p className='text-center'>{fbook?.note}</p>
+                        </>
+                      ) : (<>
+                        <p className='text-lg font-mono'>Session with {capitalizeFirstLetter(fbook?.doctorId?.username)}</p>
+
+                      </>)}
                     </div>
-                    <div><span className='cursor-pointer bg-gray-800 rounded-full px-3 py-2' onClick={() => openModal(fbook)}>Prescription</span></div>
+                    <div className='md:flex justify-center items-center w-[90%] '>
+                      <div className=' w-[75%] flex-col rounded-lg p-2 px-5 bg-gray-500 text-white justify-around border m-3 items-center  flex md:flex-row' key={fbook?._id}>
+                        <p>{new Intl.DateTimeFormat('en-IN').format(new Date(fbook.date))}</p>
+                        <p>
+                          {fbook.time} to {fbook.end}
+                        </p>
+                        <p className='text-white bg-green-600 rounded-md p-1'>{fbook.status}</p>
+                      </div>
+                      <div><span className='cursor-pointer bg-gray-800 rounded-full px-3 py-2' onClick={() => openModal(fbook)}>Prescription</span></div>
+                    </div>
                   </div>
                 )))}
               </div>
@@ -279,15 +292,18 @@ const Booked = ({ Bookings, handleCancelBooking, handleCompleteBooking }: { Book
             {loading ? (
               <p>Loading...</p>
             ) : (
-              <div className='w-[85%] flex flex-col justify-center items-center '>
-                {cBooking && cBooking.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any Cancelled Bookings</p>) : (cBooking?.map((cbook) => (
+              <div className='w-[85%] flex flex-col justify-center items-center  '>
+                {cBooking && cBooking.length < 1 ? (<p className="font-mono font-bold text-2xl text-gray-800">No Any Cancelled Bookings</p>) : (cBooking?.map((cbook:{note:string;status:string;userName: string; userAge: number; _id: string; time: string; end: string; date: string; doctorId: any }) => (
                   <>
                     <div>
-                      {location.pathname === '/doctor/bookings' && (
+                      {location.pathname === '/doctor/bookings' ?(
                         <>
                           <p className='text-lg font-mono'>Session with {capitalizeFirstLetter(cbook.userName)} ({cbook.userAge})</p>
                           <p className='text-center'>{cbook.note}</p>
                         </>
+                      ):(
+                        <p className='text-lg font-mono'>Session with {capitalizeFirstLetter(cbook?.doctorId?.username)}</p>
+
                       )}
                     </div>
 

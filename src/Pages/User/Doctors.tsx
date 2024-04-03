@@ -1,6 +1,7 @@
 import { FC, useEffect, useState, lazy, Suspense } from 'react';
 import useApi from '../../hooks/useApi';
 import Spinner from '../../components/Spinner/Spinner';
+import Skeleton from '../../components/Skeleton/Skeleton'
 import Navbar from '../../components/Navbar/Navbar';
 import Header from '../../components/Header/Header';
 import { useDispatch } from 'react-redux';
@@ -36,7 +37,7 @@ const Doctors: FC = () => {
   const users: User[] = userData.doctors || [];
 
   const handlePageChange = (newPage: number, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); 
+    e.preventDefault();
     setCurrentPage(newPage);
   };
 
@@ -88,7 +89,7 @@ const Doctors: FC = () => {
     return bookingsOnDate.length > 0;
   };
 
- 
+
 
   if (userError || bookingError) {
     return <p>Error: {userError ? userError.message : bookingError?.message}</p>;
@@ -128,17 +129,29 @@ const Doctors: FC = () => {
         <div className='flex w-full justify-evenly'>
           <section className='p-0'>
             <div className='container flex justify-around '>
-              {!loadingBookings || !loadingUsers ? (<div className='grid grid-cols-2 m-4  md:grid-cols-3 lg:grid-cols-4 gap-5'>
-                {doctors.map((doctor) => (
-                  <div key={doctor._id} className=' shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
-                    <Suspense fallback={<Spinner/>}>
-                      <DoctorCard doctor={doctor} loading={loadingUsers || loadingBookings} />
-                    </Suspense>
-                  </div>
-                ))}
-              </div>):(
-                <div className='h-52  w-36 flex  justify-center items-center'><Spinner/></div>
-              )}
+            {loadingUsers || loadingBookings || (!initialLoadComplete && doctors.length === 0) ? (
+  <div className='grid grid-cols-2 m-4 md:grid-cols-3 lg:grid-cols-4 gap-5'>
+    {Array.from({ length: 4 }).map((_, index) => (
+      <div key={index} className='shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
+        <Skeleton />
+      </div>
+    ))}
+  </div>
+) : (
+  <div className='grid grid-cols-2 m-4 md:grid-cols-3 lg:grid-cols-4 gap-5'>
+    {doctors.map((doctor) => (
+      <div key={doctor._id} className='shadow-lg shadow-slate-400 p-2 px-0 rounded-md flex justify-center'>
+        <Suspense fallback={<Skeleton />}>
+          <DoctorCard doctor={doctor} loading={loadingUsers || loadingBookings} />
+        </Suspense>
+      </div>
+
+    ))}
+    
+  </div>
+)}
+
+
             </div>
             <div className='flex justify-center p-10 font-mono '>
               <button onClick={(e) => handlePageChange(currentPage - 1, e)} disabled={currentPage === 1}>

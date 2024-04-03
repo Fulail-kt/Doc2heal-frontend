@@ -32,10 +32,6 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor,loading }:{doctor:any,lo
         <div className="mt-2 lg:mt-3  sm:flex md:flex lg:flex  gap-x-4 justify-between">
           <span className='bg-[#ccf0f3] md:w-36 lg:w-[36] rounded-sm text-cyan-500 py-1 px-1 lg:py-1 lg:px-2 text-[10px] 
          lg:text-[16px] lg:leading-7 font-semibold'>{specialization}</span>
-          {/* <div className='flex items-center sm:gap-x-1 md:gap-[15px]'>
-            <span className='flex items-center text-[14px] leading-3 lg:text-[16px] lg:leading-4 font-semibold text-slate-800'>4.1</span>
-            <span className='text-[14px] leading-3 lg:text-[16px] lg:leading-4 font-semibold text-slate-700'>(45)</span>
-          </div> */}
         </div>
 
         <div className='mt-[10px]  flex items-center justify-between'>
